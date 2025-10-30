@@ -1,13 +1,9 @@
-import { useState } from 'react';
-import './components/Login.jsx';
-import './components/Home.jsx';
+import Login from './views/auth/Login.jsx';
 
 function App() {
-  const [Usuario, setUsuario] = useState(null);
-
   return (
     <>
-   
+      <Login />
     </>
   )
 }
