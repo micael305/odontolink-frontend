@@ -19,7 +19,7 @@ const Login = () => {
   };
 
   return (
-    <div className="auth-container">
+    <div className="page-container">
       <div className="auth-card">
         <Link to="/" className="auth-back-link">
           <IoIosArrowBack />
