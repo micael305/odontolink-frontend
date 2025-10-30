@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import './Auth.css'; 
-
+import { Link } from 'react-router-dom';
+import './Auth.css';
 import { IoIosArrowBack } from 'react-icons/io';
 import {
   FiUser,
@@ -10,8 +10,10 @@ import {
   FiLock,
   FiEye,
   FiEyeOff,
+  FiUserPlus, 
 } from 'react-icons/fi';
 import { LiaAddressCard } from 'react-icons/lia';
+import Button from '../../components/Button/Button.jsx';
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,10 +27,10 @@ const Register = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <a href="#" className="auth-back-link">
+        <Link to="/" className="auth-back-link">
           <IoIosArrowBack />
           Volver
-        </a>
+        </Link>
 
         <div className="auth-content">
           <h1>Registrarse</h1>
@@ -135,9 +137,14 @@ const Register = () => {
               </div>
             </div>
 
-            <button type="submit" className="create-account-button">
+            <Button
+              type="submit"
+              variant="success"
+              icon={<FiUserPlus />}
+              className="auth-register-btn"
+            >
               Crear Cuenta
-            </button>
+            </Button>
           </form>
 
           <div className="login-link-box">

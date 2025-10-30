@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { IoIosArrowBack } from 'react-icons/io';
 import { LiaAddressCard } from 'react-icons/lia';
-import { FiLock, FiEye, FiEyeOff, FiInfo } from 'react-icons/fi';
-import './auth.css'; 
+import { FiLock, FiEye, FiEyeOff, FiInfo, FiLogIn } from 'react-icons/fi'; 
+import './auth.css';
+import Button from '../../components/Button/Button.jsx'; 
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,10 +21,10 @@ const Login = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <a href="#" className="auth-back-link">
+        <Link to="/" className="auth-back-link">
           <IoIosArrowBack />
           Volver
-        </a>
+        </Link>
 
         <div className="auth-content">
           <h1>Iniciar Sesión</h1>
@@ -62,9 +64,14 @@ const Login = () => {
               </div>
             </div>
 
-            <button type="submit" className="login-button">
+            <Button
+              type="submit"
+              variant="primary"
+              icon={<FiLogIn />}
+              className="auth-login-btn"
+            >
               Ingresar
-            </button>
+            </Button>
           </form>
 
           <a href="#" className="forgot-password">
