@@ -1,75 +1,62 @@
 .btn {
-  display: flex; 
-  align-items: center;
+  display: flex;
   justify-content: center;
-  gap: 0.5rem; 
-
-  border: none;
-  padding: 1rem 1.5rem; 
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid transparent;
+  padding: 1rem;
   border-radius: 8px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-  width: 100%; 
-  max-width: 300px; 
-  box-sizing: border-box; 
+  transition: all 0.3s ease;
+  width: 100%;
 }
 
 .btn-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: 1.2rem;
 }
 
 .btn-primary {
-  background-color: #0d6efd; 
+  background-color: #0d6efd;
   color: white;
 }
 .btn-primary:hover {
-  background-color: #0b5ed7; 
-}
-.btn-primary:active {
-  background-color: #0a58ca;
-}
-.btn-primary:disabled {
-  background-color: #bbd3f8; 
-  cursor: not-allowed;
-}
-
-.btn-outline-primary {
-  background-color: transparent;
-  color: #0d6efd;
-  border: 1px solid #0d6efd;
-}
-.btn-outline-primary:hover {
-  background-color: #eaf3ff; 
-  border-color: #0d6efd;
-}
-.btn-outline-primary:active {
-  background-color: #d1e3ff;
-  color: #0d6efd;
-  border-color: #0d6efd;
-}
-.btn-outline-primary:disabled {
-  color: #bbd3f8;
-  border-color: #bbd3f8;
-  background-color: transparent;
-  cursor: not-allowed;
+  background-color: #0b5ed7;
 }
 
 .btn-success {
-  background-color: #198754; 
+  background-color: #198754;
   color: white;
 }
 .btn-success:hover {
-  background-color: #157347; 
+  background-color: #157347;
 }
-.btn-success:active {
-  background-color: #13663f;
+
+.btn-outline-primary {
+  background-color: #ffffff;
+  color: #0d6efd;
+  border-color: #0d6efd;
 }
-.btn-success:disabled {
-  background-color: #a3d9b8;
-  cursor: not-allowed;
+.btn-outline-primary:hover {
+  background-color: #e6f0ff;
+}
+
+.btn-outline-secondary {
+  background-color: #ffffff;
+  color: #333;
+  border-color: #ddd;
+}
+.btn-outline-secondary:hover {
+  background-color: #f8f9fa;
+  border-color: #ccc;
+}
+
+.btn-outline-danger {
+  background-color: #ffffff;
+  color: #dc3545;
+  border-color: #dc3545;
+}
+.btn-outline-danger:hover {
+  background-color: #fff5f5;
 }

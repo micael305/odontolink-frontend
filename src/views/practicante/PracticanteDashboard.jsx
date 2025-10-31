@@ -1,10 +1,13 @@
-import Button from '../../components/Button/Button.jsx';
+import { useNavigate } from 'react-router-dom';
+import Button from '../../components/Button/Button';
 import { FiSettings, FiClipboard } from 'react-icons/fi';
 import './practicante.css';
 
 const PracticanteDashboard = () => {
+  const navigate = useNavigate();
+
   const handleGestionar = () => {
-    console.log('Navegando a Gestionar Tratamientos...');
+    navigate('/practicante/tratamientos');
   };
 
   const handleEvolucion = () => {
