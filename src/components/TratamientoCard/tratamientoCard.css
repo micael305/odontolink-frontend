@@ -1,0 +1,118 @@
+.treatment-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  max-width: 700px;
+  margin: 0 auto;
+  margin-bottom: 1.5rem;
+}
+
+.treatment-card:last-child {
+  margin-bottom: 0;
+}
+
+.treatment-card-content {
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.card-header-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #222;
+  margin: 0;
+}
+.card-header-pills {
+  display: flex;
+  gap: 0.5rem;
+}
+.card-tag {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  color: #555;
+  background-color: #f0f0f0;
+}
+.card-tag.duration {
+  background-color: #e6f0ff;
+  color: #053b8a;
+}
+.card-tag.preventivo {
+  background-color: #e6f7eb;
+  color: #155724;
+}
+
+.card-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.card-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+.card-section-title svg {
+  color: #0d6efd;
+  font-size: 1.2rem;
+}
+.card-section-title .danger {
+  color: #dc3545;
+}
+
+.card-pills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.card-pill {
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  color: #444;
+  background-color: #f8f9fa;
+  border: 1px solid #eee;
+}
+
+.card-text {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+.card-footer-actions {
+  display: flex;
+  gap: 1rem;
+  border-top: 1px solid #f0f0f0;
+  padding: 1.5rem 2rem;
+  background-color: #fdfdfd;
+}
+.card-footer-actions .btn {
+  flex: 1;
+  font-size: 0.9rem;
+  padding: 0.75rem 1rem;
+}
+
+.card-tag.estetica {
+  background-color: #fce6ff;
+  color: #7a0c8a;
+}
+
+.card-tag.restauracion {
+  background-color: #fffbe6;
+  color: #8a6a0c;
+}

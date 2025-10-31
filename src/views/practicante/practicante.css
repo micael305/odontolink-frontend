@@ -1,4 +1,4 @@
-
+/* src/views/practicante/practicante.css */
 .dashboard-card {
   background: #ffffff;
   padding: 2.5rem;
@@ -33,7 +33,7 @@
 
 .practicante-content-container {
   width: 100%;
-  max-width: 800px; 
+  max-width: 800px;
   margin: 0 auto;
   padding-top: 3rem;
   padding-bottom: 3rem;
@@ -44,13 +44,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
-  position: relative; /* --- 1. AÑADIDO: para centrar el h1 --- */
-}
-
-.page-title-container {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  position: relative;
 }
 
 .page-back-link {
@@ -71,11 +65,9 @@
   font-weight: 700;
   color: #222;
   margin: 0;
-  /* --- 1. AÑADIDO: Reglas para centrar --- */
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  /* --- Fin de reglas para centrar --- */
 }
 
 .add-treatment-btn {
@@ -91,107 +83,4 @@
   margin-bottom: 1.5rem;
   border-bottom: 1px solid #eee;
   padding-bottom: 1rem;
-}
-
-.treatment-card {
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
-  overflow: hidden;
-  /* La tarjeta ocupará el 100% del contenedor de 800px */
-}
-
-.treatment-card-content {
-  padding: 1.5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-.card-header-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #222;
-  margin: 0;
-}
-.card-header-pills {
-  display: flex;
-  gap: 0.5rem;
-}
-.card-tag {
-  display: inline-block;
-  font-size: 0.8rem;
-  font-weight: 500;
-  padding: 0.25rem 0.75rem;
-  border-radius: 12px;
-  color: #555;
-  background-color: #f0f0f0;
-}
-.card-tag.duration {
-  background-color: #e6f0ff;
-  color: #053b8a;
-}
-.card-tag.preventivo {
-  background-color: #e6f7eb;
-  color: #155724;
-}
-
-.card-section {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-.card-section-title {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #333;
-}
-.card-section-title svg {
-  color: #0d6efd;
-  font-size: 1.2rem;
-}
-.card-section-title .danger {
-  color: #dc3545;
-}
-
-.card-pills-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-.card-pill {
-  font-size: 0.9rem;
-  font-weight: 500;
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
-  color: #444;
-  background-color: #f8f9fa;
-  border: 1px solid #eee;
-}
-
-.card-text {
-  font-size: 0.95rem;
-  color: #555;
-  line-height: 1.5;
-}
-
-.card-footer-actions {
-  display: flex;
-  gap: 1rem;
-  border-top: 1px solid #f0f0f0;
-  padding: 1.5rem 2rem;
-  background-color: #fdfdfd;
-}
-.card-footer-actions .btn {
-  flex: 1;
-  font-size: 0.9rem;
-  padding: 0.75rem 1rem;
 }

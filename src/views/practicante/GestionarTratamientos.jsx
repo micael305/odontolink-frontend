@@ -1,28 +1,62 @@
-// src/views/practicante/GestionTratamientos.jsx
 import { Link } from 'react-router-dom';
 import Button from '../../components/Button/Button';
+import TratamientoCard from '../../components/TratamientoCard/TratamientoCard';
 import './practicante.css';
-import {
-  FiPlus,
-  FiChevronLeft,
-  FiCalendar,
-  FiClock,
-  FiAlertTriangle,
-  FiEdit3,
-  FiTrash2,
-} from 'react-icons/fi';
+import { FiPlus, FiChevronLeft } from 'react-icons/fi';
 
 const GestionTratamientos = () => {
+  const tratamientos = [
+  {
+    id: 't1',
+    titulo: 'Limpieza Dental',
+    tags: [
+      { texto: 'Preventivo', tipo: 'preventivo' },
+      { texto: '45 minutos', tipo: 'duration' },
+    ],
+    disponibilidad: ['Lunes', 'Martes', 'Miércoles', 'Viernes'],
+    horarios: ['09:00', '11:00', '14:00', '16:00'],
+    requerimientos: 'Paciente debe venir en ayunas',
+  },
+  {
+    id: 't2',
+    titulo: 'Blanqueamiento Dental',
+    tags: [
+      { texto: 'Estética', tipo: 'estetica' }, 
+      { texto: '60 minutos', tipo: 'duration' },
+    ],
+    disponibilidad: ['Lunes', 'Miércoles'],
+    horarios: ['10:00', '15:00'],
+    requerimientos: 'No requiere preparación previa.',
+  },
+  {
+    id: 't3',
+    titulo: 'Tratamiento de Caries',
+    tags: [
+      { texto: 'Restauración', tipo: 'restauracion' }, 
+      { texto: '50 minutos', tipo: 'duration' },
+    ],
+    disponibilidad: ['Martes', 'Viernes'],
+    horarios: ['09:00', '11:00', '14:00', '16:00', '17:00'],
+    requerimientos: 'Evitar comer 1 hora antes.',
+  },
+];
+
+  const handleModificar = () => {
+    console.log('Modificar tratamiento:', tratamientos.titulo);
+  };
+
+  const handleEliminar = () => {
+    console.log('Eliminar tratamiento:', tratamientos.titulo);
+  };
+
   return (
-    <div className="page-container">
+   <div className="page-container">
       <div className="practicante-content-container">
         <header className="page-header">
-          <div className="page-title-container">
-            <Link to="/practicante/dashboard" className="page-back-link">
-              <FiChevronLeft />
-              Volver
-            </Link>
-          </div>
+          <Link to="/practicante/dashboard" className="page-back-link">
+            <FiChevronLeft />
+            Volver
+          </Link>
           <Button
             variant="success"
             icon={<FiPlus />}
@@ -34,65 +68,17 @@ const GestionTratamientos = () => {
 
         <section className="treatment-list">
           <h2 className="treatment-list-header">
-            Tratamientos que ofrezco (1)
+            Tratamientos que ofrezco ({tratamientos.length})
           </h2>
 
-          <div className="treatment-card">
-            <div className="treatment-card-content">
-              <div className="card-header">
-                <h3 className="card-header-title">Limpieza Dental</h3>
-                <div className="card-header-pills">
-                  <span className="card-tag preventivo">Preventivo</span>
-                  <span className="card-tag duration">45 minutos</span>
-                </div>
-              </div>
-
-              <div className="card-section">
-                <h4 className="card-section-title">
-                  <FiCalendar />
-                  Disponibilidad:
-                </h4>
-                <div className="card-pills-list">
-                  <span className="card-pill">Lunes</span>
-                  <span className="card-pill">Martes</span>
-                  <span className="card-pill">Miércoles</span>
-                  <span className="card-pill">Viernes</span>
-                </div>
-              </div>
-
-              <div className="card-section">
-                <h4 className="card-section-title">
-                  <FiClock />
-                  Horarios:
-                </h4>
-                <div className="card-pills-list">
-                  <span className="card-pill">09:00</span>
-                  <span className="card-pill">11:00</span>
-                  <span className="card-pill">14:00</span>
-                  <span className="card-pill">16:00</span>
-                </div>
-              </div>
-
-              <div className="card-section">
-                <h4 className="card-section-title">
-                  <FiAlertTriangle className="danger" />
-                  Requerimientos:
-                </h4>
-                <p className="card-text">
-                  Paciente debe venir en ayunas
-                </p>
-              </div>
-            </div>
-
-            <footer className="card-footer-actions">
-              <Button variant="outline-secondary" icon={<FiEdit3 />}>
-                Modificar
-              </Button>
-              <Button variant="outline-danger" icon={<FiTrash2 />}>
-                Eliminar
-              </Button>
-            </footer>
-          </div>
+          {tratamientos.map((tratamiento) => (
+            <TratamientoCard
+              key={tratamiento.id}
+              tratamiento={tratamiento}
+              onModificar={() => handleModificar(tratamiento.id)}
+              onEliminar={() => handleEliminar(tratamiento.id)}
+            />
+          ))}
         </section>
       </div>
     </div>
