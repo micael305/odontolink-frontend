@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import Button from '../../components/Button/Button.jsx'; 
+import Button from '../../components/Button/Button'; 
 import { FiLogIn, FiUserPlus, FiHelpCircle } from 'react-icons/fi';
-import './auth.css'; 
+import './Auth.css'; 
 
 const Home = () => {
   const navigate = useNavigate();

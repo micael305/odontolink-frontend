@@ -1,6 +1,5 @@
-// src/components/Button/Button.jsx
 import React from 'react';
-import './button.css';
+import './Button.css';
 
 const Button = ({
   children,

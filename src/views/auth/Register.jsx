@@ -13,7 +13,7 @@ import {
   FiUserPlus, 
 } from 'react-icons/fi';
 import { LiaAddressCard } from 'react-icons/lia';
-import Button from '../../components/Button/Button.jsx';
+import Button from '../../components/Button/Button'; 
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import Button from '../../components/Button/Button';
+import Button from '../../components/Button/Button'; 
 import { FiSettings, FiClipboard } from 'react-icons/fi';
-import './practicante.css';
+import './Practicante.css';
 
 const PracticanteDashboard = () => {
   const navigate = useNavigate();

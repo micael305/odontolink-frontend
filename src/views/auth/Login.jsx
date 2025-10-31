@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { IoIosArrowBack } from 'react-icons/io';
 import { LiaAddressCard } from 'react-icons/lia';
 import { FiLock, FiEye, FiEyeOff, FiInfo, FiLogIn } from 'react-icons/fi'; 
-import './auth.css';
-import Button from '../../components/Button/Button.jsx'; 
+import './Auth.css';
+import Button from '../../components/Button/Button'; 
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
