@@ -60,3 +60,10 @@
 .btn-outline-danger:hover {
   background-color: #fff5f5;
 }
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+.btn-danger:hover {
+  background-color: #bb2d3b;
+}

@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import Button from '../../components/Button/Button';
 import TratamientoCard from '../../components/TratamientoCard/TratamientoCard';
 import AgregarTratamientoModal from '../../components/AgregarTratamientoModal/AgregarTratamientoModal';
+import ModificarTratamientoModal from '../../components/ModificarTratamientoModal/ModificarTratamientoModal';
+import ConfirmarEliminacionModal from '../../components/ConfirmarEliminacionModal/ConfirmarEliminacionModal';
 import './practicante.css';
 import { FiPlus, FiChevronLeft } from 'react-icons/fi';
 
@@ -44,18 +46,33 @@ const DUMMY_TRATAMIENTOS = [
 ];
 
 const GestionTratamientos = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAgregarModalOpen, setIsAgregarModalOpen] = useState(false);
+  const [isModificarModalOpen, setIsModificarModalOpen] = useState(false);
+  const [isEliminarModalOpen, setIsEliminarModalOpen] = useState(false);
+  const [tratamientoSeleccionado, setTratamientoSeleccionado] =
+    useState(null);
 
-  const handleModificar = (idTratamiento) => {
-    console.log('Modificar tratamiento con ID:', idTratamiento);
+  const handleOpenModificar = (tratamiento) => {
+    setTratamientoSeleccionado(tratamiento);
+    setIsModificarModalOpen(true);
   };
 
-  const handleEliminar = (idTratamiento) => {
-    console.log('Eliminar tratamiento con ID:', idTratamiento);
+  const handleOpenEliminar = (tratamiento) => {
+    setTratamientoSeleccionado(tratamiento);
+    setIsEliminarModalOpen(true);
   };
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const handleConfirmarEliminar = () => {
+    console.log('Eliminando:', tratamientoSeleccionado.id);
+    closeModals();
+  };
+
+  const closeModals = () => {
+    setIsAgregarModalOpen(false);
+    setIsModificarModalOpen(false);
+    setIsEliminarModalOpen(false);
+    setTratamientoSeleccionado(null);
+  };
 
   return (
     <div className="page-container">
@@ -65,11 +82,12 @@ const GestionTratamientos = () => {
             <FiChevronLeft />
             Volver
           </Link>
+
           <Button
             variant="success"
             icon={<FiPlus />}
             className="add-treatment-btn"
-            onClick={openModal}
+            onClick={() => setIsAgregarModalOpen(true)}
           >
             Agregar Tratamiento
           </Button>
@@ -84,14 +102,30 @@ const GestionTratamientos = () => {
             <TratamientoCard
               key={tratamiento.id}
               tratamiento={tratamiento}
-              onModificar={() => handleModificar(tratamiento.id)}
-              onEliminar={() => handleEliminar(tratamiento.id)}
+              onModificar={() => handleOpenModificar(tratamiento)}
+              onEliminar={() => handleOpenEliminar(tratamiento)}
             />
           ))}
         </section>
       </div>
 
-      <AgregarTratamientoModal isOpen={isModalOpen} onClose={closeModal} />
+      <AgregarTratamientoModal
+        isOpen={isAgregarModalOpen}
+        onClose={closeModals}
+      />
+
+      <ModificarTratamientoModal
+        isOpen={isModificarModalOpen}
+        onClose={closeModals}
+        tratamiento={tratamientoSeleccionado}
+      />
+
+      <ConfirmarEliminacionModal
+        isOpen={isEliminarModalOpen}
+        onClose={closeModals}
+        onConfirm={handleConfirmarEliminar}
+        tratamientoNombre={tratamientoSeleccionado?.titulo}
+      />
     </div>
   );
 };

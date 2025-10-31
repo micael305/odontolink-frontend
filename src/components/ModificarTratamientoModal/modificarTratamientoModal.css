@@ -1,3 +1,4 @@
+/* src/components/ModificarTratamientoModal/modificarTratamientoModal.css */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -166,4 +167,57 @@
   width: auto;
   padding: 0.6rem 1.25rem;
   font-size: 0.95rem;
+}
+
+.modal-tratamiento-info {
+  background-color: #e6f0ff;
+  border: 1px solid #b8d4ff;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+}
+
+.modal-tratamiento-info h4 {
+  margin: 0 0 0.25rem 0;
+  color: #053b8a;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.modal-tratamiento-info span {
+  font-size: 0.9rem;
+  color: #053b8a;
+}
+
+.modal-horarios-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.modal-horario-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background-color: #f8f9fa;
+  border: 1px solid #eee;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.modal-horario-pill button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  color: #888;
+  font-size: 1rem;
+}
+.modal-horario-pill button:hover {
+  color: #dc3545;
 }
