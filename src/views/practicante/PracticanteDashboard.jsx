@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import Button from '../../components/Button/Button'; 
+import Button from '../../components/Button/Button';
 import { FiSettings, FiClipboard } from 'react-icons/fi';
-import './Practicante.css';
+import './practicante.css';
 
 const PracticanteDashboard = () => {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ const PracticanteDashboard = () => {
   };
 
   const handleEvolucion = () => {
-    console.log('Navegando a Evolución Clínica...');
+    navigate('/practicante/pacientes');
   };
 
   return (

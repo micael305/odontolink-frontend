@@ -82,7 +82,6 @@ const GestionTratamientos = () => {
             <FiChevronLeft />
             Volver
           </Link>
-
           <Button
             variant="success"
             icon={<FiPlus />}
@@ -92,6 +91,11 @@ const GestionTratamientos = () => {
             Agregar Tratamiento
           </Button>
         </header>
+
+        {/* --- ESTA ES LA LÍNEA QUE LO ARREGLA --- */}
+        <div className="search-bar-container">
+          {/* Este div vacío ocupa el mismo espacio que la barra de búsqueda */}
+        </div>
 
         <section className="treatment-list">
           <h2 className="treatment-list-header">

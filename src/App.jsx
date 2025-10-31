@@ -1,10 +1,10 @@
-// src/App.jsx
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './views/auth/Home.jsx';
 import Login from './views/auth/Login.jsx';
 import Register from './views/auth/Register.jsx';
 import PracticanteDashboard from './views/practicante/PracticanteDashboard.jsx';
 import GestionTratamientos from './views/practicante/GestionarTratamientos.jsx';
+import ListaPacientes from './views/practicante/ListaPacientes.jsx';
 
 function App() {
   return (
@@ -20,6 +20,10 @@ function App() {
         <Route
           path="/practicante/tratamientos"
           element={<GestionTratamientos />}
+        />
+        <Route
+          path="/practicante/pacientes"
+          element={<ListaPacientes />}
         />
       </Routes>
     </BrowserRouter>
