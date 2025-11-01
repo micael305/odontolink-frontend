@@ -3,7 +3,7 @@ import { Link, useNavigate} from 'react-router-dom';
 import { IoIosArrowBack } from 'react-icons/io';
 import { LiaAddressCard } from 'react-icons/lia';
 import { FiLock, FiEye, FiEyeOff, FiInfo, FiLogIn } from 'react-icons/fi'; 
-import './Auth.css';
+import './auth.css';
 import Button from '../../components/Button/Button'; 
 
 const Login = () => {

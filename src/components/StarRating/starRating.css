@@ -17,3 +17,7 @@
 .star-rating-button.on {
   color: #ffc107; /* Estrellas llenas */
 }
+
+.star-rating-button.read-only {
+  cursor: default;
+}

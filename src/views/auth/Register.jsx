@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Auth.css';
 import { IoIosArrowBack } from 'react-icons/io';
 import {
@@ -22,6 +22,12 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Formulario de registro enviado');
+  };
+
+   const navigate = useNavigate();
+
+    const handleGestionar = () => {
+    navigate('/paciente/dashboard');
   };
 
   return (
@@ -142,6 +148,7 @@ const Register = () => {
               variant="success"
               icon={<FiUserPlus />}
               className="auth-register-btn"
+              onClick={handleGestionar}
             >
               Crear Cuenta
             </Button>

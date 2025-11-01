@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FiStar } from 'react-icons/fi';
 import './starRating.css';
 
-const StarRating = ({ rating, onRatingChange }) => {
+const StarRating = ({ rating, onRatingChange, readOnly = false }) => {
   const [hover, setHover] = useState(0);
 
   return (
@@ -15,10 +15,11 @@ const StarRating = ({ rating, onRatingChange }) => {
             key={index}
             className={`star-rating-button ${
               ratingValue <= (hover || rating) ? 'on' : 'off'
-            }`}
-            onClick={() => onRatingChange(ratingValue)}
-            onMouseEnter={() => setHover(ratingValue)}
-            onMouseLeave={() => setHover(0)}
+            } ${readOnly ? 'read-only' : ''}`}
+            onClick={() => !readOnly && onRatingChange(ratingValue)}
+            onMouseEnter={() => !readOnly && setHover(ratingValue)}
+            onMouseLeave={() => !readOnly && setHover(0)}
+            disabled={readOnly}
           >
             <FiStar fill="currentColor" />
           </button>
