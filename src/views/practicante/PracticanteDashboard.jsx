@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button/Button';
-import { FiSettings, FiUsers, FiList } from 'react-icons/fi';
+import { FiSettings, FiUsers, FiList, FiUser } from 'react-icons/fi';
 import './practicante.css';
 
 const PracticanteDashboard = () => {
@@ -10,12 +10,16 @@ const PracticanteDashboard = () => {
     navigate('/practicante/tratamientos');
   };
 
- const handleMisPacientes = () => {
+  const handleMisPacientes = () => {
     navigate('/practicante/pacientes');
   };
 
   const handleHistorial = () => {
     navigate('/practicante/historial');
+  };
+
+  const handleMiPerfil = () => {
+    navigate('/practicante/perfil');
   };
 
   return (
@@ -25,6 +29,13 @@ const PracticanteDashboard = () => {
         <p>Bienvenido al panel de gestión para practicantes de Odontolink.</p>
 
         <div className="dashboard-buttons">
+           <Button
+            variant="primary"
+            icon={<FiUser />}
+            onClick={handleMiPerfil}
+          >
+            Mi Perfil
+          </Button>
           <Button
             variant="primary"
             icon={<FiSettings />}
