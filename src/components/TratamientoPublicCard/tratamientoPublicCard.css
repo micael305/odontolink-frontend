@@ -1,0 +1,62 @@
+.tratamiento-public-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.tpc-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.tpc-header h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #222;
+  margin: 0;
+}
+
+.tpc-header p {
+  font-size: 0.95rem;
+  color: #666;
+  margin: 0.25rem 0 0 0;
+  line-height: 1.4;
+}
+
+.tpc-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tpc-info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.tpc-info-item svg {
+  color: #0d6efd;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.tpc-info-item.abono svg {
+  color: #198754;
+}
+
+.tpc-footer {
+  margin-top: 1.5rem;
+}
+
+.tpc-footer .btn {
+  width: 100%;
+}

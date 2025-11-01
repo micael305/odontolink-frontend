@@ -1,3 +1,4 @@
+/* src/views/paciente/paciente.css */
 .dashboard-card {
   background: #ffffff;
   padding: 2.5rem;
@@ -32,7 +33,7 @@
 
 .paciente-content-container {
   width: 100%;
-  max-width: 800px;
+  max-width: 900px; /* <--- CAMBIO AQUÍ (antes 800px) */
   margin: 0 auto;
   padding-top: 3rem;
   padding-bottom: 3rem;
@@ -74,4 +75,72 @@
   display: flex;
   flex-direction: column;
   gap: 0;
+}
+
+/* Reservar Turno  */
+
+.filters-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.search-bar-wrapper {
+  position: relative;
+}
+
+.search-bar-wrapper svg {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+  font-size: 1.3rem;
+}
+
+.search-bar-input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+.search-bar-input:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+}
+
+.filter-button {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #ddd;
+  color: #333;
+  font-weight: 500;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+.filter-button:hover {
+  background: #f8f9fa;
+}
+
+.tratamientos-grid-container h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.tratamientos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 4rem 1rem;
 }

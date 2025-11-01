@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button/Button';
-import { FiStar } from 'react-icons/fi';
+import { FiStar, FiCalendar } from 'react-icons/fi';
 import './paciente.css';
 
 const PacienteDashboard = () => {
@@ -10,6 +10,10 @@ const PacienteDashboard = () => {
     navigate('/paciente/feedback');
   };
 
+  const handleReservarTurno = () => {
+    navigate('/paciente/reservar-turno');
+  };
+
   return (
     <div className="page-container">
       <div className="dashboard-card">
@@ -17,6 +21,13 @@ const PacienteDashboard = () => {
         <p>Bienvenido a tu portal de gestión de turnos y atenciones.</p>
 
         <div className="dashboard-buttons">
+          <Button
+            variant="primary"
+            icon={<FiCalendar />}
+            onClick={handleReservarTurno}
+          >
+            Reservar Turno
+          </Button>
           <Button
             variant="primary"
             icon={<FiStar />}
