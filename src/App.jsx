@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route,HashRouter } from 'react-router-dom';
 import Home from './views/auth/Home.jsx';
 import Login from './views/auth/Login.jsx';
 import Register from './views/auth/Register.jsx';
@@ -12,7 +12,7 @@ import GestionarTurnos from './views/practicante/GestionarTurnos.jsx';
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -25,7 +25,7 @@ function App() {
         <Route path="/practicante/perfil" element={<MiPerfil />} />
         <Route path="/practicante/turnos" element={<GestionarTurnos />}/>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
