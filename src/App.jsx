@@ -8,6 +8,7 @@ import ListaPacientes from './views/practicante/ListaPacientes.jsx';
 import EvolucionClinica from './views/practicante/EvolucionClinica.jsx';
 import HistorialAtenciones from './views/practicante/HistorialAtenciones.jsx';
 import MiPerfil from './views/practicante/MiPerfil.jsx';
+import GestionarTurnos from './views/practicante/GestionarTurnos.jsx';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/practicante/evolucion/:pacienteId" element={<EvolucionClinica />}/>
         <Route path="/practicante/historial" element={<HistorialAtenciones />}/>
         <Route path="/practicante/perfil" element={<MiPerfil />} />
+        <Route path="/practicante/turnos" element={<GestionarTurnos />}/>
       </Routes>
     </BrowserRouter>
   );

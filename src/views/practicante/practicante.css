@@ -350,3 +350,140 @@
   padding: 0.6rem 1rem;
   font-size: 0.9rem;
 }
+
+/* Gestionar turnos */
+
+.calendar-title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: #fff;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  border: 1px solid #ddd;
+  border-bottom: none;
+}
+.calendar-title-bar h2 {
+  color: #222;
+  font-size: 1.2rem;
+  margin: 0;
+}
+.calendar-title-bar button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  color: #555;
+}
+.calendar-title-bar button:hover {
+  color: #000;
+}
+
+.calendar-container {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 12px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  overflow: hidden;
+  background: #ffffff;
+}
+.calendar-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+}
+.calendar-header-day {
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  min-height: 600px;
+}
+.calendar-day {
+  border-right: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 0.5rem;
+  position: relative;
+  min-height: 120px;
+}
+.calendar-day:nth-child(7n) {
+  border-right: none;
+}
+.calendar-day-number {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #333;
+}
+.calendar-day.padding {
+  background: #fdfdfd;
+}
+.calendar-day.padding .calendar-day-number {
+  color: #ccc;
+}
+.turnos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.turno-item {
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #fff;
+}
+.turno-item-hora {
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: block;
+}
+.turno-item-paciente {
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: block;
+  margin-top: 0.25rem;
+}
+.turno-item.agendado {
+  background-color: #0d6efd;
+  border-color: #0b5ed7;
+}
+.turno-item.agendado:hover {
+  background-color: #0b5ed7;
+}
+.turno-item.completado {
+  background-color: #198754;
+  border-color: #157347;
+}
+.turno-item.completado:hover {
+  background-color: #157347;
+}
+.turno-item.cancelado {
+  background-color: #6c757d;
+  border-color: #5c636a;
+}
+.turno-item.cancelado:hover {
+  background-color: #5c636a;
+}
+.turno-item.no-asistio {
+  background-color: #ffc107;
+  border-color: #e6ac00;
+  color: #333;
+}
+.turno-item.no-asistio:hover {
+  background-color: #e6ac00;
+}
