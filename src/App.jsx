@@ -5,6 +5,7 @@ import Register from './views/auth/Register.jsx';
 import PracticanteDashboard from './views/practicante/PracticanteDashboard.jsx';
 import GestionTratamientos from './views/practicante/GestionarTratamientos.jsx';
 import ListaPacientes from './views/practicante/ListaPacientes.jsx';
+import EvolucionClinica from './views/practicante/EvolucionClinica.jsx';
 
 function App() {
   return (
@@ -24,6 +25,10 @@ function App() {
         <Route
           path="/practicante/pacientes"
           element={<ListaPacientes />}
+        />
+        <Route
+          path="/practicante/evolucion/:pacienteId"
+          element={<EvolucionClinica />}
         />
       </Routes>
     </BrowserRouter>

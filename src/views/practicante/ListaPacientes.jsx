@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; 
 import PacienteListItem from '../../components/PacienteListItem/PacienteListItem';
 import './practicante.css';
 import { FiChevronLeft, FiSearch } from 'react-icons/fi';
@@ -10,8 +10,10 @@ const DUMMY_PACIENTES = [
 ];
 
 const ListaPacientes = () => {
+  const navigate = useNavigate(); 
+
   const handleSelectPaciente = (pacienteId) => {
-    console.log('Navegando a la evolución del paciente:', pacienteId);
+    navigate(`/practicante/evolucion/${pacienteId}`);
   };
 
   return (
@@ -22,7 +24,9 @@ const ListaPacientes = () => {
             <FiChevronLeft />
             Volver
           </Link>
+          <h1>Seleccionar Paciente</h1>
         </header>
+
         <div className="search-bar-container">
           <div className="search-input-wrapper">
             <FiSearch />

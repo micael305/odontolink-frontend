@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button/Button';
-import { FiSettings, FiClipboard } from 'react-icons/fi';
+import { FiSettings, FiUsers, FiList } from 'react-icons/fi';
 import './practicante.css';
 
 const PracticanteDashboard = () => {
@@ -10,8 +10,12 @@ const PracticanteDashboard = () => {
     navigate('/practicante/tratamientos');
   };
 
-  const handleEvolucion = () => {
+ const handleMisPacientes = () => {
     navigate('/practicante/pacientes');
+  };
+
+  const handleHistorial = () => {
+    navigate('/practicante/historial');
   };
 
   return (
@@ -30,10 +34,17 @@ const PracticanteDashboard = () => {
           </Button>
           <Button
             variant="primary"
-            icon={<FiClipboard />}
-            onClick={handleEvolucion}
+            icon={<FiUsers />}
+            onClick={handleMisPacientes}
           >
-            Evolución Clínica
+            Mis Pacientes
+          </Button>
+          <Button
+            variant="primary"
+            icon={<FiList />}
+            onClick={handleHistorial}
+          >
+            Historial de Atenciones
           </Button>
         </div>
       </div>

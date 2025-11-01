@@ -39,13 +39,16 @@
   padding-bottom: 3rem;
 }
 
+.practicante-content-container.evolucion {
+  max-width: 1100px;
+}
+
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
   position: relative;
-  min-height: 40px; /* <--- ESTA ES LA LÍNEA QUE LO ARREGLA */
 }
 
 .page-back-link {
@@ -120,4 +123,191 @@
 .patient-list-container {
   display: flex;
   flex-direction: column;
+}
+
+/* Evolucion clinica  */
+
+.evolucion-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.evolucion-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.evolucion-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.info-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.info-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #222;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.info-card-header svg {
+  color: #0d6efd;
+  font-size: 1.3rem;
+}
+
+.info-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.info-key-value {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.info-key-value .key {
+  font-size: 0.8rem;
+  color: #777;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.info-key-value .value {
+  font-size: 1rem;
+  color: #222;
+  font-weight: 500;
+}
+
+.tag-en-progreso {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  color: #053b8a;
+  background-color: #e6f0ff;
+  margin-top: 0.5rem;
+}
+
+.nueva-evolucion-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 1.25rem 1.5rem;
+}
+
+.nueva-evolucion-card h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #222;
+  margin: 0;
+}
+
+.nueva-evolucion-card .btn {
+  width: auto;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+}
+
+.historial-evoluciones-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.historial-subtitulo {
+  font-size: 0.95rem;
+  color: #666;
+  padding: 0 1.5rem 1.25rem 1.5rem;
+  margin: 0;
+}
+
+.historial-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.evolucion-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.evolucion-item:last-child {
+  padding-bottom: 1.5rem;
+}
+
+.evolucion-item-badge {
+  flex-shrink: 0;
+}
+
+.evolucion-item-badge span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #e6f0ff;
+  color: #053b8a;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.evolucion-item-content {
+  flex: 1;
+}
+
+.evolucion-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.evolucion-item-header .fecha {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #222;
+}
+
+.evolucion-item-header .hora {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #777;
+  margin-left: 0.5rem;
+}
+
+.evolucion-item-header .practicante {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+}
+
+.evolucion-item-body {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.6;
+  margin: 0;
 }
