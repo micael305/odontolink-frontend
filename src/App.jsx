@@ -6,6 +6,7 @@ import PracticanteDashboard from './views/practicante/PracticanteDashboard.jsx';
 import GestionTratamientos from './views/practicante/GestionarTratamientos.jsx';
 import ListaPacientes from './views/practicante/ListaPacientes.jsx';
 import EvolucionClinica from './views/practicante/EvolucionClinica.jsx';
+import HistorialAtenciones from './views/practicante/HistorialAtenciones.jsx';
 
 function App() {
   return (
@@ -14,22 +15,11 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route
-          path="/practicante/dashboard"
-          element={<PracticanteDashboard />}
-        />
-        <Route
-          path="/practicante/tratamientos"
-          element={<GestionTratamientos />}
-        />
-        <Route
-          path="/practicante/pacientes"
-          element={<ListaPacientes />}
-        />
-        <Route
-          path="/practicante/evolucion/:pacienteId"
-          element={<EvolucionClinica />}
-        />
+        <Route path="/practicante/dashboard" element={<PracticanteDashboard />}/>
+        <Route path="/practicante/tratamientos" element={<GestionTratamientos />} />
+        <Route path="/practicante/pacientes" element={<ListaPacientes />} />
+        <Route path="/practicante/evolucion/:pacienteId" element={<EvolucionClinica />}/>
+        <Route path="/practicante/historial" element={<HistorialAtenciones />}/>
       </Routes>
     </BrowserRouter>
   );

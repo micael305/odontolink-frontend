@@ -1,0 +1,19 @@
+.star-rating-container {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.star-rating-button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  color: #e0e0e0; /* Estrellas vacías */
+  font-size: 1.75rem;
+  transition: color 0.2s ease;
+}
+
+.star-rating-button.on {
+  color: #ffc107; /* Estrellas llenas */
+}

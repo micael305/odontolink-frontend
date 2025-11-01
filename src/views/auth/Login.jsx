@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import { IoIosArrowBack } from 'react-icons/io';
 import { LiaAddressCard } from 'react-icons/lia';
 import { FiLock, FiEye, FiEyeOff, FiInfo, FiLogIn } from 'react-icons/fi'; 
@@ -16,6 +16,13 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Formulario enviado');
+
+  };
+
+  const navigate = useNavigate();
+
+  const handleGestionar = () => {
+    navigate('/practicante/dashboard');
   };
 
   return (
@@ -69,6 +76,7 @@ const Login = () => {
               variant="primary"
               icon={<FiLogIn />}
               className="auth-login-btn"
+              onClick={handleGestionar}
             >
               Ingresar
             </Button>

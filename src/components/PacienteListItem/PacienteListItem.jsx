@@ -1,8 +1,13 @@
 import Button from '../Button/Button';
 import './pacienteListItem.css';
-import { FiChevronRight } from 'react-icons/fi';
 
-const PacienteListItem = ({ paciente, onSelect }) => {
+const PacienteListItem = ({
+  paciente,
+  onSelect,
+  buttonText,
+  buttonIcon,
+  buttonVariant = 'outline-secondary',
+}) => {
   return (
     <div className="patient-list-item">
       <div className="patient-info">
@@ -10,11 +15,11 @@ const PacienteListItem = ({ paciente, onSelect }) => {
         <span className="dni">DNI: {paciente.dni}</span>
       </div>
       <Button
-        variant="outline-secondary"
-        icon={<FiChevronRight />}
+        variant={buttonVariant}
+        icon={buttonIcon}
         onClick={onSelect}
       >
-        Ver Evolución
+        {buttonText}
       </Button>
     </div>
   );

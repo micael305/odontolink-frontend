@@ -1,7 +1,9 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import PacienteListItem from '../../components/PacienteListItem/PacienteListItem';
+import CalificarPacienteModal from '../../components/CalificarPacienteModal/CalificarPacienteModal';
 import './practicante.css';
-import { FiChevronLeft, FiSearch, FiChevronRight } from 'react-icons/fi';
+import { FiChevronLeft, FiSearch, FiStar } from 'react-icons/fi';
 
 const DUMMY_PACIENTES = [
   { id: 'p1', nombre: 'Maria Gonzalez', dni: '12.345.678' },
@@ -9,11 +11,18 @@ const DUMMY_PACIENTES = [
   { id: 'p3', nombre: 'Ana Fernandez', dni: '34.567.890' },
 ];
 
-const ListaPacientes = () => {
-  const navigate = useNavigate();
+const HistorialAtenciones = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pacienteSeleccionado, setPacienteSeleccionado] = useState(null);
 
-  const handleSelectPaciente = (pacienteId) => {
-    navigate(`/practicante/evolucion/${pacienteId}`);
+  const handleOpenModal = (paciente) => {
+    setPacienteSeleccionado(paciente);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setPacienteSeleccionado(null);
   };
 
   return (
@@ -24,7 +33,7 @@ const ListaPacientes = () => {
             <FiChevronLeft />
             Volver
           </Link>
-          <h1>Seleccionar Paciente</h1>
+          <h1>Historial de Atenciones</h1>
         </header>
 
         <div className="search-bar-container">
@@ -42,15 +51,21 @@ const ListaPacientes = () => {
             <PacienteListItem
               key={paciente.id}
               paciente={paciente}
-              onSelect={() => handleSelectPaciente(paciente.id)}
-              buttonText="Ver Evolución"
-              buttonIcon={<FiChevronRight />}
+              onSelect={() => handleOpenModal(paciente)}
+              buttonText="Calificar"
+              buttonIcon={<FiStar />}
             />
           ))}
         </section>
       </div>
+
+      <CalificarPacienteModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        paciente={pacienteSeleccionado}
+      />
     </div>
   );
 };
 
-export default ListaPacientes;
+export default HistorialAtenciones;
