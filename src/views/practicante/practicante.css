@@ -30,20 +30,12 @@
   width: 100%;
 }
 
-.page-container-practicante {
-  align-items: flex-start;
-}
-
 .practicante-content-container {
   width: 100%;
-  max-width: 800px;
+  max-width: 1100px;
   margin: 0 auto;
   padding-top: 3rem;
   padding-bottom: 3rem;
-}
-
-.practicante-content-container.evolucion {
-  max-width: 1100px;
 }
 
 .page-header {
@@ -52,6 +44,7 @@
   align-items: center;
   margin-bottom: 2rem;
   position: relative;
+  min-height: 40px;
 }
 
 .page-back-link {
@@ -128,8 +121,6 @@
   flex-direction: column;
 }
 
-/* Evolucion clinica  */
-
 .evolucion-layout {
   display: grid;
   grid-template-columns: 300px 1fr;
@@ -176,25 +167,6 @@
   flex-direction: column;
   gap: 1rem;
   padding: 1.5rem;
-}
-
-.info-key-value {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-}
-
-.info-key-value .key {
-  font-size: 0.8rem;
-  color: #777;
-  font-weight: 500;
-  text-transform: uppercase;
-}
-
-.info-key-value .value {
-  font-size: 1rem;
-  color: #222;
-  font-weight: 500;
 }
 
 .tag-en-progreso {
@@ -315,7 +287,6 @@
   margin: 0;
 }
 
-/* Perfil practicante */
 .perfil-layout {
   display: flex;
   flex-direction: column;
@@ -350,8 +321,6 @@
   padding: 0.6rem 1rem;
   font-size: 0.9rem;
 }
-
-/* Gestionar turnos */
 
 .calendar-title-bar {
   display: flex;
@@ -486,4 +455,41 @@
 }
 .turno-item.no-asistio:hover {
   background-color: #e6ac00;
+}
+
+/* --- ESTILOS AÑADIDOS PARA EL BOTÓN DE CHAT FLOTANTE --- */
+.fab-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 100;
+}
+
+.fab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  padding: 1rem 1.5rem;
+  border-radius: 28px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4);
+  transition: all 0.3s ease;
+  width: auto; /* Ancho automático para que se ajuste al texto */
+}
+.fab svg {
+  font-size: 1.3rem;
+}
+.fab:hover {
+  background-color: #0b5ed7;
+  box-shadow: 0 6px 20px rgba(13, 110, 253, 0.5);
+}
+.fab:disabled {
+  background-color: #aaa;
+  box-shadow: none;
+  cursor: not-allowed;
 }

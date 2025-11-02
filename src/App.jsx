@@ -1,4 +1,5 @@
 import { Routes, Route,HashRouter } from 'react-router-dom';
+// Vistas de Autenticación
 import Home from './views/auth/Home.jsx';
 import Login from './views/auth/Login.jsx';
 import Register from './views/auth/Register.jsx';
@@ -17,14 +18,19 @@ import ListarTratamientos from './views/paciente/ListarTratamientos.jsx';
 import ReservarTurno from './views/paciente/ReservarTurno.jsx';
 import HistorialAtencionesPaciente from './views/paciente/HistorialAtencionesPaciente.jsx';
 import TurnoConfirmado from './views/paciente/TurnoConfirmado.jsx';
+//vista de chat
+import ChatLayout from './views/chat/ChatLayout.jsx';
+
 
 function App() {
   return (
     <HashRouter>
       <Routes>
+        {/* Rutas de Autenticación */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        {/* Rutas de Practicante */}
         <Route path="/practicante/dashboard" element={<PracticanteDashboard />}/>
         <Route path="/practicante/tratamientos" element={<GestionTratamientos />} />
         <Route path="/practicante/pacientes" element={<ListaPacientes />} />
@@ -32,12 +38,15 @@ function App() {
         <Route path="/practicante/historial" element={<HistorialAtenciones />}/>
         <Route path="/practicante/perfil" element={<MiPerfil />} />
         <Route path="/practicante/turnos" element={<GestionarTurnos />}/>
+        {/* Rutas de Paciente */}
         <Route path="/paciente/dashboard" element={<PacienteDashboard />}/>
         <Route path="/paciente/feedback" element={<MiFeedback />} />
         <Route path="/paciente/tratamientos" element={<ListarTratamientos />} />
         <Route path="/paciente/reservar-turno/:tratamientoId" element={<ReservarTurno />} />
         <Route path="/paciente/historial" element={<HistorialAtencionesPaciente />} />
         <Route path="/paciente/turno-confirmado" element={<TurnoConfirmado />} />
+        {/* Rutas Compartidas */}
+        <Route path="/chat" element={<ChatLayout />} />
       </Routes>
     </HashRouter>
   );

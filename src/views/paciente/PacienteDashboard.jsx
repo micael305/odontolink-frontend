@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button/Button';
-import { FiStar, FiCalendar, FiList } from 'react-icons/fi';
+import { FiStar, FiCalendar, FiList, FiMessageSquare } from 'react-icons/fi';
 import './paciente.css';
 
 const PacienteDashboard = () => {
@@ -17,6 +17,9 @@ const PacienteDashboard = () => {
   const handleHistorialAtenciones = () => {
     navigate('/paciente/historial');
   };
+  const handleChat = () => {
+    navigate('/chat');
+  };
 
   return (
     <div className="page-container">
@@ -25,6 +28,13 @@ const PacienteDashboard = () => {
         <p>Bienvenido a tu portal de gestión de turnos y atenciones.</p>
 
         <div className="dashboard-buttons">
+          <Button
+            variant="primary"
+            icon={<FiMessageSquare />}
+            onClick={handleChat}
+          >
+            Chat Interno
+          </Button>
           <Button
             variant="primary"
             icon={<FiCalendar />}
@@ -46,6 +56,7 @@ const PacienteDashboard = () => {
           >
             Mi Feedback
           </Button>
+          
         </div>
       </div>
     </div>
