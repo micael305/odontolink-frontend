@@ -11,7 +11,7 @@ const PacienteDashboard = () => {
   };
 
   const handleReservarTurno = () => {
-    navigate('/paciente/reservar-turno');
+    navigate('/paciente/tratamientos');
   };
 
   return (
