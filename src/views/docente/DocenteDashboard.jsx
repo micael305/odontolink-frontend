@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button/Button';
-import { FiUsers } from 'react-icons/fi';
+import { FiUsers, FiSearch } from 'react-icons/fi';
 import './docente.css';
 
 const DocenteDashboard = () => {
@@ -8,6 +8,10 @@ const DocenteDashboard = () => {
 
   const handlePracticantes = () => {
     navigate('/docente/practicantes');
+  };
+
+  const handleBuscar = () => {
+    navigate('/docente/buscar-practicantes');
   };
 
   return (
@@ -23,6 +27,13 @@ const DocenteDashboard = () => {
             onClick={handlePracticantes}
           >
             Practicantes a cargo
+          </Button>
+          <Button
+            variant="primary"
+            icon={<FiSearch />}
+            onClick={handleBuscar}
+          >
+            Buscar Practicantes
           </Button>
         </div>
       </div>

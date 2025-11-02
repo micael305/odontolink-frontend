@@ -21,6 +21,7 @@ import TurnoConfirmado from './views/paciente/TurnoConfirmado.jsx';
 // Vistas de Docente
 import DocenteDashboard from './views/docente/DocenteDashboard.jsx';
 import ListaPracticantes from './views/docente/ListaPracticantes.jsx';
+import BuscarPracticantes from './views/docente/BuscarPracticantes.jsx';
 //vista de chat
 import ChatLayout from './views/chat/ChatLayout.jsx';
 
@@ -51,6 +52,7 @@ function App() {
         {/* Rutas de Docente */}
         <Route path="/docente/dashboard" element={<DocenteDashboard />} />
         <Route path="/docente/practicantes" element={<ListaPracticantes />} />
+        <Route path="/docente/buscar-practicantes" element={<BuscarPracticantes />} />
         {/* Rutas Compartidas */}
         <Route path="/chat" element={<ChatLayout />} />
       </Routes>
