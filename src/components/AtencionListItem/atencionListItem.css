@@ -1,0 +1,36 @@
+.atencion-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1rem;
+}
+.atencion-list-item:last-child {
+  margin-bottom: 0;
+}
+
+.atencion-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.atencion-info .tratamiento {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #222;
+}
+
+.atencion-info .details {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.atencion-list-item .btn {
+  width: auto;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+}

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button/Button';
-import { FiStar, FiCalendar } from 'react-icons/fi';
+import { FiStar, FiCalendar, FiList } from 'react-icons/fi';
 import './paciente.css';
 
 const PacienteDashboard = () => {
@@ -12,6 +12,10 @@ const PacienteDashboard = () => {
 
   const handleReservarTurno = () => {
     navigate('/paciente/tratamientos');
+  };
+
+  const handleHistorialAtenciones = () => {
+    navigate('/paciente/historial');
   };
 
   return (
@@ -27,6 +31,13 @@ const PacienteDashboard = () => {
             onClick={handleReservarTurno}
           >
             Reservar Turno
+          </Button>
+          <Button
+            variant="primary"
+            icon={<FiList />}
+            onClick={handleHistorialAtenciones}
+          >
+            Historial de Atenciones
           </Button>
           <Button
             variant="primary"

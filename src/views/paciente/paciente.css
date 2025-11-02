@@ -286,3 +286,8 @@
   padding: 0.5rem;
   grid-column: 1 / -1;
 }
+
+.atencion-list-container {
+  display: flex;
+  flex-direction: column;
+}

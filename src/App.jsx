@@ -15,6 +15,7 @@ import PacienteDashboard from './views/paciente/PacienteDashboard.jsx';
 import MiFeedback from './views/paciente/MiFeedback.jsx';
 import ListarTratamientos from './views/paciente/ListarTratamientos.jsx';
 import ReservarTurno from './views/paciente/ReservarTurno.jsx';
+import HistorialAtencionesPaciente from './views/paciente/HistorialAtencionesPaciente.jsx';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path="/paciente/feedback" element={<MiFeedback />} />
         <Route path="/paciente/tratamientos" element={<ListarTratamientos />} />
         <Route path="/paciente/reservar-turno/:tratamientoId" element={<ReservarTurno />} />
+        <Route path="/paciente/historial" element={<HistorialAtencionesPaciente />} />
       </Routes>
     </HashRouter>
   );
