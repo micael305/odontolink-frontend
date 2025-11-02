@@ -18,6 +18,9 @@ import ListarTratamientos from './views/paciente/ListarTratamientos.jsx';
 import ReservarTurno from './views/paciente/ReservarTurno.jsx';
 import HistorialAtencionesPaciente from './views/paciente/HistorialAtencionesPaciente.jsx';
 import TurnoConfirmado from './views/paciente/TurnoConfirmado.jsx';
+// Vistas de Docente
+import DocenteDashboard from './views/docente/DocenteDashboard.jsx';
+import ListaPracticantes from './views/docente/ListaPracticantes.jsx';
 //vista de chat
 import ChatLayout from './views/chat/ChatLayout.jsx';
 
@@ -45,6 +48,9 @@ function App() {
         <Route path="/paciente/reservar-turno/:tratamientoId" element={<ReservarTurno />} />
         <Route path="/paciente/historial" element={<HistorialAtencionesPaciente />} />
         <Route path="/paciente/turno-confirmado" element={<TurnoConfirmado />} />
+        {/* Rutas de Docente */}
+        <Route path="/docente/dashboard" element={<DocenteDashboard />} />
+        <Route path="/docente/practicantes" element={<ListaPracticantes />} />
         {/* Rutas Compartidas */}
         <Route path="/chat" element={<ChatLayout />} />
       </Routes>

@@ -1,0 +1,101 @@
+.practicante-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.practicante-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-basis: 300px;
+  flex-grow: 1;
+}
+
+.practicante-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: #e6f0ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0d6efd;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.practicante-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.practicante-details .name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #222;
+}
+
+.practicante-details .comision {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.15rem;
+}
+
+.practicante-stats {
+  display: flex;
+  gap: 1.5rem;
+  flex-grow: 1;
+  flex-basis: 300px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-item .label {
+  font-size: 0.8rem;
+  color: #777;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.stat-item .value {
+  font-size: 1rem;
+  color: #222;
+  font-weight: 500;
+}
+
+.stat-item .tag {
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  width: fit-content;
+}
+.stat-item .tag.activo {
+  color: #155724;
+  background-color: #e6f7eb;
+}
+.stat-item .tag.inactivo {
+  color: #383d41;
+  background-color: #e2e3e5;
+}
+
+.practicante-actions {
+  flex-shrink: 0;
+}
+
+.practicante-actions .btn {
+  width: auto;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+}
