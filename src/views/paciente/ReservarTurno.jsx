@@ -1,8 +1,10 @@
+// src/views/paciente/ReservarTurno.jsx
 import { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import './paciente.css';
 import { FiChevronLeft, FiCheck, FiUser } from 'react-icons/fi';
 import DateButton from '../../components/DateButton/DateButton';
+import ConfirmarReservaModal from '../../components/ConfirmarReservaModal/ConfirmarReservaModal';
 
 const DUMMY_TRATAMIENTO_DETALLE = {
   t1: {
@@ -74,6 +76,8 @@ const ReservarTurno = () => {
   const { tratamientoId } = useParams();
   const [selectedDate, setSelectedDate] = useState(3);
   const [selectedTime, setSelectedTime] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const detalles =
     DUMMY_TRATAMIENTO_DETALLE[tratamientoId] ||
@@ -84,16 +88,29 @@ const ReservarTurno = () => {
     setSelectedTime(null);
   };
 
-  const handleConfirmar = () => {
-    console.log('Turno a confirmar:');
-    console.log('Tratamiento:', detalles.tratamiento.nombre);
-    console.log('Fecha:', selectedDate);
-    console.log('Hora:', selectedTime);
+  const handleOpenConfirmModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleConfirmarReserva = () => {
+    console.log('Turno confirmado!');
+    setIsModalOpen(false);
+    navigate('/paciente/turno-confirmado');
   };
 
   const horariosDelDia = DUMMY_HORARIOS_POR_DIA[selectedDate] || {
     mañana: [],
     tarde: [],
+  };
+
+  const getResumenTurno = () => {
+    const diaObj = DUMMY_DIAS.find((d) => d.diaNum === selectedDate);
+    return {
+      practicante: detalles.practicante.nombre,
+      fecha: `${diaObj.diaNum} de ${diaObj.mes}`,
+      hora: selectedTime,
+      tratamiento: detalles.tratamiento.nombre,
+    };
   };
 
   return (
@@ -198,13 +215,20 @@ const ReservarTurno = () => {
       <div className="fab-container">
         <button
           className="fab"
-          onClick={handleConfirmar}
+          onClick={handleOpenConfirmModal}
           disabled={!selectedDate || !selectedTime}
         >
           <FiCheck />
           Confirmar Turno
         </button>
       </div>
+
+      <ConfirmarReservaModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleConfirmarReserva}
+        resumen={getResumenTurno()}
+      />
     </div>
   );
 };

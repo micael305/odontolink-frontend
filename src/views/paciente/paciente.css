@@ -124,7 +124,7 @@
 .tratamientos-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 4rem 1rem;
+  gap: 4rem 1.5rem;
 }
 .reserva-layout {
   display: flex;
@@ -153,7 +153,6 @@
   align-items: center;
   gap: 1rem;
 }
-
 .avatar-icon-wrapper {
   width: 50px;
   height: 50px;
@@ -166,7 +165,6 @@
   font-size: 1.5rem;
   flex-shrink: 0;
 }
-
 .practitioner-details {
   display: flex;
   flex-direction: column;
@@ -287,7 +285,88 @@
   grid-column: 1 / -1;
 }
 
-.atencion-list-container {
+/* Turno Confirmado */
+
+.confirmacion-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 450px;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 2.5rem;
+}
+
+.confirmacion-icon {
+  font-size: 4rem;
+  color: #198754;
+  line-height: 1;
+  margin-bottom: 1.5rem;
+}
+
+.confirmacion-card h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #222;
+  margin: 0 0 0.5rem 0;
+}
+
+.confirmacion-card p {
+  font-size: 1rem;
+  color: #666;
+  margin: 0 0 1.5rem 0;
+}
+
+.confirmacion-detalle-box {
+  background-color: #f8f9fa;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
+  gap: 1rem;
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.detalle-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.detalle-item svg {
+  color: #0d6efd;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.detalle-item-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.detalle-item-details label {
+  font-size: 0.8rem;
+  color: #777;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.detalle-item-details span {
+  font-size: 1rem;
+  color: #222;
+  font-weight: 600;
+}
+
+.confirmacion-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.confirmacion-actions .btn {
+  width: 100%;
 }
