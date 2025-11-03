@@ -1,4 +1,5 @@
 import { Routes, Route,HashRouter } from 'react-router-dom';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.jsx';
 // Vistas de Autenticación
 import Home from './views/auth/Home.jsx';
 import Login from './views/auth/Login.jsx';
@@ -36,9 +37,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<RegisterPatient />} />
-        <Route path="/register/practitioner" element={<RegisterPractitioner />}
-        />
-        {/* Rutas de Practicante */}
+        <Route path="/register/practitioner" element={<RegisterPractitioner />}/>
+        {/* Practicante - Rutas de protegidas */}
+        <Route element={<ProtectedRoute allowedRoles={['ROLE_PRACTITIONER']} />}>
         <Route path="/practicante/dashboard" element={<PracticanteDashboard />}/>
         <Route path="/practicante/tratamientos" element={<GestionTratamientos />} />
         <Route path="/practicante/pacientes" element={<ListaPacientes />} />
@@ -46,21 +47,27 @@ function App() {
         <Route path="/practicante/historial" element={<HistorialAtenciones />}/>
         <Route path="/practicante/perfil" element={<MiPerfil />} />
         <Route path="/practicante/turnos" element={<GestionarTurnos />}/>
-        {/* Rutas de Paciente */}
+        </Route>
+        {/* Paciente - Rutas de protegidas */}
+        <Route element={<ProtectedRoute allowedRoles={['ROLE_PATIENT']} />}>
         <Route path="/paciente/dashboard" element={<PacienteDashboard />}/>
         <Route path="/paciente/feedback" element={<MiFeedback />} />
         <Route path="/paciente/tratamientos" element={<ListarTratamientos />} />
         <Route path="/paciente/reservar-turno/:tratamientoId" element={<ReservarTurno />} />
         <Route path="/paciente/historial" element={<HistorialAtencionesPaciente />} />
         <Route path="/paciente/turno-confirmado" element={<TurnoConfirmado />} />
-        {/* Rutas de Docente */}
+        </Route>
+        {/* Docente - Rutas de protegidas */}
+        <Route element={<ProtectedRoute allowedRoles={['ROLE_DOCENTE']} />}>
         <Route path="/docente/dashboard" element={<DocenteDashboard />} />
         <Route path="/docente/practicantes" element={<ListaPracticantes />} />
         <Route path="/docente/buscar-practicantes" element={<BuscarPracticantes />} />
         <Route path="/docente/practicante/feedback/:practicanteId" element={<VerFeedbackPracticante />} />
-        <Route path="/docente/practicante/feedback/:practicanteId" element={<VerFeedbackPracticante />} />  
-        {/* Rutas Compartidas */}
+        </Route>
+        {/* Rutas Compartidas - Protegidas */}
+        <Route element={<ProtectedRoute allowedRoles={['ROLE_PRACTITIONER', 'ROLE_PATIENT']}/>}>
         <Route path="/chat" element={<ChatLayout />} />
+        </Route>
       </Routes>
     </HashRouter>
   );
