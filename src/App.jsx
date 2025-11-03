@@ -29,6 +29,7 @@ import ChatLayout from './views/chat/ChatLayout.jsx';
 
 function App() {
   return (
+    <AuthProvider>
     <HashRouter>
       <Routes>
         {/* Rutas de Autenticación */}
@@ -60,6 +61,7 @@ function App() {
         <Route path="/chat" element={<ChatLayout />} />
       </Routes>
     </HashRouter>
+    </AuthProvider>
   );
 }
 
