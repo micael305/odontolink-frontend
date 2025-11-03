@@ -24,7 +24,7 @@ const BuscarPracticantes = () => {
   };
 
   return (
-    <div className="page-container-docente">
+    <div className="page-container-user">
       <div className="docente-content-container">
         <header className="page-header">
           <Link to="/docente/dashboard" className="page-back-link">

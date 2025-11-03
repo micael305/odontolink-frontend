@@ -1,3 +1,4 @@
+// src/views/practicante/GestionarTratamientos.jsx
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../../components/Button/Button';
@@ -9,14 +10,17 @@ import './practicante.css';
 import { FiPlus, FiChevronLeft, FiLoader } from 'react-icons/fi';
 import { useTratamientoStore } from '../../context/tratamientoStore';
 
-
 const GestionarTratamientos = () => {
   const {
     offeredTreatments,
+    masterTreatments,
     status,
     error,
     fetchOfferedTreatments,
+    fetchMasterTreatments,
     deleteOfferedTreatment,
+    addOfferedTreatment,
+    updateOfferedTreatment,
   } = useTratamientoStore();
 
   const [isAgregarModalOpen, setIsAgregarModalOpen] = useState(false);
@@ -27,7 +31,8 @@ const GestionarTratamientos = () => {
 
   useEffect(() => {
     fetchOfferedTreatments();
-  }, [fetchOfferedTreatments]);
+    fetchMasterTreatments();
+  }, [fetchOfferedTreatments, fetchMasterTreatments]);
 
   const handleOpenModificar = (tratamiento) => {
     setTratamientoSeleccionado(tratamiento);
@@ -44,6 +49,14 @@ const GestionarTratamientos = () => {
       await deleteOfferedTreatment(tratamientoSeleccionado.id);
       closeModals();
     }
+  };
+
+  const handleAgregarTratamiento = async (data) => {
+    await addOfferedTreatment(data);
+  };
+
+  const handleModificarTratamiento = async (id, data) => {
+    await updateOfferedTreatment(id, data);
   };
 
   const closeModals = () => {
@@ -69,7 +82,7 @@ const GestionarTratamientos = () => {
   const formatTime = (time) => time.substring(0, 5);
 
   return (
-    <div className="page-container-practicante">
+    <div className="page-container-user">
       <div className="practicante-content-container">
         <header className="page-header">
           <Link to="/practicante/dashboard" className="page-back-link">
@@ -154,12 +167,15 @@ const GestionarTratamientos = () => {
       <AgregarTratamientoModal
         isOpen={isAgregarModalOpen}
         onClose={closeModals}
+        masterTreatments={masterTreatments}
+        onSubmit={handleAgregarTratamiento}
       />
 
       <ModificarTratamientoModal
         isOpen={isModificarModalOpen}
         onClose={closeModals}
         tratamiento={tratamientoSeleccionado}
+        onSubmit={handleModificarTratamiento}
       />
 
       <ConfirmModal

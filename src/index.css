@@ -38,6 +38,10 @@ body {
   font-size: 0.9rem;
 }
 
+.page-container-user {
+  justify-content: flex-start;
+}
+
 /*Estilos de carga y error  */
 .loading-container,
 .error-container {

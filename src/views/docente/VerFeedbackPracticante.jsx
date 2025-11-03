@@ -40,7 +40,7 @@ const VerFeedbackPracticante = () => {
   const feedbackList = DUMMY_FEEDBACK_DATA[practicanteId] || [];
 
   return (
-    <div className="page-container-docente">
+    <div className="page-container-user">
       <div className="docente-content-container">
         <header className="page-header">
           <Link to="/docente/practicantes" className="page-back-link">

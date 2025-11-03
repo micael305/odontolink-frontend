@@ -79,7 +79,7 @@
 }
 
 .modal-form-group select,
-.modal-form-group input[type='text'],
+.modal-form-group input,
 .modal-form-group textarea {
   width: 100%;
   padding: 0.75rem 1rem;
@@ -91,7 +91,7 @@
   color: #333;
 }
 .modal-form-group select:focus,
-.modal-form-group input[type='text']:focus,
+.modal-form-group input:focus,
 .modal-form-group textarea:focus {
   outline: none;
   border-color: #0d6efd;
@@ -156,6 +156,7 @@
 .modal-footer {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 1rem;
   padding: 1.5rem 1.5rem;
   border-top: 1px solid #f0f0f0;
@@ -166,4 +167,65 @@
   width: auto;
   padding: 0.6rem 1.25rem;
   font-size: 0.95rem;
+}
+
+.modal-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.slot-input-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.slot-input-group select,
+.slot-input-group input {
+  font-size: 0.9rem;
+  padding: 0.6rem 0.75rem;
+}
+.slot-input-group select {
+  flex: 2;
+}
+.slot-input-group input {
+  flex: 1;
+}
+.slot-input-group .modal-add-btn {
+  padding: 0.6rem;
+  font-size: 1rem;
+}
+
+.slot-list {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.slot-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8f9fa;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+}
+.slot-item span {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.slot-item button {
+  background: transparent;
+  border: none;
+  color: #dc3545;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.modal-error-msg {
+  color: #dc3545;
+  font-size: 0.9rem;
+  margin: 0;
+  flex-grow: 1;
+  text-align: left;
 }

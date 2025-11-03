@@ -2,16 +2,17 @@ import { create } from 'zustand';
 import {
   getOfferedTreatments,
   deleteOfferedTreatment,
+  getMasterTreatments,
+  addOfferedTreatment,
+  updateOfferedTreatment, 
 } from '../api/practicanteService';
 
 export const useTratamientoStore = create((set) => ({
   offeredTreatments: [],
-  status: 'idle', 
+  masterTreatments: [],
+  status: 'idle',
   error: null,
 
-  /**
-   * buscar los tratamientos del practicante (GET)
-   */
   fetchOfferedTreatments: async () => {
     set({ status: 'loading', error: null });
     try {
@@ -22,15 +23,10 @@ export const useTratamientoStore = create((set) => ({
     }
   },
 
-  /**
-   * Eliminar un tratamiento del catálogo (DELETE)
-   */
   deleteOfferedTreatment: async (offeredTreatmentId) => {
     set({ status: 'loading', error: null });
     try {
       await deleteOfferedTreatment(offeredTreatmentId);
-      
-      // Actualiza el estado local eliminando la tarjeta
       set((state) => ({
         offeredTreatments: state.offeredTreatments.filter(
           (t) => t.id !== offeredTreatmentId
@@ -39,6 +35,52 @@ export const useTratamientoStore = create((set) => ({
       }));
     } catch (error) {
       set({ status: 'error', error: error.message });
+    }
+  },
+
+  fetchMasterTreatments: async () => {
+    try {
+      const data = await getMasterTreatments();
+      set({ masterTreatments: data });
+    } catch (error) {
+      console.error('Error al cargar master treatments:', error.message);
+    }
+  },
+
+  addOfferedTreatment: async (treatmentData) => {
+    set({ status: 'loading', error: null });
+    try {
+      const newTreatment = await addOfferedTreatment(treatmentData);
+      set((state) => ({
+        offeredTreatments: [...state.offeredTreatments, newTreatment],
+        status: 'success',
+      }));
+      return newTreatment;
+    } catch (error) {
+      set({ status: 'error', error: error.message });
+      throw error;
+    }
+  },
+
+  /**
+   * actualizar un tratamiento (PUT)
+   */
+  updateOfferedTreatment: async (id, treatmentData) => {
+    set({ status: 'loading', error: null });
+    try {
+      const updatedTreatment = await updateOfferedTreatment(id, treatmentData);
+      
+      // Actualiza la lista local
+      set((state) => ({
+        offeredTreatments: state.offeredTreatments.map((t) =>
+          t.id === updatedTreatment.id ? updatedTreatment : t
+        ),
+        status: 'success',
+      }));
+      return updatedTreatment;
+    } catch (error) {
+      set({ status: 'error', error: error.message });
+      throw error;
     }
   },
 }));

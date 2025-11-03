@@ -73,7 +73,7 @@ const EvolucionClinica = () => {
   const paciente = DUMMY_PACIENTES_DATA[pacienteId] || DUMMY_PACIENTES_DATA.p1;
 
   return (
-    <div className="page-container">
+    <div className="page-container-user">
       <div className="practicante-content-container evolucion">
         <header className="page-header">
           <Link to="/practicante/pacientes" className="page-back-link">

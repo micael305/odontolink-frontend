@@ -1,8 +1,33 @@
+import { useState } from 'react';
 import Button from '../Button/Button';
-import './AgregarTratamientoModal.css';
-import { FiX, FiPlus, FiMessageSquare } from 'react-icons/fi';
+import './agregarTratamientoModal.css';
+import { FiX, FiPlus, FiTrash2 } from 'react-icons/fi';
 
-const AgregarTratamientoModal = ({ isOpen, onClose }) => {
+const DIAS_SEMANA_MAP = {
+  MONDAY: 'Lunes',
+  TUESDAY: 'Martes',
+  WEDNESDAY: 'Miércoles',
+  THURSDAY: 'Jueves',
+  FRIDAY: 'Viernes',
+  SATURDAY: 'Sábado',
+  SUNDAY: 'Domingo',
+};
+
+const AgregarTratamientoModal = ({
+  isOpen,
+  onClose,
+  masterTreatments,
+  onSubmit,
+}) => {
+  const [treatmentId, setTreatmentId] = useState('');
+  const [durationInMinutes, setDurationInMinutes] = useState(45);
+  const [requirements, setRequirements] = useState('');
+  const [slots, setSlots] = useState([]);
+  const [currentDay, setCurrentDay] = useState('MONDAY');
+  const [startTime, setStartTime] = useState('09:00');
+  const [endTime, setEndTime] = useState('12:00');
+  const [error, setError] = useState(null);
+
   if (!isOpen) {
     return null;
   }
@@ -11,14 +36,43 @@ const AgregarTratamientoModal = ({ isOpen, onClose }) => {
     e.stopPropagation();
   };
 
-  const dias = [
-    'Lunes',
-    'Martes',
-    'Miércoles',
-    'Jueves',
-    'Viernes',
-    'Sábado',
-  ];
+  const handleAddSlot = () => {
+    if (!currentDay || !startTime || !endTime) return;
+    const newSlot = {
+      dayOfWeek: currentDay,
+      startTime: `${startTime}:00`,
+      endTime: `${endTime}:00`,
+    };
+    setSlots([...slots, newSlot]);
+  };
+
+  const handleRemoveSlot = (index) => {
+    setSlots(slots.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!treatmentId || slots.length === 0 || !durationInMinutes) {
+      setError('Tratamiento, duración y al menos un slot son requeridos.');
+      return;
+    }
+
+    const dataToSubmit = {
+      treatmentId: parseInt(treatmentId, 10),
+      durationInMinutes: parseInt(durationInMinutes, 10),
+      requirements,
+      availabilitySlots: slots,
+    };
+
+    try {
+      await onSubmit(dataToSubmit);
+      onClose();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -36,59 +90,100 @@ const AgregarTratamientoModal = ({ isOpen, onClose }) => {
         <div className="modal-body">
           <div className="modal-form-group">
             <label htmlFor="tratamiento">Tratamiento *</label>
-            <select id="tratamiento" defaultValue="">
+            <select
+              id="tratamiento"
+              value={treatmentId}
+              onChange={(e) => setTreatmentId(e.target.value)}
+            >
               <option value="" disabled>
-                Seleccione un tratamiento
+                Seleccione un tratamiento...
               </option>
-              <option value="limpieza">Limpieza Dental</option>
-              <option value="blanqueamiento">Blanqueamiento Dental</option>
-              <option value="caries">Tratamiento de Caries</option>
+              {masterTreatments.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name} ({t.area})
+                </option>
+              ))}
             </select>
           </div>
 
           <div className="modal-form-group">
-            <label>Días de disponibilidad *</label>
-            <div className="modal-dias-grid">
-              {dias.map((dia) => (
-                <div key={dia} className="modal-checkbox-group">
-                  <input type="checkbox" id={`dia-${dia}`} name={dia} />
-                  <label htmlFor={`dia-${dia}`}>{dia}</label>
+            <label htmlFor="durationInMinutes">Duración (en minutos) *</label>
+            <input
+              type="number"
+              id="durationInMinutes"
+              value={durationInMinutes}
+              onChange={(e) => setDurationInMinutes(e.target.value)}
+              placeholder="Ej: 45"
+            />
+          </div>
+
+          <div className="modal-form-group">
+            <label>Slots de Disponibilidad *</label>
+            <div className="slot-input-group">
+              <select
+                value={currentDay}
+                onChange={(e) => setCurrentDay(e.target.value)}
+              >
+                {Object.keys(DIAS_SEMANA_MAP).map((diaKey) => (
+                  <option key={diaKey} value={diaKey}>
+                    {DIAS_SEMANA_MAP[diaKey]}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="time"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                step="1800"
+              />
+              <input
+                type="time"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                step="1800"
+              />
+              <Button
+                type="button"
+                variant="outline-secondary"
+                className="modal-add-btn"
+                icon={<FiPlus />}
+                onClick={handleAddSlot}
+              />
+            </div>
+            <div className="slot-list">
+              {slots.map((slot, index) => (
+                <div key={index} className="slot-item">
+                  <span>
+                    {DIAS_SEMANA_MAP[slot.dayOfWeek]}: {slot.startTime} - {slot.endTime}
+                  </span>
+                  <button type="button" onClick={() => handleRemoveSlot(index)}>
+                    <FiTrash2 />
+                  </button>
                 </div>
               ))}
             </div>
           </div>
 
           <div className="modal-form-group">
-            <label htmlFor="horario">Horarios disponibles *</label>
-            <div className="modal-horario-input">
-              <input type="text" id="horario" placeholder="--:--" />
-              <Button
-                variant="outline-secondary"
-                className="modal-add-btn"
-                icon={<FiPlus />}
-              />
-            </div>
-          </div>
-
-          <div className="modal-form-group">
-            <label htmlFor="requerimientos">
-              Requerimientos específicos (opcional)
-            </label>
-            <div className="modal-input-with-icon">
-              <FiMessageSquare />
-              <textarea
-                id="requerimientos"
-                placeholder="Paciente debe venir en ayunas"
-              />
-            </div>
+            <label htmlFor="requirements">Requerimientos (opcional)</label>
+            <textarea
+              id="requirements"
+              className="modal-textarea"
+              placeholder="Ej: Paciente debe venir en ayunas"
+              value={requirements}
+              onChange={(e) => setRequirements(e.target.value)}
+            />
           </div>
         </div>
 
         <div className="modal-footer">
+          {error && <p className="modal-error-msg">{error}</p>}
           <Button variant="outline-secondary" onClick={onClose}>
             Cancelar
           </Button>
-          <Button variant="primary">Agregar</Button>
+          <Button variant="primary" onClick={handleSubmit}>
+            Agregar
+          </Button>
         </div>
       </div>
     </div>

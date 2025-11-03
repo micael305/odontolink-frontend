@@ -34,7 +34,7 @@ const DUMMY_FEEDBACK = [
 
 const MiFeedback = () => {
   return (
-    <div className="page-container">
+    <div className="page-container-user">
       <div className="paciente-content-container">
         <header className="page-header">
           <Link to="/paciente/dashboard" className="page-back-link">
