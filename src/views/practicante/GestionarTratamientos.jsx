@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../../components/Button/Button';
 import TratamientoCard from '../../components/TratamientoCard/TratamientoCard';
@@ -6,50 +6,28 @@ import AgregarTratamientoModal from '../../components/AgregarTratamientoModal/Ag
 import ModificarTratamientoModal from '../../components/ModificarTratamientoModal/ModificarTratamientoModal';
 import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
 import './practicante.css';
-import { FiPlus, FiChevronLeft } from 'react-icons/fi';
+import { FiPlus, FiChevronLeft, FiLoader } from 'react-icons/fi';
+import { useTratamientoStore } from '../../context/tratamientoStore';
 
-const DUMMY_TRATAMIENTOS = [
-  {
-    id: 't1',
-    titulo: 'Limpieza Dental',
-    tags: [
-      { texto: 'Preventivo', tipo: 'preventivo' },
-      { texto: '45 minutos', tipo: 'duration' },
-    ],
-    disponibilidad: ['Lunes', 'Martes', 'Miércoles', 'Viernes'],
-    horarios: ['09:00', '11:00', '14:00', '16:00'],
-    requerimientos: 'Paciente debe venir en ayunas',
-  },
-  {
-    id: 't2',
-    titulo: 'Blanqueamiento Dental',
-    tags: [
-      { texto: 'Estética', tipo: 'estetica' },
-      { texto: '60 minutos', tipo: 'duration' },
-    ],
-    disponibilidad: ['Lunes', 'Miércoles'],
-    horarios: ['10:00', '15:00'],
-    requerimientos: 'No requiere preparación previa.',
-  },
-  {
-    id: 't3',
-    titulo: 'Tratamiento de Caries',
-    tags: [
-      { texto: 'Restauración', tipo: 'restauracion' },
-      { texto: '50 minutos', tipo: 'duration' },
-    ],
-    disponibilidad: ['Martes', 'Viernes'],
-    horarios: ['09:00', '11:00', '14:00', '16:00', '17:00'],
-    requerimientos: 'Evitar comer 1 hora antes.',
-  },
-];
 
-const GestionTratamientos = () => {
+const GestionarTratamientos = () => {
+  const {
+    offeredTreatments,
+    status,
+    error,
+    fetchOfferedTreatments,
+    deleteOfferedTreatment,
+  } = useTratamientoStore();
+
   const [isAgregarModalOpen, setIsAgregarModalOpen] = useState(false);
   const [isModificarModalOpen, setIsModificarModalOpen] = useState(false);
   const [isEliminarModalOpen, setIsEliminarModalOpen] = useState(false);
   const [tratamientoSeleccionado, setTratamientoSeleccionado] =
     useState(null);
+
+  useEffect(() => {
+    fetchOfferedTreatments();
+  }, [fetchOfferedTreatments]);
 
   const handleOpenModificar = (tratamiento) => {
     setTratamientoSeleccionado(tratamiento);
@@ -61,9 +39,11 @@ const GestionTratamientos = () => {
     setIsEliminarModalOpen(true);
   };
 
-  const handleConfirmarEliminar = () => {
-    console.log('Eliminando:', tratamientoSeleccionado.id);
-    closeModals();
+  const handleConfirmarEliminar = async () => {
+    if (tratamientoSeleccionado) {
+      await deleteOfferedTreatment(tratamientoSeleccionado.id);
+      closeModals();
+    }
   };
 
   const closeModals = () => {
@@ -72,6 +52,21 @@ const GestionTratamientos = () => {
     setIsEliminarModalOpen(false);
     setTratamientoSeleccionado(null);
   };
+
+  const formatDay = (day) => {
+    const map = {
+      MONDAY: 'Lunes',
+      TUESDAY: 'Martes',
+      WEDNESDAY: 'Miércoles',
+      THURSDAY: 'Jueves',
+      FRIDAY: 'Viernes',
+      SATURDAY: 'Sábado',
+      SUNDAY: 'Domingo',
+    };
+    return map[day] || day;
+  };
+  
+  const formatTime = (time) => time.substring(0, 5);
 
   return (
     <div className="page-container-practicante">
@@ -96,17 +91,63 @@ const GestionTratamientos = () => {
 
         <section className="treatment-list">
           <h2 className="treatment-list-header">
-            Tratamientos que ofrezco ({DUMMY_TRATAMIENTOS.length})
+            Tratamientos que ofrezco ({offeredTreatments.length})
           </h2>
 
-          {DUMMY_TRATAMIENTOS.map((tratamiento) => (
-            <TratamientoCard
-              key={tratamiento.id}
-              tratamiento={tratamiento}
-              onModificar={() => handleOpenModificar(tratamiento)}
-              onEliminar={() => handleOpenEliminar(tratamiento)}
-            />
-          ))}
+          {status === 'loading' && (
+            <div className="loading-container">
+              <FiLoader className="loading-icon" />
+              <p>Cargando tratamientos...</p>
+            </div>
+          )}
+
+          {status === 'error' && (
+            <div className="error-container">
+              <p>{error}</p>
+            </div>
+          )}
+
+          {status === 'success' &&
+            offeredTreatments.map((tratamientoApi) => {
+              const tratamientoProps = {
+                id: tratamientoApi.id,
+                titulo: tratamientoApi.treatment.name,
+                tags: [
+                  {
+                    texto: tratamientoApi.treatment.area,
+                    tipo: 'preventivo',
+                  },
+                  {
+                    texto: `${tratamientoApi.durationInMinutes} minutos`,
+                    tipo: 'duration',
+                  },
+                ],
+                disponibilidad: [
+                  ...new Set(
+                    tratamientoApi.availabilitySlots.map((slot) =>
+                      formatDay(slot.dayOfWeek)
+                    )
+                  ),
+                ],
+                horarios: [
+                  ...new Set(
+                    tratamientoApi.availabilitySlots.map(
+                      (slot) => `${formatTime(slot.startTime)}`
+                    )
+                  ),
+                ],
+                requerimientos: tratamientoApi.requirements,
+              };
+
+              return (
+                <TratamientoCard
+                  key={tratamientoApi.id}
+                  tratamiento={tratamientoProps}
+                  onModificar={() => handleOpenModificar(tratamientoApi)}
+                  onEliminar={() => handleOpenEliminar(tratamientoApi)}
+                />
+              );
+            })}
         </section>
       </div>
 
@@ -131,10 +172,10 @@ const GestionTratamientos = () => {
         confirmVariant="danger"
       >
         ¿Está seguro que desea eliminar el tratamiento "{' '}
-        <strong>{tratamientoSeleccionado?.titulo}</strong>"?
+        <strong>{tratamientoSeleccionado?.treatment?.name}</strong>"?
       </ConfirmModal>
     </div>
   );
 };
 
-export default GestionTratamientos;
+export default GestionarTratamientos;
