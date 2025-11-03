@@ -1,28 +1,40 @@
 import { useState } from 'react';
-import { Link, useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { IoIosArrowBack } from 'react-icons/io';
-import { LiaAddressCard } from 'react-icons/lia';
-import { FiLock, FiEye, FiEyeOff, FiInfo, FiLogIn } from 'react-icons/fi'; 
+import { FiLock, FiEye, FiEyeOff, FiInfo, FiLogIn, FiMail } from 'react-icons/fi';
 import './auth.css';
-import Button from '../../components/Button/Button'; 
+import Button from '../../components/Button/Button';
+import { useAuthStore } from '../../context/authStore';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const { login, status, error } = useAuthStore();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Formulario enviado');
+    try {
+      const userData = await login(email, password);
 
-  };
-
-  const navigate = useNavigate();
-
-  const handleGestionar = () => {
-    navigate('/practicante/dashboard');
+      if (userData.role === 'PRACTITIONER') {
+        navigate('/practicante/dashboard');
+      } else if (userData.role === 'PATIENT') {
+        navigate('/paciente/dashboard');
+      } else if (userData.role === 'DOCENTE') {
+        navigate('/docente/dashboard');
+      } else {
+        navigate('/');
+      }
+    } catch (err) {
+      console.error(err.message);
+    }
   };
 
   return (
@@ -39,14 +51,16 @@ const Login = () => {
 
           <form onSubmit={handleSubmit}>
             <div className="input-group">
-              <label htmlFor="dni">DNI (sin puntos ni espacios)</label>
+              <label htmlFor="email">Email</label>
               <div className="input-wrapper">
-                <LiaAddressCard className="icon-left" />
+                <FiMail className="icon-left" />
                 <input
-                  type="text"
-                  id="dni"
-                  placeholder="12345678"
+                  type="email"
+                  id="email"
+                  placeholder="ejemplo@email.com"
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
             </div>
@@ -60,6 +74,8 @@ const Login = () => {
                   id="password"
                   placeholder="Tu contraseña"
                   required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
                   type="button"
@@ -71,14 +87,18 @@ const Login = () => {
               </div>
             </div>
 
+            {status === 'error' && (
+              <p className="auth-error-msg">{error}</p>
+            )}
+
             <Button
               type="submit"
               variant="primary"
               icon={<FiLogIn />}
               className="auth-login-btn"
-              onClick={handleGestionar}
+              disabled={status === 'loading'}
             >
-              Ingresar
+              {status === 'loading' ? 'Ingresando...' : 'Ingresar'}
             </Button>
           </form>
 
@@ -88,7 +108,14 @@ const Login = () => {
 
           <div className="info-box">
             <FiInfo />
-            <span>Use su DNI sin puntos ni espacios para ingresar.</span>
+            <span>Ingrese sus credenciales registradas para acceder.</span>
+          </div>
+
+          <div className="register-link-box">
+            <span>¿No tienes una cuenta? </span>
+            <Link to="/register" className="register-link">
+              Regístrate aquí
+            </Link>
           </div>
         </div>
       </div>

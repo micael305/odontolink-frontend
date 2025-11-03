@@ -2,7 +2,8 @@ import { Routes, Route,HashRouter } from 'react-router-dom';
 // Vistas de Autenticación
 import Home from './views/auth/Home.jsx';
 import Login from './views/auth/Login.jsx';
-import Register from './views/auth/Register.jsx';
+import RegisterPatient from './views/auth/RegisterPatient.jsx';
+import RegisterPractitioner from './views/auth/RegisterPractitioner.jsx';
 // Vistas de Practicante
 import PracticanteDashboard from './views/practicante/PracticanteDashboard.jsx';
 import GestionTratamientos from './views/practicante/GestionarTratamientos.jsx';
@@ -29,13 +30,14 @@ import ChatLayout from './views/chat/ChatLayout.jsx';
 
 function App() {
   return (
-    <AuthProvider>
     <HashRouter>
       <Routes>
         {/* Rutas de Autenticación */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<RegisterPatient />} />
+        <Route path="/register/practitioner" element={<RegisterPractitioner />}
+        />
         {/* Rutas de Practicante */}
         <Route path="/practicante/dashboard" element={<PracticanteDashboard />}/>
         <Route path="/practicante/tratamientos" element={<GestionTratamientos />} />
@@ -61,7 +63,6 @@ function App() {
         <Route path="/chat" element={<ChatLayout />} />
       </Routes>
     </HashRouter>
-    </AuthProvider>
   );
 }
 
