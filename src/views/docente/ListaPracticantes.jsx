@@ -1,5 +1,7 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import PracticanteListItem from '../../components/PracticanteListItem/PracticanteListItem';
+import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
 import './docente.css';
 import { FiChevronLeft, FiSearch } from 'react-icons/fi';
 
@@ -31,8 +33,27 @@ const DUMMY_PRACTICANTES = [
 ];
 
 const ListaPracticantes = () => {
-  const handleSelectPracticante = (practicanteId) => {
-    console.log('Viendo detalles del practicante:', practicanteId);
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [practicanteSeleccionado, setPracticanteSeleccionado] = useState(null);
+
+  const handleVerFeedback = (practicanteId) => {
+    navigate(`/docente/practicante/feedback/${practicanteId}`);
+  };
+
+  const handleOpenQuitarModal = (practicante) => {
+    setPracticanteSeleccionado(practicante);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setPracticanteSeleccionado(null);
+  };
+
+  const handleConfirmarQuitar = () => {
+    console.log('Quitando practicante:', practicanteSeleccionado.id);
+    handleCloseModal();
   };
 
   return (
@@ -61,11 +82,24 @@ const ListaPracticantes = () => {
             <PracticanteListItem
               key={practicante.id}
               practicante={practicante}
-              onSelect={() => handleSelectPracticante(practicante.id)}
+              onVerFeedback={() => handleVerFeedback(practicante.id)}
+              onQuitar={() => handleOpenQuitarModal(practicante)}
             />
           ))}
         </section>
       </div>
+
+      <ConfirmModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmarQuitar}
+        title="Quitar Practicante"
+        confirmText="Quitar"
+        confirmVariant="danger"
+      >
+        ¿Está seguro que desea quitar a{' '}
+        <strong>{practicanteSeleccionado?.nombre}</strong> de su cargo?
+      </ConfirmModal>
     </div>
   );
 };

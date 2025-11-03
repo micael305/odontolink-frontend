@@ -92,6 +92,8 @@
 
 .practicante-actions {
   flex-shrink: 0;
+  display: flex;
+  gap: 0.5rem;
 }
 
 .practicante-actions .btn {

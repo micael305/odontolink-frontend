@@ -2,12 +2,17 @@ import StarRating from '../StarRating/StarRating';
 import './feedbackCard.css';
 
 const FeedbackCard = ({ feedback }) => {
-  const { practicante, fecha, criterios, comentario } = feedback;
+  const { practicante, fecha, criterios, comentario, tratamiento } = feedback;
 
   return (
     <div className="feedback-card">
       <div className="feedback-card-header">
-        <h3>{practicante}</h3>
+        <div>
+          <h3>{practicante}</h3>
+          {tratamiento && (
+            <span className="tratamiento-label">{tratamiento}</span>
+          )}
+        </div>
         <span className="date">{fecha}</span>
       </div>
       <div className="feedback-card-body">
@@ -19,7 +24,7 @@ const FeedbackCard = ({ feedback }) => {
         ))}
         {comentario && (
           <div className="feedback-comment">
-            <span className="label">Comentario del practicante:</span>
+            <span className="label">Comentario:</span>
             <p>"{comentario}"</p>
           </div>
         )}

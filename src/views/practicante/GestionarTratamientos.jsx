@@ -1,11 +1,10 @@
-// src/views/practicante/GestionarTratamientos.jsx
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../../components/Button/Button';
 import TratamientoCard from '../../components/TratamientoCard/TratamientoCard';
 import AgregarTratamientoModal from '../../components/AgregarTratamientoModal/AgregarTratamientoModal';
 import ModificarTratamientoModal from '../../components/ModificarTratamientoModal/ModificarTratamientoModal';
-import ConfirmarEliminacionModal from '../../components/ConfirmarEliminacionModal/ConfirmarEliminacionModal';
+import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
 import './practicante.css';
 import { FiPlus, FiChevronLeft } from 'react-icons/fi';
 
@@ -82,6 +81,9 @@ const GestionTratamientos = () => {
             <FiChevronLeft />
             Volver
           </Link>
+
+          <h1>Mis Tratamientos</h1>
+
           <Button
             variant="success"
             icon={<FiPlus />}
@@ -119,12 +121,18 @@ const GestionTratamientos = () => {
         tratamiento={tratamientoSeleccionado}
       />
 
-      <ConfirmarEliminacionModal
+      <ConfirmModal
         isOpen={isEliminarModalOpen}
         onClose={closeModals}
         onConfirm={handleConfirmarEliminar}
-        tratamientoNombre={tratamientoSeleccionado?.titulo}
-      />
+        title="Confirmar Eliminación"
+        warningText="Esta acción no se puede deshacer. El tratamiento se eliminará permanentemente."
+        confirmText="Eliminar"
+        confirmVariant="danger"
+      >
+        ¿Está seguro que desea eliminar el tratamiento "{' '}
+        <strong>{tratamientoSeleccionado?.titulo}</strong>"?
+      </ConfirmModal>
     </div>
   );
 };

@@ -8,6 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1010;
 }
 
 .confirm-modal-content {
@@ -17,6 +18,7 @@
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
   width: 100%;
   max-width: 450px;
+  z-index: 1011;
 }
 
 .confirm-modal-header {
@@ -60,6 +62,7 @@
 
 .confirm-modal-body p strong {
   color: #333;
+  font-weight: 600;
 }
 
 .confirm-warning-box {

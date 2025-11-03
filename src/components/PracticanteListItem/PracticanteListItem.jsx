@@ -1,8 +1,16 @@
 import Button from '../Button/Button';
 import './practicanteListItem.css';
-import { FiUser, FiChevronRight } from 'react-icons/fi';
+import {
+  FiUser,
+  FiStar,
+  FiUserMinus,
+} from 'react-icons/fi';
 
-const PracticanteListItem = ({ practicante, onSelect }) => {
+const PracticanteListItem = ({
+  practicante,
+  onVerFeedback,
+  onQuitar,
+}) => {
   const estadoClass = practicante.estadoActual.toLowerCase();
 
   return (
@@ -39,10 +47,17 @@ const PracticanteListItem = ({ practicante, onSelect }) => {
       <div className="practicante-actions">
         <Button
           variant="outline-secondary"
-          icon={<FiChevronRight />}
-          onClick={onSelect}
+          icon={<FiStar />}
+          onClick={onVerFeedback}
         >
-          Ver Detalles
+          Ver Feedback
+        </Button>
+        <Button
+          variant="outline-danger"
+          icon={<FiUserMinus />}
+          onClick={onQuitar}
+        >
+          Quitar
         </Button>
       </div>
     </div>
