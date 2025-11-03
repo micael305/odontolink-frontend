@@ -12,7 +12,7 @@ const getInitialState = () => {
     if (token && user) {
       return { token, user, isAuthenticated: true };
     }
-  } catch {
+  } catch  {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
   }

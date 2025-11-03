@@ -1,32 +1,20 @@
 import axios from 'axios';
 
-// para los endpoints públicos
 const publicApi = axios.create({
-  baseURL: 'http://localhost:8080/api/auth',
+  baseURL: 'https://odontolink.azurewebsites.net/api/auth',
   timeout: 5000,
 });
 
-/**
- * Llama al endpoint de login.
- * @param {string} email
- * @param {string} password
- * @returns {Promise<object>} Datos del usuario y token (JwtResponseDTO)
- */
 export const login = async (email, password) => {
   try {
     const response = await publicApi.post('/login', { email, password });
     return response.data;
   } catch (error) {
     console.error('Error en el login:', error.response?.data || error.message);
-    throw new Error(error.response?.data?.message || 'Error al iniciar sesión');
+    throw new Error(error.response?.data?.message || 'Email o contraseña incorrectos');
   }
 };
 
-/**
- * Llama al endpoint de registro de paciente.
- * @param {object} patientData (RegisterPatientRequestDTO)
- * @returns {Promise<object>} Mensaje de éxito
- */
 export const registerPatient = async (patientData) => {
   try {
     const response = await publicApi.post('/register/patient', patientData);
@@ -40,11 +28,6 @@ export const registerPatient = async (patientData) => {
   }
 };
 
-/**
- * Llama al endpoint de registro de practicante.
- * @param {object} practitionerData (RegisterPractitionerRequestDTO)
- * @returns {Promise<object>} Mensaje de éxito
- */
 export const registerPractitioner = async (practitionerData) => {
   try {
     const response = await publicApi.post(

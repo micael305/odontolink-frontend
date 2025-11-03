@@ -23,11 +23,13 @@ const Login = () => {
     try {
       const userData = await login(email, password);
 
-      if (userData.role === 'PRACTITIONER') {
+      // --- CAMBIOS AQUÍ ---
+      // Comparamos con los roles exactos del backend
+      if (userData.role === 'ROLE_PRACTITIONER') {
         navigate('/practicante/dashboard');
-      } else if (userData.role === 'PATIENT') {
+      } else if (userData.role === 'ROLE_PATIENT') {
         navigate('/paciente/dashboard');
-      } else if (userData.role === 'DOCENTE') {
+      } else if (userData.role === 'ROLE_DOCENTE') {
         navigate('/docente/dashboard');
       } else {
         navigate('/');
