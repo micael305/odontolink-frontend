@@ -67,7 +67,7 @@ const HistorialAtencionesPracticante = () => {
   );
 
   return (
-    <div className="page-container">
+    <div className="page-container-user">
       <div className="practicante-content-container">
         <header className="page-header">
           <Link to="/practicante/dashboard" className="page-back-link">
@@ -104,6 +104,8 @@ const HistorialAtencionesPracticante = () => {
           {status === 'success' &&
             atencionesFinalizadas.map((atencion) => {
               const hasFeedback = atencion.feedback && atencion.feedback.length > 0;
+              const rating = hasFeedback ? atencion.feedback[0].rating : null;
+
               return (
                 <AtencionListItem
                   key={atencion.id}
@@ -118,6 +120,7 @@ const HistorialAtencionesPracticante = () => {
                       ? () => handleOpenDisplayModal(atencion)
                       : () => handleOpenRatingModal(atencion)
                   }
+                  rating={rating}
                 />
               );
             })}

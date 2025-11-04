@@ -38,7 +38,7 @@ const EvolucionClinica = () => {
 
   if (status === 'loading' && !currentAttention) {
     return (
-      <div className="page-container">
+      <div className="page-container-user">
         <div className="loading-container">
           <FiLoader className="loading-icon" />
           <p>Cargando evolución...</p>
@@ -49,7 +49,7 @@ const EvolucionClinica = () => {
 
   if (status === 'error' && !currentAttention) {
     return (
-      <div className="page-container">
+      <div className="page-container-user">
         <div className="error-container">
           <p>{error || 'No se pudo cargar la atención.'}</p>
         </div>
@@ -59,7 +59,7 @@ const EvolucionClinica = () => {
 
   if (!currentAttention) {
     return (
-      <div className="page-container">
+      <div className="page-container-user">
         <p>No se ha encontrado la atención.</p>
       </div>
     );
@@ -91,7 +91,7 @@ const EvolucionClinica = () => {
 
   return (
     <>
-      <div className="page-container">
+      <div className="page-container-user">
         <div className="practicante-content-container">
           <header className="page-header">
             <Link to="/practicante/pacientes" className="page-back-link">

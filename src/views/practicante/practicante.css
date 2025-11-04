@@ -528,3 +528,10 @@
   animation: spin 1s linear infinite;
   margin: 0.5rem auto;
 }
+
+.feedback-list {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  margin: 0 auto;
+}

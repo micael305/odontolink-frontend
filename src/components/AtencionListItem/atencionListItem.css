@@ -23,13 +23,28 @@
   color: #222;
 }
 
+.atencion-rating-display {
+  margin-top: 0.5rem;
+}
+.atencion-rating-display .star-rating-container {
+  gap: 0.1rem;
+}
+.atencion-rating-display .star-rating-button {
+  font-size: 1.1rem;
+}
+
 .atencion-info .details {
   font-size: 0.9rem;
   color: #666;
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
 }
 
-.atencion-list-item .btn {
+.atencion-action {
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
+.atencion-action .btn {
   width: auto;
   padding: 0.6rem 1rem;
   font-size: 0.9rem;

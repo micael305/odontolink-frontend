@@ -18,7 +18,7 @@ const ListaAtenciones = () => {
   };
 
   return (
-    <div className="page-container">
+    <div className="page-container-user">
       <div className="practicante-content-container">
         <header className="page-header">
           <Link to="/practicante/dashboard" className="page-back-link">
