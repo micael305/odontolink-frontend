@@ -370,3 +370,63 @@
 .confirmacion-actions .btn {
   width: 100%;
 }
+
+.loading-container,
+.error-container {
+  text-align: center;
+  padding: 3rem;
+  color: #888;
+  grid-column: 1 / -1; 
+}
+
+.error-container {
+  color: #dc3545;
+  font-weight: 500;
+}
+
+.loading-icon {
+  font-size: 2rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.time-slot:disabled {
+  background: #f8f9fa;
+  color: #aaa;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+.fab-container {
+  position: fixed;
+/* ... (estilos existentes) ... */
+.no-horarios-msg {
+  font-size: 0.9rem;
+  color: #888;
+  font-style: italic;
+  padding: 0.5rem;
+  grid-column: 1 / -1;
+}
+
+.time-slot-grid .loading-icon-small {
+  font-size: 1.5rem;
+  color: #888;
+  animation: spin 1s linear infinite;
+  margin: 0.5rem auto;
+  grid-column: 1 / -1;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

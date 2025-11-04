@@ -1,210 +1,196 @@
-// src/views/paciente/ReservarTurno.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import './paciente.css';
-import { FiChevronLeft, FiCheck, FiUser } from 'react-icons/fi';
+import { FiChevronLeft, FiCheck, FiUser, FiLoader } from 'react-icons/fi';
 import DateButton from '../../components/DateButton/DateButton';
 import ConfirmarReservaModal from '../../components/ConfirmarReservaModal/ConfirmarReservaModal';
+import { usePacienteStore } from '../../context/pacienteStore';
 
-const DUMMY_TRATAMIENTO_DETALLE = {
-  t1: {
-    practicante: {
-      nombre: 'Dra. María González',
-      especialidad: 'Odontología General',
-      avatarUrl: 'https://i.imgur.com/LpaY82x.png',
-    },
-    tratamiento: {
-      nombre: 'Limpieza Dental',
-      duracion: '45 minutos',
-    },
-  },
-  t2: {
-    practicante: {
-      nombre: 'Dr. Carlos Sánchez',
-      especialidad: 'Endodoncia',
-      avatarUrl: 'https://i.imgur.com/LpaY82x.png',
-    },
-    tratamiento: {
-      nombre: 'Empaste Simple',
-      duracion: '30 minutos',
-    },
-  },
+const getNextSevenDays = () => {
+  const days = [];
+  const today = new Date();
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(today);
+    date.setDate(today.getDate() + i);
+    days.push({
+      date,
+      diaSemana: date.toLocaleString('es-ES', { weekday: 'short' }),
+      diaNum: date.getDate(),
+      mes: date.toLocaleString('es-ES', { month: 'short' }),
+      isoDate: date.toISOString().split('T')[0],
+    });
+  }
+  return days;
 };
 
-const DUMMY_DIAS = [
-  { diaSemana: 'Dom', diaNum: 2, mes: 'Nov' },
-  { diaSemana: 'Lun', diaNum: 3, mes: 'Nov' },
-  { diaSemana: 'Mar', diaNum: 4, mes: 'Nov' },
-  { diaSemana: 'Mié', diaNum: 5, mes: 'Nov' },
-  { diaSemana: 'Jue', diaNum: 6, mes: 'Nov' },
-  { diaSemana: 'Vie', diaNum: 7, mes: 'Nov' },
-  { diaSemana: 'Sáb', diaNum: 8, mes: 'Nov' },
-];
-
-const DUMMY_HORARIOS_POR_DIA = {
-  2: {
-    mañana: [],
-    tarde: [],
-  },
-  3: {
-    mañana: ['09:00', '09:30', '10:30', '11:00'],
-    tarde: ['14:00', '14:30', '15:00', '16:30'],
-  },
-  4: {
-    mañana: ['09:30', '10:00', '10:30'],
-    tarde: ['15:00', '15:30', '16:00', '16:30', '17:00'],
-  },
-  5: {
-    mañana: ['09:00', '11:30'],
-    tarde: ['14:00', '16:00', '17:30'],
-  },
-  6: {
-    mañana: ['10:00', '10:30', '11:00', '11:30'],
-    tarde: [],
-  },
-  7: {
-    mañana: ['09:00', '09:30', '10:30'],
-    tarde: ['14:30', '15:00', '16:30', '17:00', '17:30'],
-  },
-  8: {
-    mañana: ['09:00', '10:00', '11:00'],
-    tarde: [],
-  },
+const formatTime = (isoString) => {
+  return new Date(isoString).toLocaleTimeString('default', {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 };
 
 const ReservarTurno = () => {
   const { tratamientoId } = useParams();
-  const [selectedDate, setSelectedDate] = useState(3);
+  const navigate = useNavigate();
+  
+  const {
+    selectedTreatmentDetails,
+    availableSlots,
+    status,
+    error,
+    fetchTreatmentDetails,
+    fetchAvailableSlots,
+    scheduleAppointment,
+  } = usePacienteStore();
+
+  const [diasSemana] = useState(getNextSevenDays());
+  const [selectedDate, setSelectedDate] = useState(diasSemana[0].isoDate);
   const [selectedTime, setSelectedTime] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const navigate = useNavigate();
 
-  const detalles =
-    DUMMY_TRATAMIENTO_DETALLE[tratamientoId] ||
-    DUMMY_TRATAMIENTO_DETALLE.t1;
+  useEffect(() => {
+    fetchTreatmentDetails(tratamientoId);
+  }, [tratamientoId, fetchTreatmentDetails]);
 
-  const handleDateSelect = (diaNum) => {
-    setSelectedDate(diaNum);
+  useEffect(() => {
+    if (selectedDate) {
+      fetchAvailableSlots(tratamientoId, selectedDate);
+    }
+  }, [tratamientoId, selectedDate, fetchAvailableSlots]);
+
+  const handleDateSelect = (isoDate) => {
+    setSelectedDate(isoDate);
     setSelectedTime(null);
   };
 
-  const handleOpenConfirmModal = () => {
-    setIsModalOpen(true);
+  const handleConfirmarReserva = async () => {
+    const data = {
+      offeredTreatmentId: parseInt(tratamientoId, 10),
+      appointmentTime: selectedTime,
+    };
+    try {
+      await scheduleAppointment(data);
+      setIsModalOpen(false);
+      navigate('/paciente/turno-confirmado');
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
-  const handleConfirmarReserva = () => {
-    console.log('Turno confirmado!');
-    setIsModalOpen(false);
-    navigate('/paciente/turno-confirmado');
-  };
+  if (status === 'loading' && !selectedTreatmentDetails) {
+    return (
+      <div className="page-container">
+        <div className="loading-container">
+          <FiLoader className="loading-icon" />
+        </div>
+      </div>
+    );
+  }
 
-  const horariosDelDia = DUMMY_HORARIOS_POR_DIA[selectedDate] || {
-    mañana: [],
-    tarde: [],
-  };
+  if (error && !selectedTreatmentDetails) {
+    return (
+      <div className="page-container">
+        <div className="error-container">
+          <p>{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!selectedTreatmentDetails) {
+    return <div className="page-container"></div>;
+  }
 
   const getResumenTurno = () => {
-    const diaObj = DUMMY_DIAS.find((d) => d.diaNum === selectedDate);
+    const diaObj = diasSemana.find((d) => d.isoDate === selectedDate);
     return {
-      practicante: detalles.practicante.nombre,
+      practicante: selectedTreatmentDetails.practitionerName,
       fecha: `${diaObj.diaNum} de ${diaObj.mes}`,
-      hora: selectedTime,
-      tratamiento: detalles.tratamiento.nombre,
+      hora: formatTime(selectedTime),
+      tratamiento: selectedTreatmentDetails.treatment.name,
     };
   };
 
   return (
-    <div className="page-container">
-      <div className="paciente-content-container">
-        <header className="page-header">
-          <Link to="/paciente/tratamientos" className="page-back-link">
-            <FiChevronLeft />
-            Volver
-          </Link>
-          <h1>Reservar Turno</h1>
-        </header>
+    <>
+      <div className="page-container">
+        <div className="paciente-content-container">
+          <header className="page-header">
+            <Link to="/paciente/tratamientos" className="page-back-link">
+              <FiChevronLeft />
+              Volver
+            </Link>
+            <h1>Reservar Turno</h1>
+          </header>
 
-        <div className="reserva-layout">
-          <div className="turno-detalle-card">
-            <h2>Detalles del turno</h2>
-            <div className="practitioner-info">
-              <div className="avatar-icon-wrapper">
-                <FiUser />
-              </div>
-              <div className="practitioner-details">
-                <span>{detalles.practicante.nombre}</span>
-                <p>{detalles.practicante.especialidad}</p>
-              </div>
-            </div>
-            <div className="treatment-info-box">
-              <span>{detalles.tratamiento.nombre}</span>
-              <p>Duración: {detalles.tratamiento.duracion}</p>
-            </div>
-          </div>
-
-          <div className="turno-detalle-card">
-            <h2>Selecciona una fecha</h2>
-            <p>Elige el día que prefieras para tu consulta</p>
-            <div className="date-selector-container">
-              <div className="date-selector-scroll">
-                {DUMMY_DIAS.map((dia) => (
-                  <DateButton
-                    key={dia.diaNum}
-                    dia={dia}
-                    isSelected={dia.diaNum === selectedDate}
-                    onClick={() => handleDateSelect(dia.diaNum)}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="turno-detalle-card">
-            <h2>Selecciona un horario</h2>
-            <p>Horarios disponibles para el día seleccionado</p>
-            <div className="time-selector-container">
-              <div className="time-slot-group">
-                <h3>Mañana (9:00 - 12:00)</h3>
-                <div className="time-slot-grid">
-                  {horariosDelDia.mañana.length > 0 ? (
-                    horariosDelDia.mañana.map((hora) => (
-                      <button
-                        key={hora}
-                        className={`time-slot ${
-                          hora === selectedTime ? 'selected' : ''
-                        }`}
-                        onClick={() => setSelectedTime(hora)}
-                      >
-                        {hora}
-                      </button>
-                    ))
-                  ) : (
-                    <p className="no-horarios-msg">
-                      No hay turnos disponibles por la mañana.
-                    </p>
-                  )}
+          <div className="reserva-layout">
+            <div className="turno-detalle-card">
+              <h2>Detalles del turno</h2>
+              <div className="practitioner-info">
+                <div className="avatar-icon-wrapper">
+                  <FiUser />
+                </div>
+                <div className="practitioner-details">
+                  <span>{selectedTreatmentDetails.practitionerName}</span>
+                  <p>Odontología General</p>
                 </div>
               </div>
-              <div className="time-slot-group">
-                <h3>Tarde (14:00 - 18:00)</h3>
-                <div className="time-slot-grid">
-                  {horariosDelDia.tarde.length > 0 ? (
-                    horariosDelDia.tarde.map((hora) => (
-                      <button
-                        key={hora}
-                        className={`time-slot ${
-                          hora === selectedTime ? 'selected' : ''
-                        }`}
-                        onClick={() => setSelectedTime(hora)}
-                      >
-                        {hora}
-                      </button>
-                    ))
-                  ) : (
-                    <p className="no-horarios-msg">
-                      No hay turnos disponibles por la tarde.
-                    </p>
-                  )}
+              <div className="treatment-info-box">
+                <span>{selectedTreatmentDetails.treatment.name}</span>
+                <p>
+                  Duración: {selectedTreatmentDetails.durationInMinutes} minutos
+                </p>
+              </div>
+            </div>
+
+            <div className="turno-detalle-card">
+              <h2>Selecciona una fecha</h2>
+              <p>Elige el día que prefieras para tu consulta</p>
+              <div className="date-selector-container">
+                <div className="date-selector-scroll">
+                  {diasSemana.map((dia) => (
+                    <DateButton
+                      key={dia.diaNum}
+                      dia={dia}
+                      isSelected={dia.isoDate === selectedDate}
+                      onClick={() => handleDateSelect(dia.isoDate)}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="turno-detalle-card">
+              <h2>Selecciona un horario</h2>
+              <p>Horarios disponibles para el día seleccionado</p>
+              <div className="time-selector-container">
+                <div className="time-slot-group">
+                  <h3>Horarios</h3>
+                  <div className="time-slot-grid">
+                    {status === 'loading' && (
+                      <FiLoader className="loading-icon-small" />
+                    )}
+                    {status === 'success' && availableSlots.length > 0 ? (
+                      availableSlots.map((slotISO) => (
+                        <button
+                          key={slotISO}
+                          className={`time-slot ${
+                            slotISO === selectedTime ? 'selected' : ''
+                          }`}
+                          onClick={() => setSelectedTime(slotISO)}
+                        >
+                          {formatTime(slotISO)}
+                        </button>
+                      ))
+                    ) : (
+                      status === 'success' && (
+                        <p className="no-horarios-msg">
+                          No hay turnos disponibles para este día.
+                        </p>
+                      )
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -215,8 +201,8 @@ const ReservarTurno = () => {
       <div className="fab-container">
         <button
           className="fab"
-          onClick={handleOpenConfirmModal}
-          disabled={!selectedDate || !selectedTime}
+          onClick={() => setIsModalOpen(true)}
+          disabled={!selectedDate || !selectedTime || status === 'loading'}
         >
           <FiCheck />
           Confirmar Turno
@@ -229,7 +215,7 @@ const ReservarTurno = () => {
         onConfirm={handleConfirmarReserva}
         resumen={getResumenTurno()}
       />
-    </div>
+    </>
   );
 };
 
