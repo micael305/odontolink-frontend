@@ -77,3 +77,33 @@ export const addProgressNote = async (attentionId, content) => {
     );
   }
 };
+
+export const finalizeAttention = async (attentionId) => {
+  try {
+    const response = await api.post(`/attentions/${attentionId}/finalize`);
+    return response.data;
+  } catch (error) {
+    console.error(
+      'Error al finalizar la atención:',
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.message || 'Error al finalizar la atención'
+    );
+  }
+};
+
+export const getFeedbackForAttention = async (attentionId) => {
+  try {
+    const response = await api.get(`/feedback/attention/${attentionId}`);
+    return response.data;
+  } catch (error) {
+    console.error(
+      'Error al obtener feedback:',
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.message || 'Error al cargar feedback'
+    );
+  }
+};

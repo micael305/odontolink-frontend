@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import AtencionListItem from '../../components/AtencionListItem/AtencionListItem';
 import RatingModal from '../../components/RatingModal/RatingModal';
+import FeedbackDisplayModal from '../../components/FeedbackDisplayModal/FeedbackDisplayModal';
 import './practicante.css';
-import { FiChevronLeft, FiSearch, FiStar, FiLoader } from 'react-icons/fi';
+import { FiChevronLeft, FiSearch, FiStar, FiLoader, FiEye } from 'react-icons/fi';
 import { useAtencionStore } from '../../context/atencionStore';
 
 const CRITERIOS_PRACTICANTE = [
@@ -14,7 +15,8 @@ const CRITERIOS_PRACTICANTE = [
 ];
 
 const HistorialAtencionesPracticante = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
+  const [isDisplayModalOpen, setIsDisplayModalOpen] = useState(false);
   const [atencionSeleccionada, setAtencionSeleccionada] = useState(null);
 
   const {
@@ -29,25 +31,31 @@ const HistorialAtencionesPracticante = () => {
     fetchPractitionerAttentions();
   }, [fetchPractitionerAttentions]);
 
-  const handleOpenModal = (atencion) => {
+  const handleOpenRatingModal = (atencion) => {
     setAtencionSeleccionada(atencion);
-    setIsModalOpen(true);
+    setIsRatingModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleOpenDisplayModal = (atencion) => {
+    setAtencionSeleccionada(atencion);
+    setIsDisplayModalOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsRatingModalOpen(false);
+    setIsDisplayModalOpen(false);
     setAtencionSeleccionada(null);
   };
 
   const handleFormSubmit = async (calificacion) => {
     const feedbackData = {
       attentionId: atencionSeleccionada.id,
-      rating: calificacion.ratings.actitud, 
+      rating: calificacion.ratings.actitud || 5,
       comment: calificacion.comentario,
     };
     try {
       await submitFeedback(feedbackData);
-      handleCloseModal();
+      handleCloseModals();
     } catch (err) {
       console.error(err.message);
       alert(`Error: ${err.message}`);
@@ -94,24 +102,31 @@ const HistorialAtencionesPracticante = () => {
             <p>No hay atenciones finalizadas para calificar.</p>
           )}
           {status === 'success' &&
-            atencionesFinalizadas.map((atencion) => (
-              <AtencionListItem
-                key={atencion.id}
-                titulo={atencion.treatmentName}
-                detailText={`${atencion.patientName} • ${new Date(
-                  atencion.startDate
-                ).toLocaleDateString()}`}
-                buttonText="Calificar"
-                buttonIcon={<FiStar />}
-                onButtonClick={() => handleOpenModal(atencion)}
-              />
-            ))}
+            atencionesFinalizadas.map((atencion) => {
+              const hasFeedback = atencion.feedback && atencion.feedback.length > 0;
+              return (
+                <AtencionListItem
+                  key={atencion.id}
+                  titulo={atencion.treatmentName}
+                  detailText={`${atencion.patientName} • ${new Date(
+                    atencion.startDate
+                  ).toLocaleDateString()}`}
+                  buttonText={hasFeedback ? 'Ver Feedback' : 'Calificar'}
+                  buttonIcon={hasFeedback ? <FiEye /> : <FiStar />}
+                  onButtonClick={
+                    hasFeedback
+                      ? () => handleOpenDisplayModal(atencion)
+                      : () => handleOpenRatingModal(atencion)
+                  }
+                />
+              );
+            })}
         </section>
       </div>
 
       <RatingModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
+        isOpen={isRatingModalOpen}
+        onClose={handleCloseModals}
         onSubmit={handleFormSubmit}
         titulo="Calificar Paciente"
         subtitulo="Asigne una calificación de 1 a 5 estrellas"
@@ -121,6 +136,12 @@ const HistorialAtencionesPracticante = () => {
         }}
         criterios={CRITERIOS_PRACTICANTE}
         comentarioLabel="Comentario (opcional)"
+      />
+
+      <FeedbackDisplayModal
+        isOpen={isDisplayModalOpen}
+        onClose={handleCloseModals}
+        feedback={atencionSeleccionada?.feedback}
       />
     </div>
   );

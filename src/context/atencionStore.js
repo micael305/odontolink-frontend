@@ -4,7 +4,9 @@ import {
   getAttentionById,
   getProgressNotes,
   createFeedback,
-  addProgressNote, 
+  addProgressNote,
+  finalizeAttention,
+  getFeedbackForAttention,
 } from '../api/atencionService';
 
 export const useAtencionStore = create((set) => ({
@@ -17,8 +19,23 @@ export const useAtencionStore = create((set) => ({
   fetchPractitionerAttentions: async () => {
     set({ status: 'loading', error: null });
     try {
-      const data = await getMyAttentions();
-      set({ attentions: data, status: 'success' });
+      const attentions = await getMyAttentions();
+
+      const attentionsWithFeedback = await Promise.all(
+        attentions.map(async (att) => {
+          if (att.status === 'COMPLETED') {
+            try {
+              const feedback = await getFeedbackForAttention(att.id);
+              return { ...att, feedback: feedback || [] };
+            } catch {
+              return { ...att, feedback: [] };
+            }
+          }
+          return { ...att, feedback: [] };
+        })
+      );
+
+      set({ attentions: attentionsWithFeedback, status: 'success' });
     } catch (error) {
       set({ status: 'error', error: error.message });
     }
@@ -50,8 +67,15 @@ export const useAtencionStore = create((set) => ({
   submitFeedback: async (feedbackData) => {
     set({ status: 'loading', error: null });
     try {
-      await createFeedback(feedbackData);
-      set({ status: 'success' });
+      const newFeedback = await createFeedback(feedbackData);
+      set((state) => ({
+        attentions: state.attentions.map((att) =>
+          att.id === feedbackData.attentionId
+            ? { ...att, feedback: [newFeedback, ...(att.feedback || [])] }
+            : att
+        ),
+        status: 'success',
+      }));
     } catch (error) {
       set({ status: 'error', error: error.message });
       throw error;
@@ -64,13 +88,24 @@ export const useAtencionStore = create((set) => ({
       const updatedAttention = await addProgressNote(attentionId, content);
       const notesData = await getProgressNotes(attentionId);
 
-      set({
-        currentAttention: updatedAttention,
+      set((state) => ({
+        currentAttention: { ...state.currentAttention, ...updatedAttention },
         progressNotes: notesData.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         ),
         status: 'success',
-      });
+      }));
+    } catch (error) {
+      set({ status: 'error', error: error.message });
+      throw error;
+    }
+  },
+
+  finalizeAttention: async (attentionId) => {
+    set({ status: 'loading', error: null });
+    try {
+      const finalizedAttention = await finalizeAttention(attentionId);
+      set({ currentAttention: finalizedAttention, status: 'success' });
     } catch (error) {
       set({ status: 'error', error: error.message });
       throw error;

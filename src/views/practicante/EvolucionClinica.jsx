@@ -9,10 +9,12 @@ import {
   FiPlus,
   FiFileText,
   FiLoader,
+  FiCheckCircle,
 } from 'react-icons/fi';
 import { useAtencionStore } from '../../context/atencionStore';
 import DataItem from '../../components/DataItem/DataItem';
 import AgregarEvolucionModal from '../../components/AgregarEvolucionModal/AgregarEvolucionModal';
+import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
 
 const EvolucionClinica = () => {
   const { attentionId } = useParams();
@@ -22,9 +24,11 @@ const EvolucionClinica = () => {
     status,
     error,
     fetchAttentionDetails,
+    finalizeAttention,
   } = useAtencionStore();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isNotaModalOpen, setIsNotaModalOpen] = useState(false);
+  const [isFinalizarModalOpen, setIsFinalizarModalOpen] = useState(false);
 
   useEffect(() => {
     if (attentionId) {
@@ -61,6 +65,16 @@ const EvolucionClinica = () => {
     );
   }
   
+  const handleConfirmarFinalizar = async () => {
+    try {
+      await finalizeAttention(currentAttention.id);
+      setIsFinalizarModalOpen(false);
+    } catch (err) {
+      console.error(err.message);
+      alert(`Error: ${err.message}`);
+    }
+  };
+
   const getProximoTurno = () => {
     const proximo = currentAttention.appointments
       .filter(a => a.status === 'SCHEDULED')
@@ -72,6 +86,8 @@ const EvolucionClinica = () => {
     }
     return 'N/A';
   }
+
+  const isCompleted = currentAttention.status === 'COMPLETED';
 
   return (
     <>
@@ -106,22 +122,36 @@ const EvolucionClinica = () => {
                   <DataItem label="Tratamiento" value={currentAttention.treatmentName} />
                   <DataItem label="Inicio" value={currentAttention.startDate} />
                   <DataItem label="Próximo turno" value={getProximoTurno()} />
-                  <span className="tag-en-progreso">{currentAttention.status}</span>
+                  <span className={`tag-status ${isCompleted ? 'completado' : 'en-progreso'}`}>
+                    {isCompleted ? 'Completado' : 'En Progreso'}
+                  </span>
                 </div>
               </div>
+
+              {!isCompleted && (
+                <Button
+                  variant="success"
+                  icon={<FiCheckCircle />}
+                  onClick={() => setIsFinalizarModalOpen(true)}
+                >
+                  Finalizar Atención
+                </Button>
+              )}
             </aside>
 
             <main className="evolucion-main">
-              <div className="nueva-evolucion-card">
-                <h3>Nueva Evolución</h3>
-                <Button 
-                  variant="success" 
-                  icon={<FiPlus />}
-                  onClick={() => setIsModalOpen(true)}
-                >
-                  Agregar
-                </Button>
-              </div>
+              {!isCompleted && (
+                <div className="nueva-evolucion-card">
+                  <h3>Nueva Evolución</h3>
+                  <Button 
+                    variant="success" 
+                    icon={<FiPlus />}
+                    onClick={() => setIsNotaModalOpen(true)}
+                  >
+                    Agregar
+                  </Button>
+                </div>
+              )}
 
               <div className="historial-evoluciones-card">
                 <h2 className="info-card-header">
@@ -158,10 +188,22 @@ const EvolucionClinica = () => {
       </div>
 
       <AgregarEvolucionModal 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isNotaModalOpen}
+        onClose={() => setIsNotaModalOpen(false)}
         attentionId={currentAttention.id}
       />
+
+      <ConfirmModal
+        isOpen={isFinalizarModalOpen}
+        onClose={() => setIsFinalizarModalOpen(false)}
+        onConfirm={handleConfirmarFinalizar}
+        title="Finalizar Atención"
+        confirmText="Finalizar"
+        confirmVariant="success"
+        warningText="Esta acción marcará la atención como completada y habilitará el feedback. No podrá agregar más notas de evolución."
+      >
+        ¿Está seguro que desea finalizar esta atención?
+      </ConfirmModal>
     </>
   );
 };
