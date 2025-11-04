@@ -3,20 +3,20 @@ import { Link } from 'react-router-dom';
 import RatingModal from '../../components/RatingModal/RatingModal';
 import AtencionListItem from '../../components/AtencionListItem/AtencionListItem';
 import './paciente.css';
-import { FiChevronLeft, FiSearch } from 'react-icons/fi';
+import { FiChevronLeft, FiSearch, FiStar } from 'react-icons/fi';
 
 const DUMMY_ATENCIONES = [
   {
     id: 'a1',
-    tratamiento: 'Limpieza Dental',
-    practicante: 'Dra. María González',
-    fecha: '19/01/2024',
+    treatmentName: 'Limpieza Dental',
+    practitionerName: 'Dra. María González',
+    startDate: '2024-01-19',
   },
   {
     id: 'a2',
-    tratamiento: 'Tratamiento de Caries',
-    practicante: 'Dra. María González',
-    fecha: '10/01/2024',
+    treatmentName: 'Tratamiento de Caries',
+    practitionerName: 'Dra. María González',
+    startDate: '2024-01-10',
   },
 ];
 
@@ -45,10 +45,11 @@ const HistorialAtencionesPaciente = () => {
       atencionId: atencionSeleccionada.id,
       ...calificacion,
     });
+    // Aquí iría la llamada al store/API
   };
 
   return (
-    <div className="page-container-user">
+    <div className="page-container">
       <div className="paciente-content-container">
         <header className="page-header">
           <Link to="/paciente/dashboard" className="page-back-link">
@@ -73,8 +74,13 @@ const HistorialAtencionesPaciente = () => {
           {DUMMY_ATENCIONES.map((atencion) => (
             <AtencionListItem
               key={atencion.id}
-              atencion={atencion}
-              onCalificar={() => handleOpenModal(atencion)}
+              titulo={atencion.treatmentName}
+              detailText={`${
+                atencion.practitionerName
+              } • ${new Date(atencion.startDate).toLocaleDateString()}`}
+              buttonText="Calificar"
+              buttonIcon={<FiStar />}
+              onButtonClick={() => handleOpenModal(atencion)}
             />
           ))}
         </section>
@@ -87,8 +93,12 @@ const HistorialAtencionesPaciente = () => {
         titulo="Calificar Atención"
         subtitulo="Califique su experiencia con el practicante"
         infoBox={{
-          titulo: atencionSeleccionada?.tratamiento,
-          subtitulo: `${atencionSeleccionada?.practicante} • ${atencionSeleccionada?.fecha}`,
+          titulo: atencionSeleccionada?.treatmentName,
+          subtitulo: `${atencionSeleccionada?.practitionerName} • ${
+            atencionSeleccionada
+              ? new Date(atencionSeleccionada.startDate).toLocaleDateString()
+              : ''
+          }`,
         }}
         criterios={CRITERIOS_PACIENTE}
         comentarioLabel="Comentarios adicionales (opcional)"

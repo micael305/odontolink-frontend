@@ -11,6 +11,7 @@ import {
   FiEdit2,
   FiClock,
 } from 'react-icons/fi';
+import DataItem from '../../components/DataItem/DataItem';
 
 const DUMMY_PERFIL = {
   nombre: 'Juan Pérez',
@@ -97,18 +98,9 @@ const MiPerfil = () => {
               </Button>
             </div>
             <div className="info-card-content">
-              <div className="info-key-value">
-                <span className="key">Nombre completo</span>
-                <span className="value">{DUMMY_PERFIL.nombre}</span>
-              </div>
-              <div className="info-key-value">
-                <span className="key">DNI</span>
-                <span className="value">{DUMMY_PERFIL.dni}</span>
-              </div>
-              <div className="info-key-value">
-                <span className="key">Matrícula Profesional</span>
-                <span className="value">{DUMMY_PERFIL.matricula}</span>
-              </div>
+              <DataItem label="Nombre completo" value={DUMMY_PERFIL.nombre} />
+              <DataItem label="DNI" value={DUMMY_PERFIL.dni} />
+              <DataItem label="Matrícula Profesional" value={DUMMY_PERFIL.matricula} />
             </div>
           </div>
 
@@ -126,14 +118,8 @@ const MiPerfil = () => {
               </Button>
             </div>
             <div className="info-card-content">
-              <div className="info-key-value">
-                <span className="key">Teléfono</span>
-                <span className="value">{DUMMY_PERFIL.telefono}</span>
-              </div>
-              <div className="info-key-value">
-                <span className="key">Email</span>
-                <span className="value">{DUMMY_PERFIL.email}</span>
-              </div>
+              <DataItem label="Teléfono" value={DUMMY_PERFIL.telefono} />
+              <DataItem label="Email" value={DUMMY_PERFIL.email} />
             </div>
           </div>
 
@@ -151,14 +137,8 @@ const MiPerfil = () => {
               </Button>
             </div>
             <div className="info-card-content">
-              <div className="info-key-value">
-                <span className="key">Título</span>
-                <span className="value">{DUMMY_PERFIL.titulo}</span>
-              </div>
-              <div className="info-key-value">
-                <span className="key">Universidad</span>
-                <span className="value">{DUMMY_PERFIL.universidad}</span>
-              </div>
+              <DataItem label="Título" value={DUMMY_PERFIL.titulo} />
+              <DataItem label="Universidad" value={DUMMY_PERFIL.universidad} />
             </div>
           </div>
 
@@ -176,10 +156,7 @@ const MiPerfil = () => {
               </Button>
             </div>
             <div className="info-card-content">
-              <div className="info-key-value">
-                <span className="key">Horarios de atención</span>
-                <span className="value">{DUMMY_PERFIL.disponibilidad}</span>
-              </div>
+              <DataItem label="Horarios de atención" value={DUMMY_PERFIL.disponibilidad} />
             </div>
           </div>
         </div>

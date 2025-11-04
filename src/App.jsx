@@ -8,9 +8,9 @@ import RegisterPractitioner from './views/auth/RegisterPractitioner.jsx';
 // Vistas de Practicante
 import PracticanteDashboard from './views/practicante/PracticanteDashboard.jsx';
 import GestionTratamientos from './views/practicante/GestionarTratamientos.jsx';
-import ListaPacientes from './views/practicante/ListaPacientes.jsx';
+import ListaAtenciones from './views/practicante/ListaAtenciones.jsx';
 import EvolucionClinica from './views/practicante/EvolucionClinica.jsx';
-import HistorialAtenciones from './views/practicante/HistorialAtenciones.jsx';
+import HistorialAtencionesPracticante from './views/practicante/HistorialAtencionesPracticante.jsx';
 import MiPerfil from './views/practicante/MiPerfil.jsx';
 import GestionarTurnos from './views/practicante/GestionarTurnos.jsx';
 // Vistas de Paciente
@@ -42,9 +42,9 @@ function App() {
         <Route element={<ProtectedRoute allowedRoles={['ROLE_PRACTITIONER']} />}>
         <Route path="/practicante/dashboard" element={<PracticanteDashboard />}/>
         <Route path="/practicante/tratamientos" element={<GestionTratamientos />} />
-        <Route path="/practicante/pacientes" element={<ListaPacientes />} />
-        <Route path="/practicante/evolucion/:pacienteId" element={<EvolucionClinica />}/>
-        <Route path="/practicante/historial" element={<HistorialAtenciones />}/>
+        <Route path="/practicante/pacientes" element={<ListaAtenciones />} />
+        <Route path="/practicante/evolucion/:attentionId" element={<EvolucionClinica />}/>
+        <Route path="/practicante/historial" element={<HistorialAtencionesPracticante />}/>
         <Route path="/practicante/perfil" element={<MiPerfil />} />
         <Route path="/practicante/turnos" element={<GestionarTurnos />}/>
         </Route>

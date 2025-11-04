@@ -1,0 +1,129 @@
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import AtencionListItem from '../../components/AtencionListItem/AtencionListItem';
+import RatingModal from '../../components/RatingModal/RatingModal';
+import './practicante.css';
+import { FiChevronLeft, FiSearch, FiStar, FiLoader } from 'react-icons/fi';
+import { useAtencionStore } from '../../context/atencionStore';
+
+const CRITERIOS_PRACTICANTE = [
+  { id: 'puntualidad', label: 'Puntualidad' },
+  { id: 'colaboracion', label: 'Colaboración durante la atención' },
+  { id: 'cumplimiento', label: 'Cumplimiento de indicaciones' },
+  { id: 'actitud', label: 'Actitud general' },
+];
+
+const HistorialAtencionesPracticante = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [atencionSeleccionada, setAtencionSeleccionada] = useState(null);
+
+  const {
+    attentions,
+    status,
+    error,
+    fetchPractitionerAttentions,
+    submitFeedback,
+  } = useAtencionStore();
+
+  useEffect(() => {
+    fetchPractitionerAttentions();
+  }, [fetchPractitionerAttentions]);
+
+  const handleOpenModal = (atencion) => {
+    setAtencionSeleccionada(atencion);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setAtencionSeleccionada(null);
+  };
+
+  const handleFormSubmit = async (calificacion) => {
+    const feedbackData = {
+      attentionId: atencionSeleccionada.id,
+      rating: calificacion.ratings.actitud, 
+      comment: calificacion.comentario,
+    };
+    try {
+      await submitFeedback(feedbackData);
+      handleCloseModal();
+    } catch (err) {
+      console.error(err.message);
+      alert(`Error: ${err.message}`);
+    }
+  };
+
+  const atencionesFinalizadas = attentions.filter(
+    (a) => a.status === 'COMPLETED'
+  );
+
+  return (
+    <div className="page-container">
+      <div className="practicante-content-container">
+        <header className="page-header">
+          <Link to="/practicante/dashboard" className="page-back-link">
+            <FiChevronLeft />
+            Volver
+          </Link>
+          <h1>Historial de Atenciones</h1>
+        </header>
+
+        <div className="search-bar-container">
+          <div className="search-input-wrapper">
+            <FiSearch />
+            <input
+              type="text"
+              placeholder="Buscar paciente por nombre o DNI..."
+            />
+          </div>
+        </div>
+
+        <section className="atencion-list-container">
+          {status === 'loading' && (
+            <div className="loading-container">
+              <FiLoader className="loading-icon" />
+            </div>
+          )}
+          {status === 'error' && (
+            <div className="error-container">
+              <p>{error}</p>
+            </div>
+          )}
+          {status === 'success' && atencionesFinalizadas.length === 0 && (
+            <p>No hay atenciones finalizadas para calificar.</p>
+          )}
+          {status === 'success' &&
+            atencionesFinalizadas.map((atencion) => (
+              <AtencionListItem
+                key={atencion.id}
+                titulo={atencion.treatmentName}
+                detailText={`${atencion.patientName} • ${new Date(
+                  atencion.startDate
+                ).toLocaleDateString()}`}
+                buttonText="Calificar"
+                buttonIcon={<FiStar />}
+                onButtonClick={() => handleOpenModal(atencion)}
+              />
+            ))}
+        </section>
+      </div>
+
+      <RatingModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSubmit={handleFormSubmit}
+        titulo="Calificar Paciente"
+        subtitulo="Asigne una calificación de 1 a 5 estrellas"
+        infoBox={{
+          titulo: atencionSeleccionada?.patientName,
+          subtitulo: `Tratamiento: ${atencionSeleccionada?.treatmentName}`,
+        }}
+        criterios={CRITERIOS_PRACTICANTE}
+        comentarioLabel="Comentario (opcional)"
+      />
+    </div>
+  );
+};
+
+export default HistorialAtencionesPracticante;
