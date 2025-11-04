@@ -1,9 +1,11 @@
-// src/components/TurnoDetalleModal/TurnoDetalleModal.jsx
 import Button from '../Button/Button';
 import './turnoDetalleModal.css';
-import { FiX } from 'react-icons/fi';
+import { FiX, FiCheckCircle } from 'react-icons/fi';
+import { useTurnoStore } from '../../context/turnoStore';
 
 const TurnoDetalleModal = ({ isOpen, onClose, turno }) => {
+  const { completeTurno, noShowTurno, status } = useTurnoStore();
+
   if (!isOpen || !turno) {
     return null;
   }
@@ -12,22 +14,26 @@ const TurnoDetalleModal = ({ isOpen, onClose, turno }) => {
     e.stopPropagation();
   };
 
-  const handleConfirmar = () => {
-    console.log('Confirmar turno:', turno.id);
-    onClose();
+  const handleCompletar = async () => {
+    try {
+      await completeTurno(turno.id);
+      onClose();
+    } catch (e) {
+      alert(e.message);
+    }
   };
 
-  const handleReagendar = () => {
-    console.log('Reagendar turno:', turno.id);
-    onClose();
+  const handleNoAsistio = async () => {
+    try {
+      await noShowTurno(turno.id);
+      onClose();
+    } catch (e) {
+      alert(e.message);
+    }
   };
 
-  const handleCancelar = () => {
-    console.log('Cancelar turno:', turno.id);
-    onClose();
-  };
-
-  const statusClass = turno.estado.toLowerCase().replace(' ', '-');
+  const statusClass = turno.status.toLowerCase().replace('_', '-');
+  const isLoading = status === 'loading';
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -42,35 +48,42 @@ const TurnoDetalleModal = ({ isOpen, onClose, turno }) => {
         <div className="modal-body">
           <div className="turno-detalle-grupo">
             <label>Paciente</label>
-            <span>{turno.paciente}</span>
+            <span>{turno.patientName}</span>
           </div>
           <div className="turno-detalle-grupo">
             <label>Tratamiento</label>
-            <span>{turno.tratamiento}</span>
+            <span>{turno.treatmentName}</span>
           </div>
           <div className="turno-detalle-grupo">
             <label>Fecha y Hora</label>
             <span>
-              {turno.fecha} a las {turno.hora}
+              {new Date(turno.appointmentTime).toLocaleDateString()} a las{' '}
+              {turno.hora}
             </span>
           </div>
           <div className="turno-detalle-grupo">
             <label>Estado</label>
             <span className={`turno-status ${statusClass}`}>
-              {turno.estado}
+              {turno.status}
             </span>
           </div>
         </div>
 
         <div className="modal-footer">
-          <Button variant="outline-danger" onClick={handleCancelar}>
-            Cancelar Turno
+          <Button
+            variant="outline-danger"
+            onClick={handleNoAsistio}
+            disabled={isLoading}
+          >
+            No Asistió
           </Button>
-          <Button variant="outline-secondary" onClick={handleReagendar}>
-            Reagendar
-          </Button>
-          <Button variant="primary" onClick={handleConfirmar}>
-            Confirmar
+          <Button
+            variant="success"
+            icon={<FiCheckCircle />}
+            onClick={handleCompletar}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Guardando...' : 'Completar Turno'}
           </Button>
         </div>
       </div>

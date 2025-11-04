@@ -1,74 +1,37 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import TurnoDetalleModal from '../../components/TurnoDetalleModal/TurnoDetalleModal';
 import './practicante.css';
-import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-
-const DUMMY_TURNOS = [
-  {
-    id: 't1',
-    fecha: '2025-11-01',
-    hora: '09:00',
-    paciente: 'Juan Pérez',
-    tratamiento: 'Consulta General',
-    estado: 'Agendado',
-  },
-  {
-    id: 't2',
-    fecha: '2025-11-01',
-    hora: '10:30',
-    paciente: 'Maria García',
-    tratamiento: 'Limpieza Dental',
-    estado: 'Completado',
-  },
-  {
-    id: 't3',
-    fecha: '2025-11-03',
-    hora: '11:00',
-    paciente: 'Ana Martínez',
-    tratamiento: 'Control Postoperatorio',
-    estado: 'Agendado',
-  },
-  {
-    id: 't4',
-    fecha: '2025-11-03',
-    hora: '11:30',
-    paciente: 'Luis Fernández',
-    tratamiento: 'Consulta General',
-    estado: 'Agendado',
-  },
-  {
-    id: 't5',
-    fecha: '2025-11-04',
-    hora: '16:00',
-    paciente: 'Sofia Gomez',
-    tratamiento: 'Ortodoncia',
-    estado: 'Completado',
-  },
-  {
-    id: 't6',
-    fecha: '2025-11-10',
-    hora: '10:00',
-    paciente: 'Carlos Diaz',
-    tratamiento: 'Extracción',
-    estado: 'Cancelado',
-  },
-  {
-    id: 't7',
-    fecha: '2025-11-12',
-    hora: '15:00',
-    paciente: 'Lucia Vega',
-    tratamiento: 'Consulta General',
-    estado: 'No Asistio',
-  },
-];
+import { FiChevronLeft, FiChevronRight, FiLoader } from 'react-icons/fi';
+import { useTurnoStore } from '../../context/turnoStore';
 
 const DIAS_SEMANA = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
 
 const GestionarTurnos = () => {
-  const [currentDate, setCurrentDate] = useState(new Date('2025-11-01T12:00:00'));
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [turnoSeleccionado, setTurnoSeleccionado] = useState(null);
+
+  const { turnos, status, error, fetchTurnos } = useTurnoStore();
+
+  useEffect(() => {
+    fetchTurnos();
+  }, [fetchTurnos]);
+
+  const turnosFormateados = useMemo(() => {
+    return turnos.map((turno) => {
+      const d = new Date(turno.appointmentTime);
+      return {
+        ...turno,
+        fecha: d.toISOString().split('T')[0],
+        hora: d.toLocaleTimeString('default', {
+          hour: '2-digit',
+          minute: '2-digit',
+        }),
+        diaDelMes: d.getDate(),
+      };
+    });
+  }, [turnos]);
 
   const calendarDays = useMemo(() => {
     const year = currentDate.getFullYear();
@@ -156,11 +119,10 @@ const GestionarTurnos = () => {
           </div>
           <div className="calendar-grid">
             {calendarDays.map((day, index) => {
-              const dayString = day.date
-                ? day.date.toISOString().split('T')[0]
-                : null;
-              const turnosDelDia = DUMMY_TURNOS.filter(
-                (t) => t.fecha === dayString
+              const turnosDelDia = turnosFormateados.filter(
+                (t) =>
+                  t.diaDelMes === day.day &&
+                  new Date(t.fecha).getMonth() === currentDate.getMonth()
               );
 
               return (
@@ -176,17 +138,20 @@ const GestionarTurnos = () => {
                 >
                   <span className="calendar-day-number">{day.day}</span>
                   <div className="turnos-list">
+                    {status === 'loading' && index === 0 && (
+                      <FiLoader className="loading-icon-small" />
+                    )}
                     {turnosDelDia.map((turno) => (
                       <div
                         key={turno.id}
-                        className={`turno-item ${turno.estado
+                        className={`turno-item ${turno.status
                           .toLowerCase()
-                          .replace(' ', '-')}`}
+                          .replace('_', '-')}`}
                         onClick={() => handleOpenModal(turno)}
                       >
                         <span className="turno-item-hora">{turno.hora}</span>
                         <span className="turno-item-paciente">
-                          {turno.paciente}
+                          {turno.patientName}
                         </span>
                       </div>
                     ))}

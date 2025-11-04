@@ -77,23 +77,22 @@
   border-radius: 12px;
   width: fit-content;
 }
-.turno-status.agendado {
+.turno-status.scheduled {
   color: #053b8a;
   background-color: #e6f0ff;
 }
-.turno-status.completado {
+.turno-status.completed {
   color: #155724;
   background-color: #e6f7eb;
 }
-.turno-status.cancelado {
+.turno-status.cancelled {
   color: #383d41;
   background-color: #e2e3e5;
 }
-.turno-status.no-asistio {
+.turno-status.no-show {
   color: #664d00;
   background-color: #fff8e6;
 }
-
 .modal-footer {
   display: flex;
   justify-content: center;

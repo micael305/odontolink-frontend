@@ -82,3 +82,52 @@ export const updateOfferedTreatment = async (id, treatmentData) => {
     );
   }
 };
+
+export const getUpcomingAppointments = async () => {
+  try {
+    const response = await api.get('/practitioner/appointments/upcoming');
+    return response.data;
+  } catch (error) {
+    console.error(
+      'Error al obtener próximos turnos:',
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.message || 'Error al cargar turnos'
+    );
+  }
+};
+
+export const markAppointmentAsCompleted = async (appointmentId) => {
+  try {
+    const response = await api.post(
+      `/practitioner/appointments/${appointmentId}/complete`
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      'Error al completar turno:',
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.message || 'Error al completar turno'
+    );
+  }
+};
+
+export const markAppointmentAsNoShow = async (appointmentId) => {
+  try {
+    const response = await api.post(
+      `/practitioner/appointments/${appointmentId}/no-show`
+    );
+    return response.data;
+  } catch (error) {
+    console.error(
+      'Error al marcar no asistencia:',
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.message || 'Error al marcar no asistencia'
+    );
+  }
+};

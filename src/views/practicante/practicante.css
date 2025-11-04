@@ -188,7 +188,7 @@
   padding: 1.5rem;
 }
 
-/* --- CLASE ACTUALIZADA --- */
+
 .tag-status {
   display: inline-block;
   align-self: flex-start;
@@ -453,37 +453,39 @@
   display: block;
   margin-top: 0.25rem;
 }
-.turno-item.agendado {
+.turno-item.scheduled {
   background-color: #0d6efd;
   border-color: #0b5ed7;
 }
-.turno-item.agendado:hover {
+.turno-item.scheduled:hover {
   background-color: #0b5ed7;
 }
-.turno-item.completado {
+
+.turno-item.completed {
   background-color: #198754;
   border-color: #157347;
 }
-.turno-item.completado:hover {
+.turno-item.completed:hover {
   background-color: #157347;
 }
-.turno-item.cancelado {
+
+.turno-item.cancelled {
   background-color: #6c757d;
   border-color: #5c636a;
 }
-.turno-item.cancelado:hover {
+.turno-item.cancelled:hover {
   background-color: #5c636a;
 }
-.turno-item.no-asistio {
+
+.turno-item.no-show {
   background-color: #ffc107;
   border-color: #e6ac00;
   color: #333;
 }
-.turno-item.no-asistio:hover {
+.turno-item.no-show:hover {
   background-color: #e6ac00;
 }
 
-/* --- ESTILOS AÑADIDOS PARA EL BOTÓN DE CHAT FLOTANTE --- */
 .fab-container {
   position: fixed;
   bottom: 2rem;
@@ -520,3 +522,9 @@
   cursor: not-allowed;
 }
 
+.loading-icon-small {
+  font-size: 1.5rem;
+  color: #888;
+  animation: spin 1s linear infinite;
+  margin: 0.5rem auto;
+}
