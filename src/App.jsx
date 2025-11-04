@@ -13,6 +13,7 @@ import EvolucionClinica from './views/practicante/EvolucionClinica.jsx';
 import HistorialAtencionesPracticante from './views/practicante/HistorialAtencionesPracticante.jsx';
 import MiPerfil from './views/practicante/MiPerfil.jsx';
 import GestionarTurnos from './views/practicante/GestionarTurnos.jsx';
+import MiFeedbackPracticante from './views/practicante/MiFeedbackPracticante.jsx';
 // Vistas de Paciente
 import PacienteDashboard from './views/paciente/PacienteDashboard.jsx';
 import MiFeedback from './views/paciente/MiFeedback.jsx';
@@ -47,6 +48,7 @@ function App() {
         <Route path="/practicante/historial" element={<HistorialAtencionesPracticante />}/>
         <Route path="/practicante/perfil" element={<MiPerfil />} />
         <Route path="/practicante/turnos" element={<GestionarTurnos />}/>
+        <Route path="/practicante/feedback" element={<MiFeedbackPracticante />} />
         </Route>
         {/* Paciente - Rutas de protegidas */}
         <Route element={<ProtectedRoute allowedRoles={['ROLE_PATIENT']} />}>
