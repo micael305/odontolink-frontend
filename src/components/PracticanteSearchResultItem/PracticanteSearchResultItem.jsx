@@ -3,6 +3,9 @@ import './practicanteSearchResultItem.css';
 import { FiUser, FiPlus } from 'react-icons/fi';
 
 const PracticanteSearchResultItem = ({ practicante, onAgregar }) => {
+  // El backend retorna: id, email, firstName, lastName, dni, phone, birthDate, studentId, studyYear, active
+  const fullName = `${practicante.firstName} ${practicante.lastName}`;
+  
   return (
     <div className="search-result-item">
       <div className="search-result-info">
@@ -10,9 +13,9 @@ const PracticanteSearchResultItem = ({ practicante, onAgregar }) => {
           <FiUser />
         </div>
         <div className="search-result-details">
-          <span className="name">{practicante.nombre}</span>
+          <span className="name">{fullName}</span>
           <span className="id">
-            Legajo: {practicante.legajo} • DNI: {practicante.dni}
+            Legajo: {practicante.studentId || 'N/A'} • DNI: {practicante.dni || 'N/A'}
           </span>
         </div>
       </div>

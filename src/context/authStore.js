@@ -3,6 +3,7 @@ import {
   login as apiLogin,
   registerPatient as apiRegisterPatient,
   registerPractitioner as apiRegisterPractitioner,
+  registerSupervisor as apiRegisterSupervisor,
 } from '../api/authService';
 
 const getInitialState = () => {
@@ -80,6 +81,18 @@ export const useAuthStore = create((set) => ({
     set({ status: 'loading', error: null });
     try {
       const data = await apiRegisterPractitioner(practitionerData);
+      set({ status: 'success', error: null });
+      return data;
+    } catch (error) {
+      set({ status: 'error', error: error.message });
+      throw error;
+    }
+  },
+
+  registerSupervisor: async (supervisorData) => {
+    set({ status: 'loading', error: null });
+    try {
+      const data = await apiRegisterSupervisor(supervisorData);
       set({ status: 'success', error: null });
       return data;
     } catch (error) {
