@@ -2,7 +2,7 @@ import StarRating from '../StarRating/StarRating';
 import './feedbackCard.css';
 
 const FeedbackCard = ({ feedback }) => {
-  const { practicante, fecha, criterios, comentario, tratamiento } = feedback;
+  const { practicante, fecha, criterios, comentario, tratamiento, fechaCompleta } = feedback;
 
   return (
     <div className="feedback-card">
@@ -13,7 +13,12 @@ const FeedbackCard = ({ feedback }) => {
             <span className="tratamiento-label">{tratamiento}</span>
           )}
         </div>
-        <span className="date">{fecha}</span>
+        <div className="date-info">
+          <span className="date">{fecha}</span>
+          {fechaCompleta && (
+            <span className="time">{fechaCompleta}</span>
+          )}
+        </div>
       </div>
       <div className="feedback-card-body">
         {criterios.map((criterio) => (

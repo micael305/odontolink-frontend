@@ -76,3 +76,22 @@
 .btn-dark:hover {
   background-color: #343a40;
 }
+
+.btn-outline-success {
+  background-color: #ffffff;
+  color: #198754;
+  border-color: #198754;
+}
+.btn-outline-success:hover {
+  background-color: #f0f9f5;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.btn:disabled:hover {
+  background-color: inherit;
+  border-color: inherit;
+  transform: none;
+}

@@ -13,6 +13,7 @@ const RatingModal = ({
   infoBox,
   criterios,
   comentarioLabel,
+  submitting = false,
 }) => {
   const [ratings, setRatings] = useState({});
   const [comentario, setComentario] = useState('');
@@ -79,11 +80,11 @@ const RatingModal = ({
         </div>
 
         <div className="modal-footer">
-          <Button variant="outline-secondary" onClick={onClose}>
+          <Button variant="outline-secondary" onClick={onClose} disabled={submitting}>
             Cancelar
           </Button>
-          <Button variant="primary" onClick={handleSubmit}>
-            Confirmar Calificación
+          <Button variant="primary" onClick={handleSubmit} disabled={submitting}>
+            {submitting ? 'Enviando...' : 'Confirmar Calificación'}
           </Button>
         </div>
       </div>
