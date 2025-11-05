@@ -54,15 +54,14 @@ const ChatLayout = () => {
 
   const getOtherPersonName = (session) => {
     if (!user) return '';
-    // Si mi userId coincide con patientId, soy el paciente → mostrar practicante
-    // Si mi userId coincide con practitionerId, soy el practicante → mostrar paciente
-    if (user.userId === session.patientId) {
-      return session.practitionerName;
-    } else if (user.userId === session.practitionerId) {
-      return session.patientName;
+    // Si soy paciente → mostrar practitionerName
+    // Si soy practicante → mostrar patientName
+    if (user.role === 'ROLE_PATIENT') {
+      return session.practitionerName || '';
+    } else if (user.role === 'ROLE_PRACTITIONER') {
+      return session.patientName || '';
     }
-    // Fallback: si no coincide con ninguno, intentar por rol
-    return user.role === 'ROLE_PATIENT' ? session.practitionerName : session.patientName;
+    return '';
   };
 
   const selectedSession = sessions.find((s) => s.id === currentSessionId);
@@ -147,13 +146,13 @@ const ChatLayout = () => {
             </div>
           )}
           {filteredSessions.map((session) => {
-            // Determinar el rol de la otra persona
+            // Determinar el rol de la otra persona basado en mi rol
             let otherPersonRole = 'paciente';
-            if (user?.userId === session.patientId) {
-              // Soy el paciente, la otra persona es practicante
+            if (user?.role === 'ROLE_PATIENT') {
+              // Soy paciente, la otra persona es practicante
               otherPersonRole = 'practicante';
-            } else if (user?.userId === session.practitionerId) {
-              // Soy el practicante, la otra persona es paciente
+            } else if (user?.role === 'ROLE_PRACTITIONER') {
+              // Soy practicante, la otra persona es paciente
               otherPersonRole = 'paciente';
             }
             
