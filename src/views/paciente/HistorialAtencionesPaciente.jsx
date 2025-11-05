@@ -76,8 +76,10 @@ const HistorialAtencionesPaciente = () => {
 
   const handleOpenFeedbackModal = (atencion) => {
     setAtencionSeleccionada(atencion);
-    // Obtener el primer feedback (debe haber solo uno del paciente)
-    const feedback = feedbacks[atencion.id]?.[0];
+    // Obtener solo el feedback que el paciente dejó al practicante
+    const feedback = feedbacks[atencion.id]?.find(
+      (fb) => fb.submittedByRole === 'ROLE_PATIENT'
+    );
     setFeedbackSeleccionado(feedback);
     setIsFeedbackModalOpen(true);
   };
@@ -124,9 +126,11 @@ const HistorialAtencionesPaciente = () => {
     );
   });
 
-  // Verificar si una atención tiene feedback
+  // Verificar si una atención tiene feedback del paciente
   const hasFeedback = (attentionId) => {
-    return feedbacks[attentionId] && feedbacks[attentionId].length > 0;
+    const feedbackList = feedbacks[attentionId] || [];
+    // Verificar si existe feedback enviado por el paciente
+    return feedbackList.some((fb) => fb.submittedByRole === 'ROLE_PATIENT');
   };
 
   return (
@@ -166,6 +170,12 @@ const HistorialAtencionesPaciente = () => {
           <section className="atencion-list-container">
             {atencionesFiltradas.map((atencion) => {
               const tieneFeedback = hasFeedback(atencion.id);
+              // Obtener el rating si existe feedback del paciente
+              const myFeedback = feedbacks[atencion.id]?.find(
+                (fb) => fb.submittedByRole === 'ROLE_PATIENT'
+              );
+              const rating = myFeedback ? myFeedback.rating : null;
+              
               return (
                 <AtencionListItem
                   key={atencion.id}
@@ -176,6 +186,7 @@ const HistorialAtencionesPaciente = () => {
                   buttonText={tieneFeedback ? 'Ver calificación' : 'Calificar'}
                   buttonIcon={tieneFeedback ? <FiEye /> : <FiStar />}
                   onButtonClick={() => tieneFeedback ? handleOpenFeedbackModal(atencion) : handleOpenRatingModal(atencion)}
+                  rating={rating}
                 />
               );
             })}

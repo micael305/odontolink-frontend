@@ -100,8 +100,12 @@ const HistorialAtencionesPracticante = () => {
           )}
           {status === 'success' &&
             atencionesFinalizadas.map((atencion) => {
-              const hasFeedback = atencion.feedback && atencion.feedback.length > 0;
-              const rating = hasFeedback ? atencion.feedback[0].rating : null;
+              // Filtrar solo el feedback que el practicante dejó al paciente
+              const myFeedback = atencion.feedback?.find(
+                (fb) => fb.submittedByRole === 'ROLE_PRACTITIONER'
+              );
+              const hasFeedback = myFeedback !== undefined;
+              const rating = hasFeedback ? myFeedback.rating : null;
 
               return (
                 <AtencionListItem
@@ -141,7 +145,11 @@ const HistorialAtencionesPracticante = () => {
       <FeedbackDisplayModal
         isOpen={isDisplayModalOpen}
         onClose={handleCloseModals}
-        feedback={atencionSeleccionada?.feedback?.[0]}
+        feedback={
+          atencionSeleccionada?.feedback?.find(
+            (fb) => fb.submittedByRole === 'ROLE_PRACTITIONER'
+          )
+        }
         atencionInfo={atencionSeleccionada}
       />
     </div>

@@ -20,14 +20,21 @@ const MiFeedbackPracticante = () => {
           att.status === 'COMPLETED' && att.feedback && att.feedback.length > 0
       )
       .flatMap((att) =>
-        att.feedback.map((fb) => ({
-          id: fb.id,
-          practicante: `Feedback de: ${fb.submittedByName}`,
-          fecha: new Date(fb.createdAt).toLocaleDateString(),
-          tratamiento: att.treatmentName,
-          criterios: [{ nombre: 'Calificación General', puntaje: fb.rating }],
-          comentario: fb.comment,
-        }))
+        att.feedback
+          .filter((fb) => fb.submittedByRole === 'ROLE_PATIENT') // Solo feedback de pacientes
+          .map((fb) => ({
+            id: fb.id,
+            practicante: `Feedback de: ${fb.submittedByName}`,
+            fecha: new Date(fb.createdAt).toLocaleDateString(),
+            hora: new Date(fb.createdAt).toLocaleTimeString('es-ES', {
+              hour: '2-digit',
+              minute: '2-digit',
+            }),
+            tratamiento: att.treatmentName,
+            paciente: att.patientName,
+            criterios: [{ nombre: 'Satisfacción General', puntaje: fb.rating }],
+            comentario: fb.comment,
+          }))
       )
       .sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
   }, [attentions]);
