@@ -207,6 +207,18 @@
   background-color: #e6f7eb;
 }
 
+.turno-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.turno-actions .btn {
+  flex: 1;
+}
+
 .nueva-evolucion-card {
   display: flex;
   justify-content: space-between;
