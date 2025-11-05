@@ -43,3 +43,16 @@ export const registerPractitioner = async (practitionerData) => {
     throw new Error(error.response?.data?.message || 'Error al registrarse');
   }
 };
+
+export const registerSupervisor = async (supervisorData) => {
+  try {
+    const response = await publicApi.post('/supervisors/register', supervisorData);
+    return response.data;
+  } catch (error) {
+    console.error(
+      'Error en el registro de supervisor:',
+      error.response?.data || error.message
+    );
+    throw new Error(error.response?.data?.message || 'Error al registrarse');
+  }
+};

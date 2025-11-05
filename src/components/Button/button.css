@@ -76,3 +76,32 @@
 .btn-dark:hover {
   background-color: #343a40;
 }
+
+/* Modificador para botones con ancho automático */
+.btn-auto-width {
+  width: auto;
+  min-width: fit-content;
+}
+
+/* Mejoras responsive para botones */
+@media (max-width: 768px) {
+  .btn {
+    font-size: 0.95rem;
+    padding: 0.875rem 1rem;
+  }
+  
+  .btn-icon {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn {
+    font-size: 0.9rem;
+    padding: 0.8rem 0.875rem;
+  }
+  
+  .btn-icon {
+    font-size: 1rem;
+  }
+}

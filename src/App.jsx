@@ -5,6 +5,7 @@ import Home from './views/auth/Home.jsx';
 import Login from './views/auth/Login.jsx';
 import RegisterPatient from './views/auth/RegisterPatient.jsx';
 import RegisterPractitioner from './views/auth/RegisterPractitioner.jsx';
+import RegisterSupervisor from './views/auth/RegisterSupervisor.jsx';
 // Vistas de Practicante
 import PracticanteDashboard from './views/practicante/PracticanteDashboard.jsx';
 import GestionTratamientos from './views/practicante/GestionarTratamientos.jsx';
@@ -39,6 +40,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<RegisterPatient />} />
         <Route path="/register/practitioner" element={<RegisterPractitioner />}/>
+        <Route path="/register/supervisor" element={<RegisterSupervisor />}/>
         {/* Practicante - Rutas de protegidas */}
         <Route element={<ProtectedRoute allowedRoles={['ROLE_PRACTITIONER']} />}>
         <Route path="/practicante/dashboard" element={<PracticanteDashboard />}/>
@@ -60,7 +62,7 @@ function App() {
         <Route path="/paciente/turno-confirmado" element={<TurnoConfirmado />} />
         </Route>
         {/* Docente - Rutas de protegidas */}
-        <Route element={<ProtectedRoute allowedRoles={['ROLE_DOCENTE']} />}>
+        <Route element={<ProtectedRoute allowedRoles={['ROLE_SUPERVISOR']} />}>
         <Route path="/docente/dashboard" element={<DocenteDashboard />} />
         <Route path="/docente/practicantes" element={<ListaPracticantes />} />
         <Route path="/docente/buscar-practicantes" element={<BuscarPracticantes />} />

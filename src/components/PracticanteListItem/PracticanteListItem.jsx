@@ -11,7 +11,10 @@ const PracticanteListItem = ({
   onVerFeedback,
   onQuitar,
 }) => {
-  const estadoClass = practicante.estadoActual.toLowerCase();
+  // El backend retorna: id, email, firstName, lastName, dni, phone, birthDate, studentId, studyYear, active
+  const fullName = `${practicante.firstName} ${practicante.lastName}`;
+  const estadoClass = practicante.active ? 'activo' : 'inactivo';
+  const estadoTexto = practicante.active ? 'Activo' : 'Inactivo';
 
   return (
     <div className="practicante-list-item">
@@ -20,26 +23,26 @@ const PracticanteListItem = ({
           <FiUser />
         </div>
         <div className="practicante-details">
-          <span className="name">{practicante.nombre}</span>
+          <span className="name">{fullName}</span>
           <span className="comision">
-            Comisión: {practicante.comision}
+            Legajo: {practicante.studentId || 'N/A'}
           </span>
         </div>
       </div>
 
       <div className="practicante-stats">
         <div className="stat-item">
-          <span className="label">Estado Académico</span>
-          <span className="value">{practicante.estadoAcademico}</span>
+          <span className="label">Año de Estudio</span>
+          <span className="value">{practicante.studyYear ? `${practicante.studyYear}° año` : 'N/A'}</span>
         </div>
         <div className="stat-item">
-          <span className="label">Prácticas Realizadas</span>
-          <span className="value">{practicante.practicasRealizadas}</span>
+          <span className="label">DNI</span>
+          <span className="value">{practicante.dni || 'N/A'}</span>
         </div>
         <div className="stat-item">
-          <span className="label">Estado Actual</span>
+          <span className="label">Estado</span>
           <span className={`tag ${estadoClass}`}>
-            {practicante.estadoActual}
+            {estadoTexto}
           </span>
         </div>
       </div>
