@@ -1,66 +1,64 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import './docente.css';
-import { FiChevronLeft, FiFilter } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronDown, FiChevronRight, FiUser } from 'react-icons/fi';
 import FeedbackCard from '../../components/FeedbackCard/FeedbackCard';
 import { getFeedbackForPractitioner } from '../../api/docenteService';
 
 const VerFeedbackPracticante = () => {
   const { practicanteId } = useParams();
   const [feedbackList, setFeedbackList] = useState([]);
-  const [filteredFeedback, setFilteredFeedback] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState('all'); // 'all', 'practitioner', 'patient'
+  const [expandedPatients, setExpandedPatients] = useState({});
 
   useEffect(() => {
+    const fetchFeedback = async () => {
+      try {
+        setLoading(true);
+        const data = await getFeedbackForPractitioner(practicanteId);
+        // Filtrar solo feedback de pacientes
+        const patientFeedback = data.filter((f) => f.submittedByRole === 'ROLE_PATIENT');
+        setFeedbackList(patientFeedback);
+        setError(null);
+      } catch (err) {
+        console.error('Error al obtener feedback:', err);
+        setError('No se pudo cargar el feedback');
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchFeedback();
   }, [practicanteId]);
 
-  useEffect(() => {
-    applyFilter();
-  }, [filter, feedbackList]);
-
-  const fetchFeedback = async () => {
-    try {
-      setLoading(true);
-      const data = await getFeedbackForPractitioner(practicanteId);
-      setFeedbackList(data);
-      setFilteredFeedback(data);
-      setError(null);
-    } catch (err) {
-      console.error('Error al obtener feedback:', err);
-      setError('No se pudo cargar el feedback');
-    } finally {
-      setLoading(false);
+  // Agrupar feedback por paciente
+  const groupedFeedback = feedbackList.reduce((acc, feedback) => {
+    const patientId = feedback.submittedById;
+    const patientName = feedback.submittedByName;
+    
+    if (!acc[patientId]) {
+      acc[patientId] = {
+        patientId,
+        patientName,
+        feedbacks: [],
+      };
     }
-  };
+    
+    acc[patientId].feedbacks.push(feedback);
+    return acc;
+  }, {});
 
-  const applyFilter = () => {
-    if (filter === 'all') {
-      setFilteredFeedback(feedbackList);
-    } else if (filter === 'practitioner') {
-      setFilteredFeedback(
-        feedbackList.filter((f) => f.submittedByRole === 'ROLE_PRACTITIONER')
-      );
-    } else if (filter === 'patient') {
-      setFilteredFeedback(
-        feedbackList.filter((f) => f.submittedByRole === 'ROLE_PATIENT')
-      );
-    }
-  };
+  const patientGroups = Object.values(groupedFeedback).sort((a, b) =>
+    a.patientName.localeCompare(b.patientName)
+  );
 
-  const getStats = () => {
-    const practitionerCount = feedbackList.filter(
-      (f) => f.submittedByRole === 'ROLE_PRACTITIONER'
-    ).length;
-    const patientCount = feedbackList.filter(
-      (f) => f.submittedByRole === 'ROLE_PATIENT'
-    ).length;
-    return { practitionerCount, patientCount, total: feedbackList.length };
+  const togglePatient = (patientId) => {
+    setExpandedPatients((prev) => ({
+      ...prev,
+      [patientId]: !prev[patientId],
+    }));
   };
-
-  const stats = getStats();
 
   if (loading) {
     return (
@@ -90,45 +88,50 @@ const VerFeedbackPracticante = () => {
             <FiChevronLeft />
             Volver
           </Link>
-          <h1>Feedback del Practicante</h1>
+          <h1>Feedback de Pacientes al Practicante</h1>
+          <p className="page-subtitle">
+            Feedbacks organizados por paciente
+          </p>
         </header>
 
-        {stats.total > 0 && (
-          <div className="feedback-filters">
-            <FiFilter className="filter-icon" />
-            <button
-              className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
-              onClick={() => setFilter('all')}
-            >
-              Todos ({stats.total})
-            </button>
-            <button
-              className={`filter-btn ${filter === 'practitioner' ? 'active' : ''}`}
-              onClick={() => setFilter('practitioner')}
-            >
-              Del Practicante ({stats.practitionerCount})
-            </button>
-            <button
-              className={`filter-btn ${filter === 'patient' ? 'active' : ''}`}
-              onClick={() => setFilter('patient')}
-            >
-              De Pacientes ({stats.patientCount})
-            </button>
-          </div>
-        )}
+        <section className="patient-feedback-groups">
+          {patientGroups.length > 0 ? (
+            patientGroups.map((group) => (
+              <div key={group.patientId} className="patient-group">
+                <div
+                  className="patient-group-header"
+                  onClick={() => togglePatient(group.patientId)}
+                >
+                  <div className="patient-info">
+                    <FiUser className="patient-icon" />
+                    <div>
+                      <h3>{group.patientName}</h3>
+                      <span className="feedback-count">
+                        {group.feedbacks.length} feedback{group.feedbacks.length !== 1 ? 's' : ''}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="expand-icon">
+                    {expandedPatients[group.patientId] ? (
+                      <FiChevronDown />
+                    ) : (
+                      <FiChevronRight />
+                    )}
+                  </div>
+                </div>
 
-        <section className="feedback-list">
-          {filteredFeedback.length > 0 ? (
-            filteredFeedback.map((feedback) => (
-              <FeedbackCard key={feedback.id} feedback={feedback} />
+                {expandedPatients[group.patientId] && (
+                  <div className="patient-feedback-list">
+                    {group.feedbacks.map((feedback) => (
+                      <FeedbackCard key={feedback.id} feedback={feedback} />
+                    ))}
+                  </div>
+                )}
+              </div>
             ))
-          ) : stats.total > 0 ? (
-            <div className="empty-state">
-              <p>No hay feedback de este tipo.</p>
-            </div>
           ) : (
             <div className="empty-state">
-              <p>Este practicante aún no tiene feedback registrado.</p>
+              <p>Este practicante aún no ha recibido feedback de pacientes.</p>
             </div>
           )}
         </section>

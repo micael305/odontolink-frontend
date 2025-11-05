@@ -356,3 +356,122 @@
     padding: 0.7rem 1rem;
   }
 }
+
+/* Patient Feedback Groups (Desplegables) */
+.patient-feedback-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.patient-group {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.patient-group:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.patient-group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  cursor: pointer;
+  background: #ffffff;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.patient-group-header:hover {
+  background-color: #f8f9fa;
+}
+
+.patient-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.patient-icon {
+  font-size: 1.8rem;
+  color: #0d6efd;
+  background-color: #e7f1ff;
+  padding: 0.75rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.patient-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #222;
+  margin: 0 0 0.25rem 0;
+}
+
+.feedback-count {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.expand-icon {
+  font-size: 1.5rem;
+  color: #666;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.patient-feedback-list {
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-subtitle {
+  font-size: 0.95rem;
+  color: #666;
+  margin-top: 0.5rem;
+  font-weight: 400;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .patient-group-header {
+    padding: 1rem;
+  }
+
+  .patient-icon {
+    font-size: 1.5rem;
+    padding: 0.6rem;
+  }
+
+  .patient-info h3 {
+    font-size: 1rem;
+  }
+
+  .patient-feedback-list {
+    padding: 1rem;
+  }
+}
