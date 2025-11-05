@@ -23,20 +23,13 @@ const MiFeedbackPracticante = () => {
         att.feedback
           .filter((fb) => fb.submittedByRole === 'ROLE_PATIENT') // Solo feedback de pacientes
           .map((fb) => ({
-            id: fb.id,
-            practicante: `Feedback de: ${fb.submittedByName}`,
-            fecha: new Date(fb.createdAt).toLocaleDateString(),
-            hora: new Date(fb.createdAt).toLocaleTimeString('es-ES', {
-              hour: '2-digit',
-              minute: '2-digit',
-            }),
-            tratamiento: att.treatmentName,
-            paciente: att.patientName,
-            criterios: [{ nombre: 'Satisfacción General', puntaje: fb.rating }],
-            comentario: fb.comment,
+            ...fb, // Mantener toda la estructura del backend
+            treatmentName: att.treatmentName,
+            patientName: att.patientName,
+            practitionerName: att.practitionerName,
           }))
       )
-      .sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   }, [attentions]);
 
   return (

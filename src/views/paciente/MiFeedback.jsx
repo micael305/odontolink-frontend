@@ -82,32 +82,12 @@ const MiFeedback = () => {
           </div>
         ) : (
           <section className="feedback-list">
-            {feedbacks.map((feedback) => {
-              const fechaObj = new Date(feedback.createdAt);
-              return (
-                <FeedbackCard 
-                  key={feedback.id} 
-                  feedback={{
-                    id: feedback.id,
-                    practicante: feedback.practitionerName,
-                    fecha: fechaObj.toLocaleDateString('es-ES', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric'
-                    }),
-                    fechaCompleta: fechaObj.toLocaleTimeString('es-ES', {
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    }),
-                    tratamiento: feedback.treatmentName,
-                    criterios: [
-                      { nombre: 'Satisfacción General', puntaje: feedback.rating }
-                    ],
-                    comentario: feedback.comment || null,
-                  }} 
-                />
-              );
-            })}
+            {feedbacks.map((feedback) => (
+              <FeedbackCard 
+                key={feedback.id} 
+                feedback={feedback} 
+              />
+            ))}
           </section>
         )}
       </div>
