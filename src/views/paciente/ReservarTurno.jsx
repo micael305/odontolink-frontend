@@ -187,7 +187,7 @@ const ReservarTurno = () => {
 
   return (
     <>
-      <div className="page-container">
+      <div className="page-container-user">
         <div className="paciente-content-container">
           <header className="page-header">
             <Link to="/paciente/tratamientos" className="page-back-link">

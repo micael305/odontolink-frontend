@@ -51,7 +51,7 @@ const TurnoConfirmado = () => {
   });
 
   return (
-    <div className="page-container">
+    <div className="page-container-user">
       <div className="confirmacion-card">
         <div className="confirmacion-icon">
           <FiCheckCircle />

@@ -8,10 +8,7 @@ import { FiChevronLeft, FiSearch, FiStar, FiLoader, FiEye } from 'react-icons/fi
 import { useAtencionStore } from '../../context/atencionStore';
 
 const CRITERIOS_PRACTICANTE = [
-  { id: 'puntualidad', label: 'Puntualidad' },
-  { id: 'colaboracion', label: 'Colaboración durante la atención' },
-  { id: 'cumplimiento', label: 'Cumplimiento de indicaciones' },
-  { id: 'actitud', label: 'Actitud general' },
+  { id: 'satisfaccion', label: 'Satisfacción General' },
 ];
 
 const HistorialAtencionesPracticante = () => {
@@ -50,7 +47,7 @@ const HistorialAtencionesPracticante = () => {
   const handleFormSubmit = async (calificacion) => {
     const feedbackData = {
       attentionId: atencionSeleccionada.id,
-      rating: calificacion.ratings.actitud || 5,
+      rating: calificacion.ratings.satisfaccion || 5,
       comment: calificacion.comentario,
     };
     try {
@@ -144,7 +141,8 @@ const HistorialAtencionesPracticante = () => {
       <FeedbackDisplayModal
         isOpen={isDisplayModalOpen}
         onClose={handleCloseModals}
-        feedback={atencionSeleccionada?.feedback}
+        feedback={atencionSeleccionada?.feedback?.[0]}
+        atencionInfo={atencionSeleccionada}
       />
     </div>
   );
