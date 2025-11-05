@@ -10,8 +10,10 @@ import {
   FiFileText,
   FiLoader,
   FiCheckCircle,
+  FiXCircle,
 } from 'react-icons/fi';
 import { useAtencionStore } from '../../context/atencionStore';
+import { useTurnoStore } from '../../context/turnoStore';
 import DataItem from '../../components/DataItem/DataItem';
 import AgregarEvolucionModal from '../../components/AgregarEvolucionModal/AgregarEvolucionModal';
 import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
@@ -27,8 +29,14 @@ const EvolucionClinica = () => {
     finalizeAttention,
   } = useAtencionStore();
 
+  const {
+    completeTurno,
+    markNoShow,
+  } = useTurnoStore();
+
   const [isNotaModalOpen, setIsNotaModalOpen] = useState(false);
   const [isFinalizarModalOpen, setIsFinalizarModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (attentionId) {
@@ -82,10 +90,49 @@ const EvolucionClinica = () => {
     
     if (proximo) {
       const d = new Date(proximo.appointmentTime);
-      return `${d.toLocaleDateString()} - ${d.toLocaleTimeString('default', { hour: '2-digit', minute: '2-digit' })}`;
+      return {
+        texto: `${d.toLocaleDateString()} - ${d.toLocaleTimeString('default', { hour: '2-digit', minute: '2-digit' })}`,
+        id: proximo.id
+      };
     }
-    return 'N/A';
+    return { texto: 'N/A', id: null };
   }
+
+  const proximoTurno = getProximoTurno();
+
+  const handleCompletar = async () => {
+    if (!proximoTurno.id) return;
+    
+    setIsLoading(true);
+    try {
+      await completeTurno(proximoTurno.id);
+      // Recargar los detalles de la atención para actualizar el estado
+      await fetchAttentionDetails(attentionId);
+      alert('Turno marcado como completado exitosamente');
+    } catch (err) {
+      console.error('Error al completar turno:', err);
+      alert(`Error: ${err.message || 'No se pudo completar el turno'}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleNoAsistio = async () => {
+    if (!proximoTurno.id) return;
+    
+    setIsLoading(true);
+    try {
+      await markNoShow(proximoTurno.id);
+      // Recargar los detalles de la atención para actualizar el estado
+      await fetchAttentionDetails(attentionId);
+      alert('Turno marcado como no asistió');
+    } catch (err) {
+      console.error('Error al marcar no asistió:', err);
+      alert(`Error: ${err.message || 'No se pudo marcar como no asistió'}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const isCompleted = currentAttention.status === 'COMPLETED';
 
@@ -121,10 +168,31 @@ const EvolucionClinica = () => {
                 <div className="info-card-content">
                   <DataItem label="Tratamiento" value={currentAttention.treatmentName} />
                   <DataItem label="Inicio" value={currentAttention.startDate} />
-                  <DataItem label="Próximo turno" value={getProximoTurno()} />
+                  <DataItem label="Próximo turno" value={proximoTurno.texto} />
                   <span className={`tag-status ${isCompleted ? 'completado' : 'en-progreso'}`}>
                     {isCompleted ? 'Completado' : 'En Progreso'}
                   </span>
+                  
+                  {!isCompleted && proximoTurno.id && (
+                    <div className="turno-actions">
+                      <Button
+                        variant="outline-danger"
+                        icon={<FiXCircle />}
+                        onClick={handleNoAsistio}
+                        disabled={isLoading}
+                      >
+                        No Asistió
+                      </Button>
+                      <Button
+                        variant="success"
+                        icon={<FiCheckCircle />}
+                        onClick={handleCompletar}
+                        disabled={isLoading}
+                      >
+                        Completar Turno
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
 

@@ -41,3 +41,17 @@
 .date-item.selected .mes {
   color: #053b8a;
 }
+
+.date-item.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: #f5f5f5;
+}
+.date-item.disabled:hover {
+  background: #f5f5f5;
+}
+.date-item.disabled .dia-semana,
+.date-item.disabled .dia-num,
+.date-item.disabled .mes {
+  color: #999;
+}

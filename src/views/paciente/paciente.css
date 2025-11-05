@@ -195,13 +195,55 @@
   color: #666;
   margin: 0.25rem 0 0 0;
 }
+.date-selector-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+.scroll-arrow {
+  flex-shrink: 0;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.3rem;
+  color: #555;
+  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.scroll-arrow:hover:not(:disabled) {
+  background: #0d6efd;
+  border-color: #0d6efd;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+  transform: scale(1.05);
+}
+.scroll-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  box-shadow: none;
+}
 .date-selector-container {
-  overflow-x: auto;
+  overflow-x: hidden;
+  padding-bottom: 0.5rem;
+  flex: 1;
+}
+.date-selector-container::-webkit-scrollbar {
+  display: none;
 }
 .date-selector-scroll {
   display: flex;
   gap: 0.75rem;
-  padding-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  min-width: min-content;
 }
 .time-selector-container {
   display: flex;
@@ -387,32 +429,6 @@
 .loading-icon {
   font-size: 2rem;
   animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.time-slot:disabled {
-  background: #f8f9fa;
-  color: #aaa;
-  cursor: not-allowed;
-  text-decoration: line-through;
-}
-.fab-container {
-  position: fixed;
-/* ... (estilos existentes) ... */
-.no-horarios-msg {
-  font-size: 0.9rem;
-  color: #888;
-  font-style: italic;
-  padding: 0.5rem;
-  grid-column: 1 / -1;
 }
 
 .time-slot-grid .loading-icon-small {

@@ -1,55 +1,136 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import RatingModal from '../../components/RatingModal/RatingModal';
+import FeedbackDisplayModal from '../../components/FeedbackDisplayModal/FeedbackDisplayModal';
 import AtencionListItem from '../../components/AtencionListItem/AtencionListItem';
 import './paciente.css';
-import { FiChevronLeft, FiSearch, FiStar } from 'react-icons/fi';
-
-const DUMMY_ATENCIONES = [
-  {
-    id: 'a1',
-    treatmentName: 'Limpieza Dental',
-    practitionerName: 'Dra. María González',
-    startDate: '2024-01-19',
-  },
-  {
-    id: 'a2',
-    treatmentName: 'Tratamiento de Caries',
-    practitionerName: 'Dra. María González',
-    startDate: '2024-01-10',
-  },
-];
+import { FiChevronLeft, FiSearch, FiStar, FiEye, FiLoader } from 'react-icons/fi';
+import { getMyAttentionsAsPatient, getFeedbackForAttention } from '../../api/atencionService';
+import { createFeedback } from '../../api/feedbackService';
 
 const CRITERIOS_PACIENTE = [
-  { id: 'puntualidad', label: 'Puntualidad del practicante' },
-  { id: 'trato', label: 'Trato y comunicación' },
   { id: 'satisfaccion', label: 'Satisfacción general' },
 ];
 
 const HistorialAtencionesPaciente = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [atenciones, setAtenciones] = useState([]);
+  const [feedbacks, setFeedbacks] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [atencionSeleccionada, setAtencionSeleccionada] = useState(null);
+  const [feedbackSeleccionado, setFeedbackSeleccionado] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleOpenModal = (atencion) => {
+  // Cargar atenciones y sus feedbacks
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const atencionesData = await getMyAttentionsAsPatient();
+        
+        // Solo mostrar atenciones completadas
+        const completadas = atencionesData.filter(
+          (atencion) => atencion.status === 'COMPLETED'
+        );
+        
+        setAtenciones(completadas);
+
+        // Obtener feedback para cada atención
+        const feedbackPromises = completadas.map(async (atencion) => {
+          try {
+            const feedbackData = await getFeedbackForAttention(atencion.id);
+            return { attentionId: atencion.id, feedback: feedbackData };
+          } catch {
+            return { attentionId: atencion.id, feedback: [] };
+          }
+        });
+
+        const feedbackResults = await Promise.all(feedbackPromises);
+        const feedbackMap = {};
+        feedbackResults.forEach(({ attentionId, feedback }) => {
+          feedbackMap[attentionId] = feedback;
+        });
+        
+        setFeedbacks(feedbackMap);
+      } catch (error) {
+        console.error('Error al cargar atenciones:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleOpenRatingModal = (atencion) => {
     setAtencionSeleccionada(atencion);
-    setIsModalOpen(true);
+    setIsRatingModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleCloseRatingModal = () => {
+    setIsRatingModalOpen(false);
     setAtencionSeleccionada(null);
   };
 
-  const handleFormSubmit = (calificacion) => {
-    console.log('Calificación (Paciente):', {
-      atencionId: atencionSeleccionada.id,
-      ...calificacion,
-    });
-    // Aquí iría la llamada al store/API
+  const handleOpenFeedbackModal = (atencion) => {
+    setAtencionSeleccionada(atencion);
+    // Obtener el primer feedback (debe haber solo uno del paciente)
+    const feedback = feedbacks[atencion.id]?.[0];
+    setFeedbackSeleccionado(feedback);
+    setIsFeedbackModalOpen(true);
+  };
+
+  const handleCloseFeedbackModal = () => {
+    setIsFeedbackModalOpen(false);
+    setAtencionSeleccionada(null);
+    setFeedbackSeleccionado(null);
+  };
+
+  const handleFormSubmit = async (calificacion) => {
+    setSubmitting(true);
+    try {
+      const feedbackData = {
+        attentionId: atencionSeleccionada.id,
+        rating: calificacion.ratings.satisfaccion || 0,
+        comment: calificacion.comentario || '',
+      };
+
+      await createFeedback(feedbackData);
+      
+      // Actualizar el estado local para reflejar que ya tiene feedback
+      setFeedbacks((prev) => ({
+        ...prev,
+        [atencionSeleccionada.id]: [feedbackData],
+      }));
+
+      alert('Feedback enviado exitosamente');
+      handleCloseRatingModal();
+    } catch (error) {
+      console.error('Error al enviar feedback:', error);
+      alert(error.message || 'Error al enviar el feedback');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Filtrar atenciones según búsqueda
+  const atencionesFiltradas = atenciones.filter((atencion) => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      atencion.treatmentName.toLowerCase().includes(searchLower) ||
+      atencion.practitionerName.toLowerCase().includes(searchLower)
+    );
+  });
+
+  // Verificar si una atención tiene feedback
+  const hasFeedback = (attentionId) => {
+    return feedbacks[attentionId] && feedbacks[attentionId].length > 0;
   };
 
   return (
-    <div className="page-container">
+    <div className="page-container-user">
       <div className="paciente-content-container">
         <header className="page-header">
           <Link to="/paciente/dashboard" className="page-back-link">
@@ -66,29 +147,45 @@ const HistorialAtencionesPaciente = () => {
               type="text"
               className="search-bar-input"
               placeholder="Buscar por tratamiento o practicante..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
 
-        <section className="atencion-list-container">
-          {DUMMY_ATENCIONES.map((atencion) => (
-            <AtencionListItem
-              key={atencion.id}
-              titulo={atencion.treatmentName}
-              detailText={`${
-                atencion.practitionerName
-              } • ${new Date(atencion.startDate).toLocaleDateString()}`}
-              buttonText="Calificar"
-              buttonIcon={<FiStar />}
-              onButtonClick={() => handleOpenModal(atencion)}
-            />
-          ))}
-        </section>
+        {loading ? (
+          <div className="loading-container">
+            <FiLoader className="loading-icon" />
+            <p>Cargando atenciones...</p>
+          </div>
+        ) : atencionesFiltradas.length === 0 ? (
+          <div className="error-container">
+            <p>No se encontraron atenciones completadas</p>
+          </div>
+        ) : (
+          <section className="atencion-list-container">
+            {atencionesFiltradas.map((atencion) => {
+              const tieneFeedback = hasFeedback(atencion.id);
+              return (
+                <AtencionListItem
+                  key={atencion.id}
+                  titulo={atencion.treatmentName}
+                  detailText={`${
+                    atencion.practitionerName
+                  } • ${new Date(atencion.startDate).toLocaleDateString()}`}
+                  buttonText={tieneFeedback ? 'Ver calificación' : 'Calificar'}
+                  buttonIcon={tieneFeedback ? <FiEye /> : <FiStar />}
+                  onButtonClick={() => tieneFeedback ? handleOpenFeedbackModal(atencion) : handleOpenRatingModal(atencion)}
+                />
+              );
+            })}
+          </section>
+        )}
       </div>
 
-      <RatingModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
+        <RatingModal
+        isOpen={isRatingModalOpen}
+        onClose={handleCloseRatingModal}
         onSubmit={handleFormSubmit}
         titulo="Calificar Atención"
         subtitulo="Califique su experiencia con el practicante"
@@ -102,6 +199,14 @@ const HistorialAtencionesPaciente = () => {
         }}
         criterios={CRITERIOS_PACIENTE}
         comentarioLabel="Comentarios adicionales (opcional)"
+        submitting={submitting}
+      />
+
+      <FeedbackDisplayModal
+        isOpen={isFeedbackModalOpen}
+        onClose={handleCloseFeedbackModal}
+        feedback={feedbackSeleccionado}
+        atencionInfo={atencionSeleccionada}
       />
     </div>
   );

@@ -15,6 +15,21 @@ export const getMyAttentions = async () => {
   }
 };
 
+export const getMyAttentionsAsPatient = async () => {
+  try {
+    const response = await api.get('/patient/attentions');
+    return response.data;
+  } catch (error) {
+    console.error(
+      'Error al obtener atenciones del paciente:',
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.message || 'Error al cargar atenciones'
+    );
+  }
+};
+
 export const getAttentionById = async (attentionId) => {
   try {
     const response = await api.get(`/attentions/${attentionId}`);
