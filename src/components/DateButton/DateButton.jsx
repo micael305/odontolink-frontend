@@ -1,10 +1,11 @@
 import './dateButton.css';
 
-const DateButton = ({ dia, isSelected, onClick }) => {
+const DateButton = ({ dia, isSelected, onClick, disabled }) => {
   return (
     <button
-      className={`date-item ${isSelected ? 'selected' : ''}`}
+      className={`date-item ${isSelected ? 'selected' : ''} ${disabled ? 'disabled' : ''}`}
       onClick={onClick}
+      disabled={disabled}
     >
       <span className="dia-semana">{dia.diaSemana}</span>
       <span className="dia-num">{dia.diaNum}</span>

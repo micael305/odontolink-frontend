@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import './paciente.css';
-import { FiChevronLeft, FiCheck, FiUser, FiLoader } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight, FiCheck, FiUser, FiLoader } from 'react-icons/fi';
 import DateButton from '../../components/DateButton/DateButton';
 import ConfirmarReservaModal from '../../components/ConfirmarReservaModal/ConfirmarReservaModal';
 import { usePacienteStore } from '../../context/pacienteStore';
 
-const getNextSevenDays = () => {
+const generateDays = (startOffset, count) => {
   const days = [];
   const today = new Date();
-  for (let i = 0; i < 7; i++) {
+  for (let i = startOffset; i < startOffset + count; i++) {
     const date = new Date(today);
     date.setDate(today.getDate() + i);
     days.push({
@@ -18,6 +18,8 @@ const getNextSevenDays = () => {
       diaNum: date.getDate(),
       mes: date.toLocaleString('es-ES', { month: 'short' }),
       isoDate: date.toISOString().split('T')[0],
+      // Obtener el día de la semana en formato inglés (MONDAY, TUESDAY, etc.)
+      dayOfWeek: date.toLocaleString('en-US', { weekday: 'long' }).toUpperCase(),
     });
   }
   return days;
@@ -44,14 +46,48 @@ const ReservarTurno = () => {
     scheduleAppointment,
   } = usePacienteStore();
 
-  const [diasSemana] = useState(getNextSevenDays());
-  const [selectedDate, setSelectedDate] = useState(diasSemana[0].isoDate);
+  const scrollContainerRef = useRef(null);
+  const [diasSemana, setDiasSemana] = useState(() => generateDays(0, 14));
+  const [currentOffset, setCurrentOffset] = useState(0);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchTreatmentDetails(tratamientoId);
   }, [tratamientoId, fetchTreatmentDetails]);
+
+  // Seleccionar automáticamente el primer día disponible
+  useEffect(() => {
+    if (selectedTreatmentDetails && !selectedDate && selectedTreatmentDetails.availabilitySlots) {
+      // Buscar en los días actuales y en el futuro si es necesario
+      let searchOffset = currentOffset;
+      let foundDay = null;
+      
+      // Buscar hasta 90 días en el futuro
+      while (!foundDay && searchOffset < 90) {
+        const daysToCheck = generateDays(searchOffset, 14);
+        foundDay = daysToCheck.find((dia) =>
+          selectedTreatmentDetails.availabilitySlots.some(
+            (slot) => slot.dayOfWeek === dia.dayOfWeek
+          )
+        );
+        
+        if (!foundDay) {
+          searchOffset += 14;
+        }
+      }
+      
+      if (foundDay) {
+        // Si el día encontrado está fuera del rango actual, actualizar
+        if (searchOffset !== currentOffset) {
+          setCurrentOffset(searchOffset);
+          setDiasSemana(generateDays(searchOffset, 14));
+        }
+        setSelectedDate(foundDay.isoDate);
+      }
+    }
+  }, [selectedTreatmentDetails, selectedDate, currentOffset]);
 
   useEffect(() => {
     if (selectedDate) {
@@ -75,6 +111,35 @@ const ReservarTurno = () => {
       navigate('/paciente/turno-confirmado');
     } catch (err) {
       alert(err.message);
+    }
+  };
+
+  // Función para verificar si un día está disponible según los slots del practicante
+  const isDayAvailable = (dayOfWeek) => {
+    if (!selectedTreatmentDetails || !selectedTreatmentDetails.availabilitySlots) {
+      return false;
+    }
+    return selectedTreatmentDetails.availabilitySlots.some(
+      (slot) => slot.dayOfWeek === dayOfWeek
+    );
+  };
+
+  // Navegación con flechas
+  const handleScrollLeft = () => {
+    const newOffset = Math.max(0, currentOffset - 7);
+    setCurrentOffset(newOffset);
+    setDiasSemana(generateDays(newOffset, 14));
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollLeft = 0;
+    }
+  };
+
+  const handleScrollRight = () => {
+    const newOffset = currentOffset + 7;
+    setCurrentOffset(newOffset);
+    setDiasSemana(generateDays(newOffset, 14));
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollLeft = 0;
     }
   };
 
@@ -104,6 +169,14 @@ const ReservarTurno = () => {
 
   const getResumenTurno = () => {
     const diaObj = diasSemana.find((d) => d.isoDate === selectedDate);
+    if (!diaObj) {
+      return {
+        practicante: '',
+        fecha: '',
+        hora: '',
+        tratamiento: '',
+      };
+    }
     return {
       practicante: selectedTreatmentDetails.practitionerName,
       fecha: `${diaObj.diaNum} de ${diaObj.mes}`,
@@ -147,17 +220,36 @@ const ReservarTurno = () => {
             <div className="turno-detalle-card">
               <h2>Selecciona una fecha</h2>
               <p>Elige el día que prefieras para tu consulta</p>
-              <div className="date-selector-container">
-                <div className="date-selector-scroll">
-                  {diasSemana.map((dia) => (
-                    <DateButton
-                      key={dia.diaNum}
-                      dia={dia}
-                      isSelected={dia.isoDate === selectedDate}
-                      onClick={() => handleDateSelect(dia.isoDate)}
-                    />
-                  ))}
+              <div className="date-selector-wrapper">
+                <button 
+                  className="scroll-arrow scroll-arrow-left" 
+                  onClick={handleScrollLeft}
+                  disabled={currentOffset === 0}
+                >
+                  <FiChevronLeft />
+                </button>
+                <div className="date-selector-container" ref={scrollContainerRef}>
+                  <div className="date-selector-scroll">
+                    {diasSemana.map((dia, index) => {
+                      const isAvailable = isDayAvailable(dia.dayOfWeek);
+                      return (
+                        <DateButton
+                          key={`${dia.isoDate}-${index}`}
+                          dia={dia}
+                          isSelected={dia.isoDate === selectedDate}
+                          onClick={() => handleDateSelect(dia.isoDate)}
+                          disabled={!isAvailable}
+                        />
+                      );
+                    })}
+                  </div>
                 </div>
+                <button 
+                  className="scroll-arrow scroll-arrow-right" 
+                  onClick={handleScrollRight}
+                >
+                  <FiChevronRight />
+                </button>
               </div>
             </div>
 
