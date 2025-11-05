@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useAuthStore } from '../context/authStore';
 
 const api = axios.create({
-  baseURL: 'https://odontolink.azurewebsites.net/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 5000,
 });
 

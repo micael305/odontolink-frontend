@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const publicApi = axios.create({
-  baseURL: 'https://odontolink.azurewebsites.net/api/auth',
+  baseURL: `${import.meta.env.VITE_API_BASE_URL}/auth`,
   timeout: 5000,
 });
 
