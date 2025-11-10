@@ -4,6 +4,7 @@ import TurnoDetalleModal from '../../components/TurnoDetalleModal/TurnoDetalleMo
 import './practicante.css';
 import { FiChevronLeft, FiChevronRight, FiLoader } from 'react-icons/fi';
 import { useTurnoStore } from '../../context/turnoStore';
+import { toLocalISODate } from '../../utils/dateUtils';
 
 const DIAS_SEMANA = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
 
@@ -23,7 +24,7 @@ const GestionarTurnos = () => {
       const d = new Date(turno.appointmentTime);
       return {
         ...turno,
-        fecha: d.toISOString().split('T')[0],
+        fecha: toLocalISODate(d),
         hora: d.toLocaleTimeString('default', {
           hour: '2-digit',
           minute: '2-digit',
