@@ -5,6 +5,7 @@ import { FiChevronLeft, FiChevronRight, FiCheck, FiUser, FiLoader } from 'react-
 import DateButton from '../../components/DateButton/DateButton';
 import ConfirmarReservaModal from '../../components/ConfirmarReservaModal/ConfirmarReservaModal';
 import { usePacienteStore } from '../../context/pacienteStore';
+import { toLocalISODate } from '../../utils/dateUtils';
 
 const generateDays = (startOffset, count) => {
   const days = [];
@@ -17,7 +18,7 @@ const generateDays = (startOffset, count) => {
       diaSemana: date.toLocaleString('es-ES', { weekday: 'short' }),
       diaNum: date.getDate(),
       mes: date.toLocaleString('es-ES', { month: 'short' }),
-      isoDate: date.toISOString().split('T')[0],
+      isoDate: toLocalISODate(date),
       // Obtener el día de la semana en formato inglés (MONDAY, TUESDAY, etc.)
       dayOfWeek: date.toLocaleString('en-US', { weekday: 'long' }).toUpperCase(),
     });
