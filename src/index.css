@@ -6,6 +6,13 @@ body,
   padding: 0;
 }
 
+html {
+  /* Reserva espacio para scrollbar, evita que el contenido se mueva */
+  overflow-y: scroll;
+  /* Previene scroll automático suave */
+  scroll-behavior: auto;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;
