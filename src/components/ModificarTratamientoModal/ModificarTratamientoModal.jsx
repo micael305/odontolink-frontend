@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Button from '../Button/Button';
 import './modificarTratamientoModal.css';
 import { FiX, FiPlus, FiTrash2 } from 'react-icons/fi';
@@ -29,6 +29,9 @@ const ModificarTratamientoModal = ({
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('12:00');
   const [error, setError] = useState(null);
+  
+  // Ref para detectar clics fuera del modal
+  const modalContentRef = useRef(null);
 
   useEffect(() => {
     if (tratamiento) {
@@ -41,12 +44,34 @@ const ModificarTratamientoModal = ({
     }
   }, [tratamiento]);
 
+  // Bloquear scroll del body cuando el modal está abierto
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      const originalPaddingRight = document.body.style.paddingRight;
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      
+      document.body.style.overflow = 'hidden';
+      if (scrollbarWidth > 0) {
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+      }
+      
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        document.body.style.paddingRight = originalPaddingRight;
+      };
+    }
+  }, [isOpen]);
+
   if (!isOpen || !tratamiento) {
     return null;
   }
 
-  const handleStopPropagation = (e) => {
-    e.stopPropagation();
+  // Manejar clics fuera del modal
+  const handleOverlayMouseDown = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
   };
 
   const handleAddSlot = () => {
@@ -104,8 +129,8 @@ const ModificarTratamientoModal = ({
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={handleStopPropagation}>
+    <div className="modal-overlay" onMouseDown={handleOverlayMouseDown}>
+      <div className="modal-content" ref={modalContentRef}>
         <div className="modal-header">
           <div>
             <h2>Modificar Tratamiento</h2>

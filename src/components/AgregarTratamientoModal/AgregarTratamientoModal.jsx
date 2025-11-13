@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Button from '../Button/Button';
 import './agregarTratamientoModal.css';
 import {
@@ -40,6 +40,9 @@ const AgregarTratamientoModal = ({
   const [currentStep, setCurrentStep] = useState(1);
   const [direction, setDirection] = useState(1); // 1 for forward, -1 for backward
   const [isInitialRender, setIsInitialRender] = useState(true); // Para controlar animación inicial
+  
+  // Ref para detectar clics fuera del modal
+  const modalContentRef = useRef(null);
 
   // Estados del formulario
   const [treatmentId, setTreatmentId] = useState('');
@@ -74,6 +77,30 @@ const AgregarTratamientoModal = ({
       setFieldErrors({});
       setTouched({});
       setIsInitialRender(true);
+    }
+  }, [isOpen]);
+
+  // Bloquear scroll del body cuando el modal está abierto
+  useEffect(() => {
+    if (isOpen) {
+      // Guardar el overflow original del body
+      const originalOverflow = document.body.style.overflow;
+      const originalPaddingRight = document.body.style.paddingRight;
+      
+      // Calcular el ancho de la barra de scroll para evitar saltos
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      
+      // Bloquear scroll y compensar el ancho de la barra de scroll
+      document.body.style.overflow = 'hidden';
+      if (scrollbarWidth > 0) {
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+      }
+      
+      // Restaurar al desmontar o cuando el modal se cierre
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        document.body.style.paddingRight = originalPaddingRight;
+      };
     }
   }, [isOpen]);
 
@@ -200,12 +227,20 @@ const AgregarTratamientoModal = ({
     }
   };
 
+  // Manejar clics fuera del modal
+  const handleOverlayMouseDown = (e) => {
+    // Solo cerrar si el mousedown fue directamente en el overlay
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   if (!isOpen) return null;
 
   // --- Renderizado ---
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay" onMouseDown={handleOverlayMouseDown}>
+      <div className="modal-content" ref={modalContentRef}>
         <div className="modal-header">
           <div>
             <h2>Nueva Oferta</h2>
