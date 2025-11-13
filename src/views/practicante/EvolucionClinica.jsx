@@ -17,6 +17,7 @@ import { useTurnoStore } from '../../context/turnoStore';
 import DataItem from '../../components/DataItem/DataItem';
 import AgregarEvolucionModal from '../../components/AgregarEvolucionModal/AgregarEvolucionModal';
 import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
+import { formatLocalDate } from '../../utils/dateUtils';
 
 const EvolucionClinica = () => {
   const { attentionId } = useParams();
@@ -167,7 +168,7 @@ const EvolucionClinica = () => {
                 </h2>
                 <div className="info-card-content">
                   <DataItem label="Tratamiento" value={currentAttention.treatmentName} />
-                  <DataItem label="Inicio" value={currentAttention.startDate} />
+                  <DataItem label="Inicio" value={formatLocalDate(currentAttention.startDate)} />
                   <DataItem label="Próximo turno" value={proximoTurno.texto} />
                   <span className={`tag-status ${isCompleted ? 'completado' : 'en-progreso'}`}>
                     {isCompleted ? 'Completado' : 'En Progreso'}

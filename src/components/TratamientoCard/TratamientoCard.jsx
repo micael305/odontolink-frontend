@@ -5,6 +5,7 @@ import {
   FiAlertTriangle,
   FiEdit3,
   FiTrash2,
+  FiUsers,
 } from 'react-icons/fi';
 import './TratamientoCard.css';
 
@@ -19,6 +20,9 @@ const TratamientoCard = ({
     disponibilidad,
     horarios,
     requerimientos,
+    cupo,
+    fechaInicio,
+    fechaFin,
   } = tratamiento;
 
   return (
@@ -47,6 +51,9 @@ const TratamientoCard = ({
               </span>
             ))}
           </div>
+          <p className="card-text-secondary">
+            Período: {fechaInicio} - {fechaFin}
+          </p>
         </div>
 
         <div className="card-section">
@@ -69,6 +76,18 @@ const TratamientoCard = ({
             Requerimientos:
           </h4>
           <p className="card-text">{requerimientos}</p>
+        </div>
+
+        <div className="card-section">
+          <h4 className="card-section-title">
+            <FiUsers />
+            Cupo de Atenciones:
+          </h4>
+          <div className="cupo-info">
+            <p>
+              Máximo: {cupo} atenciones
+            </p>
+          </div>
         </div>
       </div>
 

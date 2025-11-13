@@ -119,6 +119,20 @@
   resize: vertical;
 }
 
+.date-range-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.date-range-group input[type='date'] {
+  flex: 1;
+}
+
+.date-range-group span {
+  font-weight: 600;
+}
+
 .slot-input-group {
   display: flex;
   gap: 0.5rem;

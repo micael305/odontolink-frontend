@@ -7,6 +7,7 @@ import './paciente.css';
 import { FiChevronLeft, FiSearch, FiStar, FiEye, FiLoader } from 'react-icons/fi';
 import { getMyAttentionsAsPatient, getFeedbackForAttention } from '../../api/atencionService';
 import { createFeedback } from '../../api/feedbackService';
+import { formatLocalDate } from '../../utils/dateUtils';
 
 const CRITERIOS_PACIENTE = [
   { id: 'satisfaccion', label: 'Satisfacción general' },
@@ -182,7 +183,7 @@ const HistorialAtencionesPaciente = () => {
                   titulo={atencion.treatmentName}
                   detailText={`${
                     atencion.practitionerName
-                  } • ${new Date(atencion.startDate).toLocaleDateString()}`}
+                  } • ${formatLocalDate(atencion.startDate)}`}
                   buttonText={tieneFeedback ? 'Ver calificación' : 'Calificar'}
                   buttonIcon={tieneFeedback ? <FiEye /> : <FiStar />}
                   onButtonClick={() => tieneFeedback ? handleOpenFeedbackModal(atencion) : handleOpenRatingModal(atencion)}
@@ -204,7 +205,7 @@ const HistorialAtencionesPaciente = () => {
           titulo: atencionSeleccionada?.treatmentName,
           subtitulo: `${atencionSeleccionada?.practitionerName} • ${
             atencionSeleccionada
-              ? new Date(atencionSeleccionada.startDate).toLocaleDateString()
+              ? formatLocalDate(atencionSeleccionada.startDate)
               : ''
           }`,
         }}

@@ -9,87 +9,327 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  overflow: hidden;
+  padding: 0;
 }
 
 .modal-content {
   background: #ffffff;
-  border-radius: 12px;
+  border-radius: 0;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
   width: 100%;
-  max-width: 500px;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100vh;
   z-index: 1001;
   display: flex;
   flex-direction: column;
-  max-height: 90vh;
   overflow: hidden;
+  position: relative;
+  margin: auto;
+  -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
-  padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+  padding: 1rem 1.25rem 0.2rem 1.25rem !important;
   flex-shrink: 0;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 0rem !important;
 }
 
 .modal-header h2 {
-  font-size: 1.5rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: #222;
-  margin: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.3;
 }
 
 .modal-header p {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   color: #666;
-  margin: 0.25rem 0 0 0;
+  margin: 0.2rem 0 0 0;
+  line-height: 1.4;
 }
 
 .modal-close-btn {
-  background: transparent;
-  border: none;
+  background: #f1f3f5;
+  border: 1px solid #dee2e6;
   cursor: pointer;
-  font-size: 1.5rem;
-  color: #888;
+  font-size: 1.25rem;
+  color: #495057;
   padding: 0.5rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  transition: all 0.2s ease;
 }
 .modal-close-btn:hover {
+  background: #e9ecef;
+  color: #212529;
+}
+.modal-close-btn:active {
+  background: #dee2e6;
+}
+
+/* --- Stepper --- */
+.stepper {
+  display: flex;
+  justify-content: space-between;
+  padding: 0rem 1.25rem;
+  padding-top: 0.75rem;
+  border-bottom: 1px solid #eee;
+  background-color: #fafafa;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+}
+
+.step-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #e9ecef;
+  color: #6c757d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: 2px solid #e9ecef;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.step-title {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6c757d;
+  margin-top: 0.35rem;
+  text-align: center;
+}
+
+.step-item.active .step-icon {
+  background-color: #fff;
+  border-color: #0d6efd;
+  color: #0d6efd;
+}
+
+.step-item.active .step-title {
+  color: #0d6efd;
+  font-weight: 600;
+}
+
+.step-item.completed .step-icon {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  color: #fff;
+}
+
+.step-item.completed .step-title {
   color: #333;
 }
 
+.step-connector-wrapper {
+  position: absolute;
+  top: 14px;
+  left: -50%;
+  width: 100%;
+  height: 2px;
+  z-index: 1;
+}
+
+.step-connector {
+  height: 100%;
+  background-color: #e9ecef;
+  transition: background-color 0.3s ease;
+}
+
+.step-item.completed .step-connector {
+  background-color: #0d6efd;
+}
+
+/* Progress bar compacto para móvil */
+.mobile-progress-bar {
+  display: none;
+  height: 3px;
+  background-color: #e9ecef;
+  position: relative;
+  overflow: hidden;
+}
+
+.mobile-progress-fill {
+  height: 100%;
+  background-color: #0d6efd;
+  transition: width 0.3s ease;
+}
+
+.mobile-step-indicator {
+  display: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #666;
+  background-color: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+}
+
 .modal-body {
-  padding: 1rem 1.5rem;
+  padding: 1rem 1.25rem !important;
+  overflow-y: auto;
+  overflow-x: hidden; /* Prevenir desbordamiento horizontal */
+  min-height: 260px; /* Optimizado para mejor balance */
+  max-height: calc(90vh - 220px); /* Altura máxima optimizada sin footer de errores */
+  position: relative;
+  flex: 1 1 auto; /* Permite que ocupe el espacio disponible pero pueda encogerse */
+}
+
+.step-form {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.form-step {
+  border: none;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  overflow-y: auto;
+  gap: 0.75rem; /* Reducido de 1.5rem a 1.25rem */
+  position: absolute;
+  width: 100%;
+  opacity: 0;
+  animation: slide-fade-out 0.4s forwards;
+}
+
+/* Sin animación para el primer paso en la renderización inicial */
+.step-form.no-initial-animation .form-step.active {
+  opacity: 1;
+  animation: none;
+  transform: translateX(0);
+  z-index: 10;
+}
+
+.form-step.active {
+  opacity: 1;
+  animation: slide-fade-in 0.4s forwards;
+  z-index: 10;
+}
+
+@keyframes slide-fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--direction, 1) * 20px));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-fade-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(calc(var(--direction, 1) * -20px));
+  }
+}
+
+.grid-col-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-helper-text {
+  font-size: 0.8rem;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.form-helper-text svg {
+  font-size: 0.9rem;
+}
+
+/* Estilos para mensajes de error inline */
+.form-error-text {
+  font-size: 0.8rem;
+  color: #e67e22; /* Naranja cálido, menos agresivo que rojo */
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.25rem;
+  animation: fadeIn 0.2s ease;
+}
+
+.form-error-text svg {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .modal-form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.4rem; /* Reducido de 0.5rem a 0.4rem */
 }
 
 .modal-form-group label {
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.875rem; /* Reducido de 0.9rem a 0.875rem */
   color: #333;
+  transition: color 0.2s ease;
+}
+
+/* Resaltar label cuando hay error (sutil) */
+.modal-form-group.has-error label {
+  color: #d68910;
 }
 
 .modal-form-group select,
 .modal-form-group input,
 .modal-form-group textarea {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.65rem 0.85rem; /* Reducido el padding */
   border: 1px solid #ddd;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.95rem; /* Reducido de 1rem a 0.95rem */
   box-sizing: border-box;
   font-family: inherit;
   color: #333;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
+
 .modal-form-group select:focus,
 .modal-form-group input:focus,
 .modal-form-group textarea:focus {
@@ -98,75 +338,129 @@
   box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
 }
 
-.modal-dias-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
+/* Estilos sutiles para inputs con error */
+.modal-form-group select.input-error,
+.modal-form-group input.input-error,
+.modal-form-group textarea.input-error {
+  border-color: #f39c12; /* Naranja dorado, más amigable */
+  background-color: #fffbf5; /* Fondo muy sutil */
 }
 
-.modal-checkbox-group {
+.modal-form-group select.input-error:focus,
+.modal-form-group input.input-error:focus,
+.modal-form-group textarea.input-error:focus {
+  border-color: #e67e22;
+  box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
+}
+
+.date-range-group {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.modal-checkbox-group input[type='checkbox'] {
-  width: 1.15rem;
-  height: 1.15rem;
-  accent-color: #0d6efd;
-}
-
-.modal-horario-input {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.modal-horario-input input {
+.date-range-group input[type='date'] {
   flex: 1;
 }
 
-.modal-add-btn {
-  width: auto;
-  padding: 0.75rem;
-  font-size: 1.25rem;
-  background-color: #f0f0f0;
-  color: #333;
-  border: 1px solid #ddd;
-}
-.modal-add-btn:hover {
-  background-color: #e0e0e0;
+/* Date range vertical en móvil - Se aplica dentro del media query principal de móvil */
+
+.date-range-group span {
+  font-weight: 600;
 }
 
-.modal-input-with-icon {
-  position: relative;
-}
-.modal-input-with-icon svg {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #888;
-  font-size: 1.2rem;
-}
-.modal-input-with-icon textarea {
-  padding-left: 3rem;
-  min-height: 80px;
-}
-
-.modal-footer {
+.slot-input-group {
   display: flex;
-  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.75rem;
   align-items: center;
-  gap: 1rem;
-  padding: 1.5rem 1.5rem;
-  border-top: 1px solid #f0f0f0;
+  width: 100%;
+}
+
+.slot-input-group select {
+  flex: 1 1 200px;
+  min-width: 150px;
+}
+
+/* Time range wrapper para desktop (inline) */
+.slot-time-range {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 2 1 300px;
+}
+
+.slot-input-group input[type='time'] {
+  flex: 1;
+  min-width: 100px;
+}
+
+.slot-input-group span {
+  font-weight: 600;
+  text-align: center;
+  padding: 0 0.25rem;
   flex-shrink: 0;
 }
 
-.modal-footer .btn {
-  width: auto;
-  padding: 0.6rem 1.25rem;
+.slot-input-group button {
+  flex-shrink: 0;
+  min-width: 44px;
+  height: 44px;
+  padding: 0.65rem 0.85rem;
+}
+
+.slot-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.slot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 150px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  transition: border-color 0.2s ease;
+  margin: 0 !important;
+}
+
+.slot-list-container.has-error .slot-list {
+  border: 1px solid #f39c12;
+  background-color: #fffbf5;
+}
+
+.slot-list-empty {
+  text-align: center;
+  color: #888;
+  font-size: 0.9rem;
+  padding: 1rem 0;
+}
+
+.slot-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #eee;
   font-size: 0.95rem;
+}
+
+.slot-remove-btn {
+  background: transparent;
+  border: none;
+  color: #dc3545;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.slot-remove-btn:hover {
+  color: #a71d2a;
 }
 
 .modal-textarea {
@@ -174,58 +468,651 @@
   resize: vertical;
 }
 
-.slot-input-group {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-.slot-input-group select,
-.slot-input-group input {
-  font-size: 0.9rem;
-  padding: 0.6rem 0.75rem;
-}
-.slot-input-group select {
-  flex: 2;
-}
-.slot-input-group input {
-  flex: 1;
-}
-.slot-input-group .modal-add-btn {
-  padding: 0.6rem;
-  font-size: 1rem;
-}
-
-.slot-list {
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.slot-item {
+.modal-footer {
+  padding: 0.75rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #f8f9fa;
-  padding: 0.5rem 0.75rem;
-  border-radius: 6px;
-}
-.slot-item span {
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-.slot-item button {
-  background: transparent;
-  border: none;
-  color: #dc3545;
-  cursor: pointer;
-  font-size: 1rem;
+  background-color: #fff;
+  border-top: 1px solid #eee;
+  flex-shrink: 0;
+  gap: 0.75rem;
+  min-height: 0px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
 }
 
-.modal-error-msg {
-  color: #dc3545;
-  font-size: 0.9rem;
-  margin: 0;
-  flex-grow: 1;
-  text-align: left;
+.modal-footer .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  padding: 0.6rem 1.25rem;
+  flex-shrink: 0;
+  min-height: 44px;
+  line-height: 1;
+}
+
+.modal-footer .btn svg {
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+}
+
+
+
+/* --- Responsive Adjustments --- */
+
+/* Texto adaptativo de botones - por defecto desktop */
+.btn-text-desktop {
+  display: inline;
+}
+
+.btn-text-mobile {
+  display: none;
+}
+
+/* Para pantallas grandes de tablets y laptops pequeñas (1024px) */
+@media (max-width: 1024px) {
+  .modal-content {
+    max-width: 85%;
+    max-height: 88vh;
+  }
+
+  .modal-body {
+    min-height: 200px;
+    max-height: calc(88vh - 210px);
+  }
+
+  .modal-footer {
+    padding: 0.75rem 1.15rem;
+  }
+}
+
+/* Para tablets en orientación landscape y pantallas medianas (800-900px) */
+@media (max-width: 900px) and (min-width: 769px) {
+  .modal-content {
+    max-width: 88%;
+    max-height: 90vh;
+  }
+
+  .modal-header {
+    padding: 0.9rem 1.15rem 0.65rem 1.15rem;
+  }
+
+  .modal-header h2 {
+    font-size: 1.15rem;
+  }
+
+  .modal-header p {
+    font-size: 0.8rem;
+  }
+
+  .stepper {
+    padding: 0.65rem 1.15rem;
+  }
+
+  .step-title {
+    font-size: 0.7rem;
+  }
+
+  .modal-body {
+    padding: 0.95rem 1.15rem;
+    min-height: 200px;
+    max-height: calc(90vh - 220px);
+  }
+
+  .modal-footer {
+    padding: 0.75rem 3.15rem;
+  }
+}
+
+/* Para pantallas medianas (tablets y pantallas pequeñas de PC) */
+@media (max-width: 900px) {
+  .modal-content {
+    max-width: 90%;
+    max-height: 90vh;
+  }
+
+  .modal-header h2 {
+    font-size: 1.15rem;
+  }
+
+  .modal-header p {
+    font-size: 0.8rem;
+  }
+
+  .step-title {
+    font-size: 0.7rem;
+  }
+
+  .modal-body {
+    min-height: 200px;
+    max-height: calc(90vh - 220px);
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 0.75rem;
+  }
+
+  .modal-content {
+    max-width: 95%;
+    max-height: 92vh;
+  }
+
+  .modal-header {
+    padding: 0.8rem 1rem 0.4rem 1rem;
+  }
+
+  .modal-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .modal-header p {
+    font-size: 0.78rem;
+  }
+
+  .stepper {
+    padding: 0.55rem 1rem;
+  }
+
+  .step-icon {
+    width: 26px;
+    height: 26px;
+    font-size: 0.8rem;
+  }
+
+  .step-connector-wrapper {
+    top: 13px;
+  }
+
+  .step-title {
+    font-size: 0.68rem;
+    margin-top: 0.3rem;
+  }
+
+  .modal-body {
+    padding: 0.85rem 1rem;
+    min-height: 180px;
+    max-height: calc(92vh - 230px);
+  }
+
+  .form-step {
+    gap: 1rem;
+  }
+
+  .modal-footer {
+    padding: 0.7rem 1rem;
+    gap: 0.65rem;
+    min-height: 52px;
+  }
+
+  .modal-footer .btn {
+    flex: 1;
+    justify-content: center;
+    padding: 0.6rem 0.85rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .modal-overlay {
+    padding: 0;
+    align-items: stretch;
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+
+  .modal-content {
+    max-width: 100%;
+    width: 100%;
+    max-height: 100vh;
+    height: 100vh;
+    border-radius: 0;
+    margin: 0;
+    animation: slideUpMobile 0.3s ease-out;
+  }
+
+  @keyframes slideUpMobile {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  /* HEADER ULTRA COMPACTO MOBILE */
+  .modal-header {
+    padding: 0.75rem 1rem 0.5rem 1rem !important;
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    min-height: 50px;
+    border-bottom: 1px solid #e0e0e0;
+    flex-shrink: 0;
+    margin: 0 !important;
+  }
+
+  .modal-header h2 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #222;
+  }
+
+  .modal-header p {
+    display: none; /* Ocultar descripción para ahorrar espacio */
+  }
+
+  .modal-close-btn {
+    font-size: 1.75rem;
+    padding: 0;
+    margin: 0;
+    color: #fff;
+    background-color: #0d6efd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(13, 110, 253, 0.35);
+  }
+
+  .modal-close-btn:hover,
+  .modal-close-btn:active {
+    background-color: #0b5ed7;
+    color: #fff;
+    transform: scale(0.95);
+  }
+
+  /* OCULTAR STEPPER COMPLEJO - mostrar solo progress bar */
+  .stepper {
+    display: none;
+  }
+
+  /* MOSTRAR PROGRESS BAR SIMPLE Y COMPACTO */
+  .mobile-progress-bar {
+    display: block;
+    border-bottom: none;
+    height: 4px;
+  }
+
+  .mobile-step-indicator {
+    display: block;
+    padding: 0.875rem 1rem;
+    font-size: 1.125rem;
+    background-color: #f8f9fa;
+    color: #333;
+    font-weight: 700;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  /* BODY: Maximizar espacio para formulario */
+  .modal-body {
+    padding: 1.5rem 1.25rem 1rem 1.25rem;
+    min-height: auto;
+    max-height: none;
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Form steps con gap optimizado */
+  .form-step {
+    gap: 1.25rem;
+    padding-top: 0;
+  }
+
+  /* Títulos de sección más prominentes */
+  .form-step h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #222;
+  }
+
+  /* Labels compactos pero legibles */
+  .modal-form-group label {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+
+  /* Inputs optimizados para móvil */
+  .modal-form-group select,
+  .modal-form-group input,
+  .modal-form-group textarea {
+    padding: 0.875rem 1rem;
+    font-size: 1.125rem;
+    min-height: 50px;
+    border-radius: 8px;
+    border: 1.5px solid #d0d0d0;
+  }
+
+  .modal-form-group select:focus,
+  .modal-form-group input:focus,
+  .modal-form-group textarea:focus {
+    border-color: #0d6efd;
+    outline: none;
+    border-width: 1.5px;
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.08);
+  }
+
+  .modal-form-group textarea {
+    min-height: 100px;
+  }
+
+  /* Form groups compactos */
+  .modal-form-group {
+    margin-bottom: 0;
+  }
+
+  .modal-form-group:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Grid siempre una columna en móvil */
+  .grid-col-2 {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  /* Date range vertical en móvil */
+  .date-range-group {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .date-range-group span {
+    font-size: 0.8125rem;
+    color: #666;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  .date-range-group input[type='date'] {
+    flex: none;
+    width: 100%;
+  }
+
+  /* FOOTER MINIMALISTA MOBILE */
+  .modal-footer {
+    padding: 1rem 1.25rem;
+    position: sticky;
+    bottom: 0;
+    background-color: #fff;
+    z-index: 10;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+    gap: 0.875rem;
+    min-height: 70px;
+    border-top: 1px solid #e0e0e0;
+    flex-shrink: 0;
+  }
+
+  .modal-footer .btn {
+    font-size: 1.125rem;
+    padding: 0.875rem 1rem;
+    gap: 0.5rem;
+    min-height: 52px;
+    flex: 1;
+    justify-content: center;
+    border-radius: 8px;
+    font-weight: 700;
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
+
+  /* Iconos en botones más pequeños */
+  .modal-footer .btn svg {
+    font-size: 1.25rem;
+  }
+
+  /* Botón secundario discreto */
+  .modal-footer .btn-secondary {
+    background-color: #f5f5f5;
+    border: 1px solid #d8d8d8;
+    color: #555;
+  }
+
+  .modal-footer .btn-secondary:hover {
+    background-color: #ebebeb;
+  }
+
+  /* Botón primario destacado */
+  .modal-footer .btn-primary {
+    font-weight: 600;
+    box-shadow: 0 1px 6px rgba(13, 110, 253, 0.18);
+  }
+
+  .modal-footer .btn-success {
+    box-shadow: 0 1px 6px rgba(40, 167, 69, 0.18);
+  }
+
+  /* Texto adaptativo en botones */
+  .btn-text-desktop {
+    display: none;
+  }
+
+  .btn-text-mobile {
+    display: inline;
+  }
+
+  /* Mejorar tap targets para móvil */
+  button,
+  select,
+  input[type="time"],
+  input[type="date"],
+  input[type="number"] {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.05);
+  }
+
+  /* Prevenir zoom en inputs en iOS */
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  input[type="time"],
+  select,
+  textarea {
+    font-size: 16px !important; /* Prevenir zoom en iOS */
+  }
+
+  /* Slot management: Layout vertical optimizado */
+  .slot-input-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+
+  .slot-input-group select {
+    min-width: 0;
+    width: 100%;
+    font-size: 0.95rem;
+    grid-column: 1;
+    order: 1;
+  }
+
+  /* Time range en una fila aparte */
+  .slot-time-range {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    grid-column: 1;
+    order: 2;
+  }
+
+  .slot-input-group input[type='time'] {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.95rem;
+  }
+
+  .slot-input-group span {
+    flex-shrink: 0;
+    font-size: 0.8125rem;
+    color: #666;
+    font-weight: 500;
+  }
+
+  /* Botón de añadir compacto */
+  .slot-input-group button {
+    min-width: 100%;
+    min-height: 40px;
+    padding: 0.5rem;
+    border-radius: 6px;
+    grid-column: 1;
+    order: 3;
+    justify-content: center;
+    font-size: 0.8125rem;
+  }
+
+  /* Lista de slots compacta */
+  .slot-list {
+    gap: 0.5rem;
+    max-height: 140px; /* Más compacto */
+    padding: 0.5rem;
+  }
+
+  .slot-item {
+    padding: 0.5rem 0.625rem;
+    border-radius: 5px;
+    background-color: #fff;
+    border: 1px solid #d8d8d8;
+    font-size: 0.8125rem;
+  }
+
+  .slot-remove-btn {
+    font-size: 1.05rem;
+    padding: 0.25rem;
+    color: #dc3545;
+    border-radius: 4px;
+  }
+
+  .slot-remove-btn:hover {
+    background-color: #fee;
+    color: #b02a37;
+  }
+
+  /* Info boxes optimizadas */
+  .info-box {
+    padding: 0.75rem 0.875rem;
+    border-radius: 8px;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  /* Helper y error texts compactos */
+  .form-helper-text,
+  .form-error-text {
+    font-size: 0.7rem;
+    line-height: 1.3;
+    margin-top: 0.2rem;
+  }
+
+  .form-helper-text svg,
+  .form-error-text svg {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .modal-content {
+    max-height: 100vh; /* Ocupa toda la pantalla */
+    height: 100vh;
+    border-radius: 0; /* Sin bordes */
+  }
+
+  .modal-header {
+    padding: 0.5rem 0.75rem 0.25rem 0.75rem;
+    min-height: 34px;
+  }
+
+  .modal-header h2 {
+    font-size: 0.75rem; /* Más pequeño */
+  }
+
+  .modal-close-btn {
+    font-size: 0.9375rem;
+    width: 22px; /* Más pequeño */
+    height: 22px;
+  }
+
+  .mobile-step-indicator {
+    font-size: 0.65rem;
+    padding: 0.25rem 0.75rem; /* Reducir padding vertical */
+  }
+
+  .modal-body {
+    padding: 0.5rem 0.875rem 0.75rem 0.875rem; /* Reducir padding vertical */
+  }
+
+  .form-step {
+    gap: 0.625rem; /* Reducir gap */
+    padding-top: 0.25rem;
+  }
+
+  .modal-form-group label {
+    font-size: 0.75rem;
+  }
+
+  .modal-form-group select,
+  .modal-form-group input,
+  .modal-form-group textarea {
+    padding: 0.5rem 0.625rem; /* Reducir padding */
+    font-size: 0.875rem;
+    min-height: 40px; /* Reducir altura */
+  }
+
+  .modal-footer {
+    padding: 0.35rem 0.75rem; /* Reducir padding vertical */
+    min-height: 42px; /* Reducir altura */
+  }
+
+  .modal-footer .btn {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.625rem; /* Reducir padding */
+    min-height: 36px; /* Reducir altura */
+  }
+
+  .slot-input-group {
+    gap: 0.4rem; /* Reducir gap */
+  }
+
+  .slot-input-group button {
+    min-height: 38px; /* Reducir altura */
+    padding: 0.4rem;
+  }
+
+  .slot-list {
+    max-height: 120px; /* Reducir altura máxima */
+    padding: 0.4rem;
+  }
+
+  .slot-item {
+    padding: 0.4rem 0.5rem; /* Reducir padding */
+    font-size: 0.75rem;
+  }
+
+  .form-helper-text,
+  .form-error-text {
+    font-size: 0.65rem; /* Reducir tamaño */
+    margin-top: 0.15rem;
+  }
+
+  .grid-col-2 {
+    gap: 0.625rem; /* Reducir gap */
+  }
+
+  .date-range-group {
+    gap: 0.4rem; /* Reducir gap */
+  }
 }

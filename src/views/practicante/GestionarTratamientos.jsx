@@ -9,6 +9,7 @@ import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
 import './practicante.css';
 import { FiPlus, FiChevronLeft, FiLoader } from 'react-icons/fi';
 import { useTratamientoStore } from '../../context/tratamientoStore';
+import { formatLocalDate } from '../../utils/dateUtils';
 
 const GestionarTratamientos = () => {
   const {
@@ -26,8 +27,7 @@ const GestionarTratamientos = () => {
   const [isAgregarModalOpen, setIsAgregarModalOpen] = useState(false);
   const [isModificarModalOpen, setIsModificarModalOpen] = useState(false);
   const [isEliminarModalOpen, setIsEliminarModalOpen] = useState(false);
-  const [tratamientoSeleccionado, setTratamientoSeleccionado] =
-    useState(null);
+  const [tratamientoSeleccionado, setTratamientoSeleccionado] = useState(null);
 
   useEffect(() => {
     fetchOfferedTreatments();
@@ -78,7 +78,7 @@ const GestionarTratamientos = () => {
     };
     return map[day] || day;
   };
-  
+
   const formatTime = (time) => time.substring(0, 5);
 
   return (
@@ -121,43 +121,41 @@ const GestionarTratamientos = () => {
           )}
 
           {status === 'success' &&
-            offeredTreatments.map((tratamientoApi) => {
+            offeredTreatments.map((tratamiento) => {
+              // Objeto para pasar al componente TratamientoCard
               const tratamientoProps = {
-                id: tratamientoApi.id,
-                titulo: tratamientoApi.treatment.name,
+                titulo: tratamiento.treatment.name,
                 tags: [
                   {
-                    texto: tratamientoApi.treatment.area,
-                    tipo: 'preventivo',
+                    texto: `${tratamiento.durationInMinutes} min`,
+                    tipo: 'duration',
                   },
                   {
-                    texto: `${tratamientoApi.durationInMinutes} minutos`,
-                    tipo: 'duration',
+                    texto: tratamiento.treatment.area,
+                    tipo: 'preventivo',
                   },
                 ],
                 disponibilidad: [
                   ...new Set(
-                    tratamientoApi.availabilitySlots.map((slot) =>
-                      formatDay(slot.dayOfWeek)
-                    )
+                    tratamiento.availabilitySlots.map((s) => formatDay(s.dayOfWeek))
                   ),
                 ],
-                horarios: [
-                  ...new Set(
-                    tratamientoApi.availabilitySlots.map(
-                      (slot) => `${formatTime(slot.startTime)}`
-                    )
-                  ),
-                ],
-                requerimientos: tratamientoApi.requirements,
+                horarios: tratamiento.availabilitySlots.map(
+                  (s) => `${formatTime(s.startTime)} - ${formatTime(s.endTime)}`
+                ),
+                requerimientos:
+                  tratamiento.requirements || 'No se especificaron requerimientos.',
+                cupo: tratamiento.maxCompletedAttentions,
+                fechaInicio: formatLocalDate(tratamiento.offerStartDate),
+                fechaFin: formatLocalDate(tratamiento.offerEndDate),
               };
 
               return (
                 <TratamientoCard
-                  key={tratamientoApi.id}
+                  key={tratamiento.id}
                   tratamiento={tratamientoProps}
-                  onModificar={() => handleOpenModificar(tratamientoApi)}
-                  onEliminar={() => handleOpenEliminar(tratamientoApi)}
+                  onModificar={() => handleOpenModificar(tratamiento)}
+                  onEliminar={() => handleOpenEliminar(tratamiento)}
                 />
               );
             })}
@@ -169,6 +167,8 @@ const GestionarTratamientos = () => {
         onClose={closeModals}
         masterTreatments={masterTreatments}
         onSubmit={handleAgregarTratamiento}
+        // 🆕 Pasamos la opción para configurar fechas y cupo
+        enableOfferPeriodAndCupo={true}
       />
 
       <ModificarTratamientoModal
@@ -176,6 +176,8 @@ const GestionarTratamientos = () => {
         onClose={closeModals}
         tratamiento={tratamientoSeleccionado}
         onSubmit={handleModificarTratamiento}
+        // 🆕 También habilitamos campos de edición de fechas y cupo
+        enableOfferPeriodAndCupo={true}
       />
 
       <ConfirmModal

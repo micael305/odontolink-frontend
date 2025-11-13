@@ -22,6 +22,9 @@ const ModificarTratamientoModal = ({
   const [durationInMinutes, setDurationInMinutes] = useState(45);
   const [requirements, setRequirements] = useState('');
   const [slots, setSlots] = useState([]);
+  const [offerStartDate, setOfferStartDate] = useState('');
+  const [offerEndDate, setOfferEndDate] = useState('');
+  const [maxCompletedAttentions, setMaxCompletedAttentions] = useState(10);
   const [currentDay, setCurrentDay] = useState('MONDAY');
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('12:00');
@@ -32,6 +35,9 @@ const ModificarTratamientoModal = ({
       setDurationInMinutes(tratamiento.durationInMinutes);
       setRequirements(tratamiento.requirements || '');
       setSlots(tratamiento.availabilitySlots || []);
+      setOfferStartDate(tratamiento.offerStartDate || '');
+      setOfferEndDate(tratamiento.offerEndDate || '');
+      setMaxCompletedAttentions(tratamiento.maxCompletedAttentions || 10);
     }
   }, [tratamiento]);
 
@@ -66,14 +72,27 @@ const ModificarTratamientoModal = ({
       return;
     }
 
+    if (!offerStartDate || !offerEndDate) {
+      setError('Las fechas de inicio y fin de la oferta son requeridas.');
+      return;
+    }
+
+    if (new Date(offerStartDate) > new Date(offerEndDate)) {
+      setError('La fecha de inicio no puede ser posterior a la de fin.');
+      return;
+    }
+
     const dataToSubmit = {
       durationInMinutes: parseInt(durationInMinutes, 10),
-      requirements,
+      requirements: requirements || undefined,
       availabilitySlots: slots.map(({ dayOfWeek, startTime, endTime }) => ({
         dayOfWeek,
         startTime,
         endTime,
       })),
+      offerStartDate,
+      offerEndDate,
+      maxCompletedAttentions: parseInt(maxCompletedAttentions, 10),
     };
 
     try {
@@ -99,14 +118,48 @@ const ModificarTratamientoModal = ({
 
         <div className="modal-body">
           <div className="modal-form-group">
+            <label htmlFor="maxCompletedAttentions">Cupo de Pacientes *</label>
+            <input
+              type="number"
+              id="maxCompletedAttentions"
+              value={maxCompletedAttentions}
+              onChange={(e) => setMaxCompletedAttentions(e.target.value)}
+              min="1"
+              placeholder="Ej: 10"
+            />
+          </div>
+
+          <div className="modal-form-group">
             <label htmlFor="durationInMinutes">Duración (en minutos) *</label>
             <input
               type="number"
               id="durationInMinutes"
               value={durationInMinutes}
               onChange={(e) => setDurationInMinutes(e.target.value)}
+              min="15"
+              step="15"
               placeholder="Ej: 45"
             />
+          </div>
+
+          <div className="modal-form-group">
+            <label>Período de la oferta *</label>
+            <div className="date-range-group">
+              <input
+                type="date"
+                value={offerStartDate}
+                onChange={(e) => setOfferStartDate(e.target.value)}
+                required
+              />
+              <span>hasta</span>
+              <input
+                type="date"
+                value={offerEndDate}
+                onChange={(e) => setOfferEndDate(e.target.value)}
+                min={offerStartDate}
+                required
+              />
+            </div>
           </div>
 
           <div className="modal-form-group">

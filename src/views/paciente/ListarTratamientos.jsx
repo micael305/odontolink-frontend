@@ -79,6 +79,7 @@ const ListarTratamientos = () => {
                   descripcion: tratamientoApi.treatment.description,
                   duracion: `${tratamientoApi.durationInMinutes} minutos`,
                   disponibilidad: `Con: ${tratamientoApi.practitionerName}`,
+                  diasDisponibles: tratamientoApi.availabilitySlots,
                   abono: false, // La API no provee este dato
                 }}
                 onSolicitar={() => handleSolicitar(tratamientoApi.id)}
