@@ -34,6 +34,7 @@ const AgregarTratamientoModal = ({
   isOpen,
   onClose,
   masterTreatments,
+  offeredTreatments = [],
   onSubmit,
 }) => {
   // --- Estados ---
@@ -62,6 +63,13 @@ const AgregarTratamientoModal = ({
   const [fieldErrors, setFieldErrors] = useState({});
   const [touched, setTouched] = useState({});
 
+  // Filtrar tratamientos disponibles (excluir los ya ofrecidos)
+  const availableTreatments = masterTreatments.filter(
+    (masterTreatment) => !offeredTreatments.some(
+      (offered) => offered.treatment.id === masterTreatment.id
+    )
+  );
+
   // --- Efectos y Ciclo de Vida ---
   useEffect(() => {
     if (!isOpen) {
@@ -83,23 +91,16 @@ const AgregarTratamientoModal = ({
   // Bloquear scroll del body cuando el modal está abierto
   useEffect(() => {
     if (isOpen) {
-      // Guardar el overflow original del body
-      const originalOverflow = document.body.style.overflow;
-      const originalPaddingRight = document.body.style.paddingRight;
+      // Guardar el estilo original
+      const originalBodyOverflow = document.body.style.overflow;
       
-      // Calcular el ancho de la barra de scroll para evitar saltos
-      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-      
-      // Bloquear scroll y compensar el ancho de la barra de scroll
+      // Bloquear scroll del body pero mantener la barra visible
+      // El html mantiene su overflow-y: scroll del CSS global
       document.body.style.overflow = 'hidden';
-      if (scrollbarWidth > 0) {
-        document.body.style.paddingRight = `${scrollbarWidth}px`;
-      }
       
       // Restaurar al desmontar o cuando el modal se cierre
       return () => {
-        document.body.style.overflow = originalOverflow;
-        document.body.style.paddingRight = originalPaddingRight;
+        document.body.style.overflow = originalBodyOverflow;
       };
     }
   }, [isOpen]);
@@ -294,37 +295,48 @@ const AgregarTratamientoModal = ({
             {/* --- PASO 1: Elige el tratamiento --- */}
             {currentStep === 1 && (
               <div className="form-step active">
-                <div className={`modal-form-group ${fieldErrors.step1_treatment ? 'has-error' : ''}`}>
-                  <label htmlFor="tratamiento">Tratamiento *</label>
-                  <select
-                    id="tratamiento"
-                    value={treatmentId}
-                    onChange={(e) => {
-                      setTreatmentId(e.target.value);
-                      clearFieldError('step1_treatment');
-                    }}
-                    onBlur={() => handleFieldBlur('step1_treatment')}
-                    className={fieldErrors.step1_treatment ? 'input-error' : ''}
-                  >
-                    <option value="" disabled>
-                      Selecciona un tratamiento de la lista
-                    </option>
-                    {masterTreatments.map((t) => (
-                      <option key={t.id} value={t.id}>
-                        {t.name} ({t.area})
+                {availableTreatments.length === 0 ? (
+                  <div className="empty-treatments-message">
+                    <FiCheck className="empty-treatments-icon" />
+                    <h3>¡Excelente trabajo!</h3>
+                    <p>Ya estás ofreciendo todos los tratamientos disponibles en el catálogo.</p>
+                    <p className="empty-treatments-hint">
+                      Para agregar nuevos tratamientos, primero debes esperar a que se agreguen más opciones al catálogo general.
+                    </p>
+                  </div>
+                ) : (
+                  <div className={`modal-form-group ${fieldErrors.step1_treatment ? 'has-error' : ''}`}>
+                    <label htmlFor="tratamiento">Tratamiento *</label>
+                    <select
+                      id="tratamiento"
+                      value={treatmentId}
+                      onChange={(e) => {
+                        setTreatmentId(e.target.value);
+                        clearFieldError('step1_treatment');
+                      }}
+                      onBlur={() => handleFieldBlur('step1_treatment')}
+                      className={fieldErrors.step1_treatment ? 'input-error' : ''}
+                    >
+                      <option value="" disabled>
+                        Selecciona un tratamiento de la lista
                       </option>
-                    ))}
-                  </select>
-                  {fieldErrors.step1_treatment ? (
-                    <p className="form-error-text">
-                      <FiInfo /> {fieldErrors.step1_treatment}
-                    </p>
-                  ) : (
-                    <p className="form-helper-text">
-                      <FiInfo /> Elige el procedimiento que vas a ofrecer.
-                    </p>
-                  )}
-                </div>
+                      {availableTreatments.map((t) => (
+                        <option key={t.id} value={t.id}>
+                          {t.name} ({t.area})
+                        </option>
+                      ))}
+                    </select>
+                    {fieldErrors.step1_treatment ? (
+                      <p className="form-error-text">
+                        <FiInfo /> {fieldErrors.step1_treatment}
+                      </p>
+                    ) : (
+                      <p className="form-helper-text">
+                        <FiInfo /> Elige el procedimiento que vas a ofrecer. Los tratamientos que ya ofreces no aparecen en esta lista.
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
             )}
 
@@ -550,7 +562,12 @@ const AgregarTratamientoModal = ({
           </Button>
 
           {currentStep < STEPS.length ? (
-            <Button variant="primary" onClick={nextStep} aria-label="Siguiente paso">
+            <Button 
+              variant="primary" 
+              onClick={nextStep} 
+              disabled={currentStep === 1 && availableTreatments.length === 0}
+              aria-label="Siguiente paso"
+            >
               <span className="btn-text-desktop">Siguiente</span><span className="btn-text-mobile">Continuar</span> <FiChevronRight />
             </Button>
           ) : (
