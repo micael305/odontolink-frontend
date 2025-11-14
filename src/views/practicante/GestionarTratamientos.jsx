@@ -330,6 +330,7 @@ const GestionarTratamientos = () => {
         isOpen={isAgregarModalOpen}
         onClose={closeModals}
         masterTreatments={masterTreatments}
+        offeredTreatments={offeredTreatments}
         onSubmit={handleAgregarTratamiento}
         // 🆕 Pasamos la opción para configurar fechas y cupo
         enableOfferPeriodAndCupo={true}
