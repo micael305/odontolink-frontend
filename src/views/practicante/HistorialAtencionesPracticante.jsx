@@ -6,6 +6,7 @@ import FeedbackDisplayModal from '../../components/FeedbackDisplayModal/Feedback
 import './practicante.css';
 import { FiChevronLeft, FiSearch, FiStar, FiLoader, FiEye } from 'react-icons/fi';
 import { useAtencionStore } from '../../context/atencionStore';
+import { formatLocalDate } from '../../utils/dateUtils';
 
 const CRITERIOS_PRACTICANTE = [
   { id: 'satisfaccion', label: 'Satisfacción General' },
@@ -111,9 +112,9 @@ const HistorialAtencionesPracticante = () => {
                 <AtencionListItem
                   key={atencion.id}
                   titulo={atencion.treatmentName}
-                  detailText={`${atencion.patientName} • ${new Date(
+                  detailText={`${atencion.patientName} • ${formatLocalDate(
                     atencion.startDate
-                  ).toLocaleDateString()}`}
+                  )}`}
                   buttonText={hasFeedback ? 'Ver Feedback' : 'Calificar'}
                   buttonIcon={hasFeedback ? <FiEye /> : <FiStar />}
                   onButtonClick={

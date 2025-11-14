@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Button from '../Button/Button';
 import './modificarTratamientoModal.css';
 import { FiX, FiPlus, FiTrash2 } from 'react-icons/fi';
@@ -22,25 +22,56 @@ const ModificarTratamientoModal = ({
   const [durationInMinutes, setDurationInMinutes] = useState(45);
   const [requirements, setRequirements] = useState('');
   const [slots, setSlots] = useState([]);
+  const [offerStartDate, setOfferStartDate] = useState('');
+  const [offerEndDate, setOfferEndDate] = useState('');
+  const [maxCompletedAttentions, setMaxCompletedAttentions] = useState(10);
   const [currentDay, setCurrentDay] = useState('MONDAY');
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('12:00');
   const [error, setError] = useState(null);
+  
+  // Ref para detectar clics fuera del modal
+  const modalContentRef = useRef(null);
 
   useEffect(() => {
     if (tratamiento) {
       setDurationInMinutes(tratamiento.durationInMinutes);
       setRequirements(tratamiento.requirements || '');
       setSlots(tratamiento.availabilitySlots || []);
+      setOfferStartDate(tratamiento.offerStartDate || '');
+      setOfferEndDate(tratamiento.offerEndDate || '');
+      setMaxCompletedAttentions(tratamiento.maxCompletedAttentions || 10);
     }
   }, [tratamiento]);
+
+  // Bloquear scroll del body cuando el modal está abierto
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      const originalPaddingRight = document.body.style.paddingRight;
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      
+      document.body.style.overflow = 'hidden';
+      if (scrollbarWidth > 0) {
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+      }
+      
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        document.body.style.paddingRight = originalPaddingRight;
+      };
+    }
+  }, [isOpen]);
 
   if (!isOpen || !tratamiento) {
     return null;
   }
 
-  const handleStopPropagation = (e) => {
-    e.stopPropagation();
+  // Manejar clics fuera del modal
+  const handleOverlayMouseDown = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
   };
 
   const handleAddSlot = () => {
@@ -66,14 +97,27 @@ const ModificarTratamientoModal = ({
       return;
     }
 
+    if (!offerStartDate || !offerEndDate) {
+      setError('Las fechas de inicio y fin de la oferta son requeridas.');
+      return;
+    }
+
+    if (new Date(offerStartDate) > new Date(offerEndDate)) {
+      setError('La fecha de inicio no puede ser posterior a la de fin.');
+      return;
+    }
+
     const dataToSubmit = {
       durationInMinutes: parseInt(durationInMinutes, 10),
-      requirements,
+      requirements: requirements || undefined,
       availabilitySlots: slots.map(({ dayOfWeek, startTime, endTime }) => ({
         dayOfWeek,
         startTime,
         endTime,
       })),
+      offerStartDate,
+      offerEndDate,
+      maxCompletedAttentions: parseInt(maxCompletedAttentions, 10),
     };
 
     try {
@@ -85,8 +129,8 @@ const ModificarTratamientoModal = ({
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={handleStopPropagation}>
+    <div className="modal-overlay" onMouseDown={handleOverlayMouseDown}>
+      <div className="modal-content" ref={modalContentRef}>
         <div className="modal-header">
           <div>
             <h2>Modificar Tratamiento</h2>
@@ -99,14 +143,48 @@ const ModificarTratamientoModal = ({
 
         <div className="modal-body">
           <div className="modal-form-group">
+            <label htmlFor="maxCompletedAttentions">Cupo de Pacientes *</label>
+            <input
+              type="number"
+              id="maxCompletedAttentions"
+              value={maxCompletedAttentions}
+              onChange={(e) => setMaxCompletedAttentions(e.target.value)}
+              min="1"
+              placeholder="Ej: 10"
+            />
+          </div>
+
+          <div className="modal-form-group">
             <label htmlFor="durationInMinutes">Duración (en minutos) *</label>
             <input
               type="number"
               id="durationInMinutes"
               value={durationInMinutes}
               onChange={(e) => setDurationInMinutes(e.target.value)}
+              min="15"
+              step="15"
               placeholder="Ej: 45"
             />
+          </div>
+
+          <div className="modal-form-group">
+            <label>Período de la oferta *</label>
+            <div className="date-range-group">
+              <input
+                type="date"
+                value={offerStartDate}
+                onChange={(e) => setOfferStartDate(e.target.value)}
+                required
+              />
+              <span>hasta</span>
+              <input
+                type="date"
+                value={offerEndDate}
+                onChange={(e) => setOfferEndDate(e.target.value)}
+                min={offerStartDate}
+                required
+              />
+            </div>
           </div>
 
           <div className="modal-form-group">

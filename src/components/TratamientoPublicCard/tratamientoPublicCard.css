@@ -53,10 +53,59 @@
   color: #198754;
 }
 
+.tpc-info-item.tpc-days-available {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.tpc-days-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.tpc-days-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tpc-day-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.6rem;
+  background-color: #e6f0ff;
+  color: #0d6efd;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
 .tpc-footer {
   margin-top: 1.5rem;
 }
 
 .tpc-footer .btn {
   width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tpc-day-badge {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .tpc-days-badges {
+    gap: 0.35rem;
+  }
+  
+  .tpc-days-label {
+    font-size: 0.8rem;
+  }
 }

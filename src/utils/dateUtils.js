@@ -24,3 +24,29 @@ export const formatTime = (isoString) => {
     minute: '2-digit',
   });
 };
+
+/**
+ * Parsea una fecha ISO (YYYY-MM-DD) como fecha local, evitando la conversión UTC
+ * que causa que se muestre un día anterior en zonas horarias negativas.
+ * 
+ * @param {string} isoDateString - String de fecha en formato ISO (YYYY-MM-DD)
+ * @returns {Date} Objeto Date en zona horaria local
+ */
+export const parseLocalDate = (isoDateString) => {
+  if (!isoDateString) return null;
+  const [year, month, day] = isoDateString.split('-').map(Number);
+  return new Date(year, month - 1, day);
+};
+
+/**
+ * Formatea una fecha ISO (YYYY-MM-DD) a formato local legible
+ * 
+ * @param {string} isoDateString - String de fecha en formato ISO (YYYY-MM-DD)
+ * @param {object} options - Opciones de formato para toLocaleDateString
+ * @returns {string} Fecha formateada
+ */
+export const formatLocalDate = (isoDateString, options = {}) => {
+  const date = parseLocalDate(isoDateString);
+  if (!date) return 'No especificada';
+  return date.toLocaleDateString('es-ES', options);
+};
