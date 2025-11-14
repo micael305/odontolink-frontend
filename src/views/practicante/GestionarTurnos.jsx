@@ -4,7 +4,6 @@ import TurnoDetalleModal from '../../components/TurnoDetalleModal/TurnoDetalleMo
 import './practicante.css';
 import { FiChevronLeft, FiChevronRight, FiLoader } from 'react-icons/fi';
 import { useTurnoStore } from '../../context/turnoStore';
-import { toLocalISODate } from '../../utils/dateUtils';
 
 const DIAS_SEMANA = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
 
@@ -21,15 +20,24 @@ const GestionarTurnos = () => {
 
   const turnosFormateados = useMemo(() => {
     return turnos.map((turno) => {
-      const d = new Date(turno.appointmentTime);
+      // Extraer fecha y hora directamente del string ISO sin conversión UTC
+      const isoString = turno.appointmentTime;
+      const fecha = isoString.split('T')[0]; // YYYY-MM-DD
+      const [year, month, day] = fecha.split('-').map(Number);
+      
+      // Parsear hora del ISO string
+      const timeMatch = isoString.match(/T(\d{2}):(\d{2})/);
+      const hora = timeMatch
+        ? `${timeMatch[1]}:${timeMatch[2]}`
+        : '00:00';
+      
       return {
         ...turno,
-        fecha: toLocalISODate(d),
-        hora: d.toLocaleTimeString('default', {
-          hour: '2-digit',
-          minute: '2-digit',
-        }),
-        diaDelMes: d.getDate(),
+        fecha,
+        hora,
+        diaDelMes: day,
+        year,
+        month: month - 1, // JavaScript usa 0-11 para meses
       };
     });
   }, [turnos]);
@@ -120,11 +128,15 @@ const GestionarTurnos = () => {
           </div>
           <div className="calendar-grid">
             {calendarDays.map((day, index) => {
-              const turnosDelDia = turnosFormateados.filter(
-                (t) =>
-                  t.diaDelMes === day.day &&
-                  new Date(t.fecha).getMonth() === currentDate.getMonth()
-              );
+              const turnosDelDia = day.isCurrentMonth
+                ? turnosFormateados.filter((t) => {
+                    return (
+                      t.diaDelMes === day.day &&
+                      t.month === currentDate.getMonth() &&
+                      t.year === currentDate.getFullYear()
+                    );
+                  })
+                : [];
 
               return (
                 <div
