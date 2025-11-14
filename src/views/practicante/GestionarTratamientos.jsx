@@ -6,6 +6,7 @@ import TratamientoCard from '../../components/TratamientoCard/TratamientoCard';
 import AgregarTratamientoModal from '../../components/AgregarTratamientoModal/AgregarTratamientoModal';
 import ModificarTratamientoModal from '../../components/ModificarTratamientoModal/ModificarTratamientoModal';
 import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
+import ProgressBar from '../../components/ProgressBar/ProgressBar';
 import './practicante.css';
 import { 
   FiPlus, 
@@ -191,6 +192,17 @@ const GestionarTratamientos = () => {
                             </span>
                           </div>
                         </div>
+                        
+                        {/* Barra de progreso compacta */}
+                        <div className="treatment-header-progress">
+                          <ProgressBar
+                            current={tratamiento.currentCompletedAttentions}
+                            max={tratamiento.maxCompletedAttentions}
+                            compact={true}
+                            showPercentage={true}
+                          />
+                        </div>
+
                         <div className="treatment-header-meta">
                           <span className="meta-badge">
                             <FiCalendar />
@@ -199,10 +211,6 @@ const GestionarTratamientos = () => {
                           <span className="meta-badge">
                             <FiClock />
                             {horarios.length} {horarios.length === 1 ? 'horario' : 'horarios'}
-                          </span>
-                          <span className="meta-badge">
-                            <FiTarget />
-                            {tratamiento.maxCompletedAttentions} cupo
                           </span>
                         </div>
                       </div>
@@ -260,15 +268,21 @@ const GestionarTratamientos = () => {
                             </div>
                           </div>
 
-                          {/* Cupo máximo */}
+                          {/* Cupo de atenciones */}
                           <div className="treatment-detail-block">
                             <div className="detail-block-header">
                               <FiTarget className="detail-icon" />
-                              <span className="detail-label">Cupo máximo</span>
+                              <span className="detail-label">Cupo de atenciones</span>
                             </div>
                             <div className="detail-block-content">
                               <p className="cupo-display">
-                                {tratamiento.maxCompletedAttentions} atenciones
+                                {tratamiento.currentCompletedAttentions} de {tratamiento.maxCompletedAttentions} completadas
+                              </p>
+                              <p className="cupo-description">
+                                {tratamiento.currentCompletedAttentions >= tratamiento.maxCompletedAttentions 
+                                  ? 'Has completado todas las atenciones requeridas para este tratamiento'
+                                  : `Necesitás completar ${tratamiento.maxCompletedAttentions - tratamiento.currentCompletedAttentions} atención${tratamiento.maxCompletedAttentions - tratamiento.currentCompletedAttentions === 1 ? '' : 'es'} más para cumplir con tu práctica`
+                                }
                               </p>
                             </div>
                           </div>
