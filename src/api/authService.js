@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const publicApi = axios.create({
   baseURL: `${import.meta.env.VITE_API_BASE_URL}/auth`,
-  timeout: 10000,
+  timeout: parseInt(import.meta.env.VITE_AUTH_TIMEOUT) || 10000,
 });
 
 export const login = async (email, password) => {
