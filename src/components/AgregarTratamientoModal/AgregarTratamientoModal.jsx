@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import Button from '../Button/Button';
-import './agregarTratamientoModal.css';
+import './AgregarTratamientoModal.css';
 import {
   FiX,
   FiPlus,

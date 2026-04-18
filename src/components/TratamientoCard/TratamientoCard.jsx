@@ -7,7 +7,7 @@ import {
   FiTrash2,
   FiTarget,
 } from 'react-icons/fi';
-import './TratamientoCard.css';
+import './tratamientoCard.css';
 
 const TratamientoCard = ({
   tratamiento,
