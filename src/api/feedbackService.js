@@ -2,7 +2,7 @@ import api from './api';
 
 export const getFeedbackForAttention = async (attentionId) => {
   try {
-    const response = await api.get(`/feedback/attention/${attentionId}`);
+    const response = await api.get(`/api/feedback/attention/${attentionId}`);
     return response.data;
   } catch (error) {
     console.error(
@@ -17,7 +17,7 @@ export const getFeedbackForAttention = async (attentionId) => {
 
 export const createFeedback = async (feedbackData) => {
   try {
-    const response = await api.post('/feedback', feedbackData);
+    const response = await api.post('/api/feedback', feedbackData);
     return response.data;
   } catch (error) {
     console.error(

@@ -1,13 +1,15 @@
 import axios from 'axios';
 
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
+
 const publicApi = axios.create({
-  baseURL: `${import.meta.env.VITE_API_BASE_URL}/auth`,
+  baseURL: API_BASE_URL,
   timeout: parseInt(import.meta.env.VITE_AUTH_TIMEOUT) || 10000,
 });
 
 export const login = async (email, password) => {
   try {
-    const response = await publicApi.post('/login', { email, password });
+    const response = await publicApi.post('/api/auth/login', { email, password });
     return response.data;
   } catch (error) {
     console.error('Error en el login:', error.response?.data || error.message);
@@ -17,7 +19,7 @@ export const login = async (email, password) => {
 
 export const registerPatient = async (patientData) => {
   try {
-    const response = await publicApi.post('/register/patient', patientData);
+    const response = await publicApi.post('/api/auth/register/patient', patientData);
     return response.data;
   } catch (error) {
     console.error(
@@ -31,7 +33,7 @@ export const registerPatient = async (patientData) => {
 export const registerPractitioner = async (practitionerData) => {
   try {
     const response = await publicApi.post(
-      '/register/practitioner',
+      '/api/auth/register/practitioner',
       practitionerData
     );
     return response.data;
@@ -46,7 +48,7 @@ export const registerPractitioner = async (practitionerData) => {
 
 export const registerSupervisor = async (supervisorData) => {
   try {
-    const response = await publicApi.post('/supervisors/register', supervisorData);
+    const response = await publicApi.post('/api/supervisors/register', supervisorData);
     return response.data;
   } catch (error) {
     console.error(

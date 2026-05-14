@@ -2,7 +2,7 @@ import api from './api';
 
 export const getAvailableTreatments = async () => {
   try {
-    const response = await api.get('/patient/offered-treatments');
+    const response = await api.get('/api/patient/offered-treatments');
     return response.data;
   } catch (error) {
     console.error(
@@ -21,7 +21,7 @@ export const getAvailableSlotsForTreatment = async (
 ) => {
   try {
     const response = await api.get(
-      `/patient/offered-treatments/${offeredTreatmentId}/availability`,
+      `/api/patient/offered-treatments/${offeredTreatmentId}/availability`,
       { params: { date } }
     );
     return response.data;
@@ -38,7 +38,7 @@ export const getAvailableSlotsForTreatment = async (
 
 export const scheduleAppointment = async (appointmentData) => {
   try {
-    const response = await api.post('/patient/appointments', appointmentData);
+    const response = await api.post('/api/patient/appointments', appointmentData);
     return response.data;
   } catch (error) {
     console.error(

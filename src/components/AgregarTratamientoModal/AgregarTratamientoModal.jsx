@@ -69,6 +69,9 @@ const AgregarTratamientoModal = ({
       (offered) => offered.treatment.id === masterTreatment.id
     )
   );
+  const isCatalogEmpty = masterTreatments.length === 0;
+  const isAllTreatmentsAlreadyOffered =
+    masterTreatments.length > 0 && availableTreatments.length === 0;
 
   // --- Efectos y Ciclo de Vida ---
   useEffect(() => {
@@ -295,7 +298,16 @@ const AgregarTratamientoModal = ({
             {/* --- PASO 1: Elige el tratamiento --- */}
             {currentStep === 1 && (
               <div className="form-step active">
-                {availableTreatments.length === 0 ? (
+                {isCatalogEmpty ? (
+                  <div className="empty-treatments-message">
+                    <FiInfo className="empty-treatments-icon" />
+                    <h3>Catálogo no disponible</h3>
+                    <p>No se encontraron tratamientos en el catálogo general.</p>
+                    <p className="empty-treatments-hint">
+                      Esto puede pasar si el catálogo aún no cargó o si el backend no devolvió tratamientos.
+                    </p>
+                  </div>
+                ) : isAllTreatmentsAlreadyOffered ? (
                   <div className="empty-treatments-message">
                     <FiCheck className="empty-treatments-icon" />
                     <h3>¡Excelente trabajo!</h3>

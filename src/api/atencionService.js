@@ -2,7 +2,7 @@ import api from './api';
 
 export const getMyAttentions = async () => {
   try {
-    const response = await api.get('/practitioner/attentions');
+    const response = await api.get('/api/practitioner/attentions');
     return response.data;
   } catch (error) {
     console.error(
@@ -17,7 +17,7 @@ export const getMyAttentions = async () => {
 
 export const getMyAttentionsAsPatient = async () => {
   try {
-    const response = await api.get('/patient/attentions');
+    const response = await api.get('/api/patient/attentions');
     return response.data;
   } catch (error) {
     console.error(
@@ -32,7 +32,7 @@ export const getMyAttentionsAsPatient = async () => {
 
 export const getAttentionById = async (attentionId) => {
   try {
-    const response = await api.get(`/attentions/${attentionId}`);
+    const response = await api.get(`/api/attentions/${attentionId}`);
     return response.data;
   } catch (error) {
     console.error(
@@ -47,7 +47,7 @@ export const getAttentionById = async (attentionId) => {
 
 export const getProgressNotes = async (attentionId) => {
   try {
-    const response = await api.get(`/attentions/${attentionId}/progress-notes`);
+    const response = await api.get(`/api/attentions/${attentionId}/progress-notes`);
     return response.data;
   } catch (error) {
     console.error(
@@ -62,7 +62,7 @@ export const getProgressNotes = async (attentionId) => {
 
 export const createFeedback = async (feedbackData) => {
   try {
-    const response = await api.post('/feedback', feedbackData);
+    const response = await api.post('/api/feedback', feedbackData);
     return response.data;
   } catch (error) {
     console.error(
@@ -78,7 +78,7 @@ export const createFeedback = async (feedbackData) => {
 export const addProgressNote = async (attentionId, content) => {
   try {
     const response = await api.post(
-      `/attentions/${attentionId}/progress-notes`,
+      `/api/attentions/${attentionId}/progress-notes`,
       { content }
     );
     return response.data;
@@ -95,7 +95,7 @@ export const addProgressNote = async (attentionId, content) => {
 
 export const finalizeAttention = async (attentionId) => {
   try {
-    const response = await api.post(`/attentions/${attentionId}/finalize`);
+    const response = await api.post(`/api/attentions/${attentionId}/finalize`);
     return response.data;
   } catch (error) {
     console.error(
@@ -110,7 +110,7 @@ export const finalizeAttention = async (attentionId) => {
 
 export const getFeedbackForAttention = async (attentionId) => {
   try {
-    const response = await api.get(`/feedback/attention/${attentionId}`);
+    const response = await api.get(`/api/feedback/attention/${attentionId}`);
     return response.data;
   } catch (error) {
     console.error(

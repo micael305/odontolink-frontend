@@ -2,7 +2,7 @@ import api from './api';
 
 export const getOfferedTreatments = async () => {
   try {
-    const response = await api.get('/practitioner/offered-treatments');
+    const response = await api.get('/api/practitioner/offered-treatments');
     return response.data;
   } catch (error) {
     console.error(
@@ -18,7 +18,7 @@ export const getOfferedTreatments = async () => {
 export const deleteOfferedTreatment = async (offeredTreatmentId) => {
   try {
     const response = await api.delete(
-      `/practitioner/offered-treatments/${offeredTreatmentId}`
+      `/api/practitioner/offered-treatments/${offeredTreatmentId}`
     );
     return response.data;
   } catch (error) {
@@ -34,7 +34,7 @@ export const deleteOfferedTreatment = async (offeredTreatmentId) => {
 
 export const getMasterTreatments = async () => {
   try {
-    const response = await api.get('/treatments');
+    const response = await api.get('/api/treatments');
     return response.data;
   } catch (error) {
     console.error(
@@ -50,7 +50,7 @@ export const getMasterTreatments = async () => {
 export const addOfferedTreatment = async (treatmentData) => {
   try {
     const response = await api.post(
-      '/practitioner/offered-treatments',
+      '/api/practitioner/offered-treatments',
       treatmentData
     );
     return response.data;
@@ -68,7 +68,7 @@ export const addOfferedTreatment = async (treatmentData) => {
 export const updateOfferedTreatment = async (id, treatmentData) => {
   try {
     const response = await api.put(
-      `/practitioner/offered-treatments/${id}`,
+      `/api/practitioner/offered-treatments/${id}`,
       treatmentData
     );
     return response.data;
@@ -85,7 +85,7 @@ export const updateOfferedTreatment = async (id, treatmentData) => {
 
 export const getUpcomingAppointments = async () => {
   try {
-    const response = await api.get('/practitioner/appointments/upcoming');
+    const response = await api.get('/api/practitioner/appointments/upcoming');
     return response.data;
   } catch (error) {
     console.error(
@@ -101,7 +101,7 @@ export const getUpcomingAppointments = async () => {
 export const markAppointmentAsCompleted = async (appointmentId) => {
   try {
     const response = await api.post(
-      `/practitioner/appointments/${appointmentId}/complete`
+      `/api/practitioner/appointments/${appointmentId}/complete`
     );
     return response.data;
   } catch (error) {
@@ -118,7 +118,7 @@ export const markAppointmentAsCompleted = async (appointmentId) => {
 export const markAppointmentAsNoShow = async (appointmentId) => {
   try {
     const response = await api.post(
-      `/practitioner/appointments/${appointmentId}/no-show`
+      `/api/practitioner/appointments/${appointmentId}/no-show`
     );
     return response.data;
   } catch (error) {

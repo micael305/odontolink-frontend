@@ -21,7 +21,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const userData = await login(email, password);
+      const userData = await login(email.trim(), password);
 
       // Comparamos con los roles exactos del backend
       if (userData.role === 'ROLE_PRACTITIONER') {

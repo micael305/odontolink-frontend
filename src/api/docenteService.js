@@ -9,7 +9,7 @@ import api from './api';
 export const searchPractitioners = async (query = '') => {
   try {
     const params = query ? { query } : {};
-    const response = await api.get('/supervisors/practitioners/search', { params });
+    const response = await api.get('/api/supervisors/practitioners/search', { params });
     return response.data;
   } catch (error) {
     console.error('Error al buscar practicantes:', error.response?.data || error.message);
@@ -23,7 +23,7 @@ export const searchPractitioners = async (query = '') => {
  */
 export const getMyPractitioners = async () => {
   try {
-    const response = await api.get('/supervisors/my-practitioners');
+    const response = await api.get('/api/supervisors/my-practitioners');
     return response.data;
   } catch (error) {
     console.error('Error al obtener practicantes a cargo:', error.response?.data || error.message);
@@ -38,7 +38,7 @@ export const getMyPractitioners = async () => {
  */
 export const linkPractitioner = async (practitionerId) => {
   try {
-    const response = await api.post(`/supervisors/my-practitioners/${practitionerId}`);
+    const response = await api.post(`/api/supervisors/my-practitioners/${practitionerId}`);
     return response.data;
   } catch (error) {
     console.error('Error al vincular practicante:', error.response?.data || error.message);
@@ -53,7 +53,7 @@ export const linkPractitioner = async (practitionerId) => {
  */
 export const unlinkPractitioner = async (practitionerId) => {
   try {
-    const response = await api.delete(`/supervisors/my-practitioners/${practitionerId}`);
+    const response = await api.delete(`/api/supervisors/my-practitioners/${practitionerId}`);
     return response.data;
   } catch (error) {
     console.error('Error al desvincular practicante:', error.response?.data || error.message);
@@ -68,7 +68,7 @@ export const unlinkPractitioner = async (practitionerId) => {
  */
 export const linkMultiplePractitioners = async (practitionerIds) => {
   try {
-    const response = await api.post('/supervisors/my-practitioners/batch', { practitionerIds });
+    const response = await api.post('/api/supervisors/my-practitioners/batch', { practitionerIds });
     return response.data;
   } catch (error) {
     console.error('Error al vincular múltiples practicantes:', error.response?.data || error.message);
@@ -83,7 +83,7 @@ export const linkMultiplePractitioners = async (practitionerIds) => {
  */
 export const getFeedbackForPractitioner = async (practitionerId) => {
   try {
-    const response = await api.get(`/supervisor/feedback/practitioner/${practitionerId}`);
+    const response = await api.get(`/api/supervisor/feedback/practitioner/${practitionerId}`);
     return response.data;
   } catch (error) {
     console.error('Error al obtener feedback del practicante:', error.response?.data || error.message);
