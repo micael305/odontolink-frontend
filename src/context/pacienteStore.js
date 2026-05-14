@@ -17,7 +17,8 @@ export const usePacienteStore = create((set, get) => ({
     set({ status: 'loading', error: null });
     try {
       const data = await getAvailableTreatments();
-      set({ availableTreatments: data, status: 'success' });
+      const treatments = Array.isArray(data) ? data : (data.content || []);
+      set({ availableTreatments: treatments, status: 'success' });
     } catch (error) {
       set({ status: 'error', error: error.message });
     }
@@ -28,7 +29,8 @@ export const usePacienteStore = create((set, get) => ({
     let treatments = get().availableTreatments;
     if (treatments.length === 0) {
       try {
-        treatments = await getAvailableTreatments();
+        const data = await getAvailableTreatments();
+        treatments = Array.isArray(data) ? data : (data.content || []);
         set({ availableTreatments: treatments });
       } catch (error) {
         set({ status: 'error', error: error.message });
